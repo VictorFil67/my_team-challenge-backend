@@ -4,13 +4,14 @@ import User from "../models/User.js";
 import { register, setTokens } from "../services/authServices.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import sendEmail from "../helpers/sendEmail.js";
 
 dotenv.config();
 
 const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, name } = req.body;
 
   const user = await User.findOne({ email });
   if (user) {
@@ -28,6 +29,19 @@ const signup = async (req, res) => {
   console.log(tokens);
 
   const loggedInUser = await User.findById({ _id: newUser._id }, "-password");
+
+  const userEmail = {
+    to: email,
+    subject: "Registration",
+    html: `<h1>Hello, ${name}!</h1>
+        <p>Congratulations! You have registered successfully.</p>
+         <p>Your next step is to add your address(addresses) to your profile by filling out the necessary form</p>
+         <p>If you have any questions, you can always contact our support team.</p>
+        <p style="margin-top: 10px;">Best regards,</p>
+        <p style="margin-top: 10px;">The Teamchallenge Chat Team</p>`,
+  };
+
+  await sendEmail(userEmail);
 
   res.status(201).json({
     loggedInUser,
