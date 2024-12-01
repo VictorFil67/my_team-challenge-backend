@@ -24,14 +24,15 @@ const userSchema = new Schema(
       trim: true,
       required: [true, "Phone is required"],
     },
-
-    accessToken: {
-      type: String,
-      default: "",
-    },
-    refreshToken: {
-      type: String,
-      default: "",
+    tokens: {
+      accessToken: {
+        type: String,
+        default: "",
+      },
+      refreshToken: {
+        type: String,
+        default: "",
+      },
     },
   },
   { versionKey: false }
