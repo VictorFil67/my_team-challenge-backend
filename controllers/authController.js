@@ -21,3 +21,5 @@ const register = async (req, res) => {
     loggedInUser,
   });
 };
+
+export default register;
