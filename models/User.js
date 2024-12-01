@@ -24,7 +24,7 @@ const userSchema = new Schema({
     required: [true, "Phone is required"],
   },
   tokens: {
-    assesToken: {
+    accessToken: {
       type: String,
       default: "",
     },

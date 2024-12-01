@@ -1,5 +1,6 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import User from "../models/User.js";
+import { register, setTokens } from "../services/authServices.js";
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -15,7 +16,7 @@ const signup = async (req, res) => {
   console.log(token);
   const refreshToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
   console.log(refreshToken);
-  const tokens = await setTokens(newUser._id, token, refreshToken);
+  const tokens = setTokens(newUser._id, token, refreshToken);
   console.log(tokens);
   const loggedInUser = await User.findById({ _id: newUser._id }, "-password");
   res.status(201).json({

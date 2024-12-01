@@ -6,3 +6,7 @@ export const register = async (data) => {
   const hashPassword = await bcrypt.hash(password, 10);
   return User.create({ ...data, password: hashPassword });
 };
+
+export const setTokens = (id, accessToken = "", refreshToken = "") => {
+  User.findOneAndUpdate({ id }, { accessToken, refreshToken }, { new: true });
+};
