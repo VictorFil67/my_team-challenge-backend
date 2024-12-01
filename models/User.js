@@ -1,5 +1,32 @@
 import { Schema, model } from "mongoose";
 
+const isLoggedIn = () => {
+  return this.tokens.accessToken;
+};
+
+const buildingSchema = new Schema({
+  residential_complex: {
+    type: String,
+    required: [true, "Residential complex is required"],
+  },
+  apartment: {
+    type: Number,
+    required: [isLoggedIn, "Apartment number is required"],
+  },
+  entrance: {
+    type: Number,
+    required: [isLoggedIn, "Entrance is required"],
+  },
+  moderator: {
+    type: Boolean,
+    default: false,
+  },
+  approved: {
+    type: Boolean,
+    default: false,
+  },
+});
+
 const userSchema = new Schema(
   {
     name: {
@@ -24,6 +51,7 @@ const userSchema = new Schema(
       trim: true,
       required: [true, "Phone is required"],
     },
+    buildings: [buildingSchema],
     tokens: {
       accessToken: {
         type: String,
@@ -34,6 +62,7 @@ const userSchema = new Schema(
         default: "",
       },
     },
+    is_admin: { type: Boolean, default: false },
   },
   { versionKey: false }
 );

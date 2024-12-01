@@ -5,6 +5,7 @@ import { register, setTokens } from "../services/authServices.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import sendEmail from "../helpers/sendEmail.js";
+import { findUser } from "../services/userServices.js";
 
 dotenv.config();
 
@@ -13,7 +14,7 @@ const { JWT_SECRET } = process.env;
 const signup = async (req, res) => {
   const { email, name } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await findUser({ email });
   if (user) {
     throw HttpError(409, "This email is already in use");
   }
@@ -35,7 +36,7 @@ const signup = async (req, res) => {
     subject: "Registration",
     html: `<h1>Hello, ${name}!</h1>
         <p>Congratulations! You have registered successfully.</p>
-         <p>Your next step is to add your address(addresses) to your profile by filling out the necessary form</p>
+         <p>Your next step is to add your address(addresses) to your profile by filling out the necessary form.</p>
          <p>If you have any questions, you can always contact our support team.</p>
         <p style="margin-top: 10px;">Best regards,</p>
         <p style="margin-top: 10px;">The Teamchallenge Chat Team</p>`,

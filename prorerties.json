@@ -1,0 +1,27 @@
+{
+  "id": "ObjectId",
+  "name": "Sunny Quarter",
+
+  "images": [],
+  "properties": {
+    "parking": true,
+    "security": true,
+    "access_control": true,
+    "concierge": false,
+    "playground": true,
+    "closed_area": true,
+    "video_surveillance": true,
+    "floors": 12,
+    "entrances": 4
+  },
+  "description": "Very cool complex",
+  "address": "asds",
+  "cordinates": { "lng": "string", "ltd": "string" },
+  "buildings": [
+    {
+      "address": "string",
+      "id": "ObjectId",
+      "appartments": ["_id", "number", "entrance", "services_debt"]
+    }
+  ]
+}
