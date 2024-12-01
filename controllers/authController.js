@@ -1,6 +1,7 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import User from "../models/User.js";
 import { register, setTokens } from "../services/authServices.js";
+import jwt from "jsonwebtoken";
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
