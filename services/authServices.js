@@ -8,5 +8,17 @@ export const register = async (data) => {
 };
 
 export const setTokens = (id, accessToken = "", refreshToken = "") => {
-  User.findOneAndUpdate({ id }, { accessToken, refreshToken }, { new: true });
+  return User.findByIdAndUpdate(
+    id,
+    { accessToken, refreshToken },
+    { new: true }
+  );
 };
+
+// export function setTokens(id, accessToken = "", refreshToken = "") {
+//   return User.findByIdAndUpdate(
+//     id,
+//     { accessToken, refreshToken },
+//     { new: true }
+//   );
+// }
