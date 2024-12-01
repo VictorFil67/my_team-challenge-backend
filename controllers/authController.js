@@ -1,6 +1,7 @@
+import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import User from "../models/User.js";
 
-const register = async (req, res) => {
+const signup = async (req, res) => {
   const { email, password } = req.body;
   // console.log(`*${password}*`);
   const user = await User.findOne({ email });
@@ -22,4 +23,4 @@ const register = async (req, res) => {
   });
 };
 
-export default register;
+export default { signup: ctrlWrapper(signup) };
