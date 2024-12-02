@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import sendEmail from "../helpers/sendEmail.js";
 import { findUser } from "../services/userServices.js";
+import bcrypt from "bcrypt";
 
 dotenv.config();
 
@@ -49,4 +50,28 @@ const signup = async (req, res) => {
   });
 };
 
-export default { signup: ctrlWrapper(signup) };
+const signin = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await findUser({ email });
+  if (!user) {
+    throw HttpError(401, "Email is wrong");
+  }
+  const { password: hashPassword, _id } = user;
+  const compare = await bcrypt.compare(password, hashPassword);
+  if (!compare) {
+    throw HttpError(401, "Password is wrong");
+  }
+
+  const payload = { id: _id };
+
+  const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+
+  const refreshToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+  await setTokens(_id, accessToken, refreshToken);
+
+  const loggedInUser = await findUser({ _id });
+
+  res.status(200).json(loggedInUser);
+};
+
+export default { signup: ctrlWrapper(signup), signin: ctrlWrapper(signin) };
