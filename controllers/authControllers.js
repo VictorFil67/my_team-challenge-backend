@@ -74,9 +74,9 @@ const signin = async (req, res) => {
   res.status(200).json(loggedInUser);
 };
 
-const logout = (req, res) => {
+const logout = async (req, res) => {
   const { _id: id } = req.user;
-  setTokens(id);
+  await setTokens(id);
   res.status(204).json("Log out successful");
 };
 
