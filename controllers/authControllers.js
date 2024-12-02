@@ -74,4 +74,14 @@ const signin = async (req, res) => {
   res.status(200).json(loggedInUser);
 };
 
-export default { signup: ctrlWrapper(signup), signin: ctrlWrapper(signin) };
+const logout = (req, res) => {
+  const { _id: id } = req.user;
+  setTokens(id);
+  res.status(204).json("Log out successful");
+};
+
+export default {
+  signup: ctrlWrapper(signup),
+  signin: ctrlWrapper(signin),
+  logout: ctrlWrapper(logout),
+};
