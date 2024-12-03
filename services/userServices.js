@@ -4,7 +4,7 @@ export function findUser(filter) {
   return User.findOne(filter);
 }
 
-export function findUserRyId(id) {
+export function findUserById(id) {
   return User.findById(id);
 }
 
