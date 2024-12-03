@@ -8,6 +8,7 @@ import swaggerUi from "swagger-ui-express";
 // import swaggerDocument from "./docs/swagger.json" assert { type: "json" };
 // import contactsRouter from "./routes/contactsRouter.js";
 import authRouter from "./routes/authRouter.js";
+import usersRouter from "./routes/usersRouter.js";
 // import complexRouter from "./routes/complexRouter.js";
 // import * as chatControllers from "./controllers/chatControllers.js";
 // import notificationsRouter from "./routes/notificationsRouter.js";
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use(express.static("upload/images"));
 
 app.use("/auth", authRouter);
+app.use("/users", usersRouter);
 // app.use("/notifications", notificationsRouter);
 // app.use("/api/contacts", contactsRouter);
 // app.use("/api", complexRouter);
