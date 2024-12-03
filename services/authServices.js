@@ -11,11 +11,3 @@ export const setTokens = (id, accessToken = "", refreshToken = "") => {
   const tokens = { accessToken, refreshToken };
   return User.findByIdAndUpdate(id, { tokens }, { new: true });
 };
-
-// export function setTokens(id, accessToken = "", refreshToken = "") {
-//   return User.findByIdAndUpdate(
-//     id,
-//     { accessToken, refreshToken },
-//     { new: true }
-//   );
-// }

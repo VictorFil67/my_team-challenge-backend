@@ -9,6 +9,10 @@ const buildingSchema = new Schema({
     type: String,
     required: [true, "Residential complex is required"],
   },
+  building: {
+    type: String,
+    reguired: [true, "Building is required"],
+  },
   apartment: {
     type: Number,
     required: [isLoggedIn, "Apartment number is required"],
