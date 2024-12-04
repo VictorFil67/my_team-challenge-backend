@@ -6,7 +6,7 @@ const addUserAddresses = async (req, res) => {
   const { _id } = req.user;
   const { residential_complex, building, entrance, apartment } = req.body;
   const { buildings } = await findUserById(_id);
-  console.log(buildings);
+  //   console.log(buildings);
   const existedAddress = buildings.find(
     (userAddress) =>
       userAddress.residential_complex === residential_complex &&
@@ -22,7 +22,7 @@ const addUserAddresses = async (req, res) => {
     );
   }
   buildings.push({ ...req.body });
-  console.log(buildings);
+  //   console.log(buildings);
   const result = await updateUser(_id, { buildings });
   res.status(200).json(result);
 };
