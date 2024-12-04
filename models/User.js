@@ -71,6 +71,10 @@ const userSchema = new Schema(
   { versionKey: false }
 );
 
+userSchema.post("save", handleSaveError);
+userSchema.pre("findOneAndUpdate", setUpdateSetting);
+userSchema.post("findOneAndUpdate", handleSaveError);
+
 const User = model("user", userSchema);
 
 export default User;
