@@ -1,25 +1,28 @@
 import { Schema, model } from "mongoose";
 import { handleSaveError, setUpdateSetting } from "./hooks.js";
 
-const isLoggedIn = () => {
-  return this.tokens.accessToken;
-};
+// const isLoggedIn = () => {
+//   console.log(this.tokens)
+//   return this.tokens.accessToken;
+// };
 
 const buildingSchema = new Schema({
   residential_complex: {
     type: String,
-    // required: [true, "Residential complex is required"],
+    required: [true, "Residential complex is required"],
   },
   building: {
     type: String,
-    // reguired: [true, "Building is required"],
+    reguired: [true, "Building is required"],
   },
   apartment: {
     type: Number,
+    required: [true, "Apartment number is required"],
     // required: [isLoggedIn, "Apartment number is required"],
   },
   entrance: {
     type: Number,
+    required: [true, "Entrance is required"],
     // required: [isLoggedIn, "Entrance is required"],
   },
   moderator: {
