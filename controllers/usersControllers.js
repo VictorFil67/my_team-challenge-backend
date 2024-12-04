@@ -7,7 +7,7 @@ const addUserAddresses = async (req, res) => {
   console.log(buildings);
   buildings.push({ ...req.body });
   console.log(buildings);
-  const result = await updateUser(_id, buildings, "-password");
+  const result = await updateUser(_id, { buildings });
   res.status(200).json(result);
 };
 
