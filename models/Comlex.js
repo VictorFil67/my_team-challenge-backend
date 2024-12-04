@@ -1,28 +1,28 @@
 import { Schema, model } from "mongoose";
 import { handleSaveError, setUpdateSetting } from "./hooks.js";
 
-const apartmenSchema = new Schema({
+const apartmentSchema = new Schema({
   number: {
-    type: Number(),
+    type: Number,
   },
   entrance: {
-    type: Number(),
+    type: Number,
   },
   services_debt: {
-    type: Number(),
+    type: Number,
     default: 0,
   },
 });
 
 const buildingSchema = new Schema({
   address: {
-    type: String(),
+    type: String,
     lowercase: true,
   },
-  apartments: [apartmenSchema],
+  apartments: [apartmentSchema],
 });
 
-const complexSchema = Schema({
+const complexSchema = new Schema({
   buildings: [buildingSchema],
 });
 
