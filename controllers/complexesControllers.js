@@ -4,10 +4,11 @@ import { addComplex } from "../services/complexServices.js";
 const createComplex = async (req, res) => {
   const { addresses, apartmentsNumber, entrance } = req.body;
 
-  //   const apartments = [];
-  //   for (i = 1; (i = apartmentsNumber); i++) {
-  //     apartments.push(i);
-  //   }
+  const apartmentNumbers = [];
+  for (let i = 1; i <= apartmentsNumber; i += 1) {
+    apartmentNumbers.push(i);
+  }
+  console.log(apartmentNumbers);
   const buildings = [];
 
   addresses.forEach((address) => {
@@ -15,11 +16,13 @@ const createComplex = async (req, res) => {
     building.apartments = [];
     // addresses.forEach((address) => {
     building.address = address;
-    const apartment = {
-      number: apartmentsNumber,
-      entrance,
-    };
-    building.apartments.push(apartment);
+    apartmentNumbers.forEach((apartmentNumber) => {
+      const apartment = {
+        number: apartmentNumber,
+        entrance,
+      };
+      building.apartments.push(apartment);
+    });
     buildings.push(building);
   });
   console.log(buildings);
