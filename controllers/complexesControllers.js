@@ -2,7 +2,7 @@ import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import { addComplex } from "../services/complexServices.js";
 
 const createComplex = async (req, res) => {
-  // const { addresses, apartmentsNumber } = req.body;
+  const { addresses, apartmentsNumber, entrance } = req.body;
 
   //   const apartments = [];
   //   for (i = 1; (i = apartmentsNumber); i++) {
@@ -21,7 +21,15 @@ const createComplex = async (req, res) => {
   // const buildings = [];
   // buildings.push(building);
   // console.log(buildings);
-  const result = await addComplex(req.body);
+  const data = {
+    buildings: [
+      {
+        address: addresses,
+        apartments: [{ number: apartmentsNumber, entrance }],
+      },
+    ],
+  };
+  const result = await addComplex(data);
   res.status(201).json(result);
 };
 

@@ -22,9 +22,12 @@ const buildingSchema = new Schema({
   apartments: [apartmentSchema],
 });
 
-const complexSchema = new Schema({
-  buildings: [buildingSchema],
-});
+const complexSchema = new Schema(
+  {
+    buildings: [buildingSchema],
+  },
+  { versionKey: false }
+);
 
 complexSchema.post("save", handleSaveError);
 complexSchema.pre("findOneAndUpdate", setUpdateSetting);
