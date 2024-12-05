@@ -8,12 +8,17 @@ const createComplex = async (req, res) => {
   //   for (i = 1; (i = apartmentsNumber); i++) {
   //     apartments.push(i);
   //   }
+  const buildings = [];
 
-  //   addresses.forEach((address) => {
-  //     address.apartments.forEach((apartment) => {
-  //       apartment.number = apartment;
-  //     });
-  //   });
+  addresses.forEach((address) => {
+    const building = {};
+    // addresses.forEach((address) => {
+    building.address = address;
+    building.entrance = entrance;
+    buildings.push(building);
+  });
+  console.log(buildings);
+  // });
   // const apartments = [apartmentsNumber];
   // const building = { addres: addresses, apartments };
   // console.log(building);
@@ -22,12 +27,13 @@ const createComplex = async (req, res) => {
   // buildings.push(building);
   // console.log(buildings);
   const data = {
-    buildings: [
-      {
-        address: addresses,
-        apartments: [{ number: apartmentsNumber, entrance }],
-      },
-    ],
+    // buildings: [
+    //   {
+    //     address: addresses[0],
+    //     apartments: [{ number: apartmentsNumber, entrance }],
+    //   },
+    // ],
+    buildings,
   };
   const result = await addComplex(data);
   res.status(201).json(result);
