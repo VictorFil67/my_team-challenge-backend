@@ -12,9 +12,14 @@ const createComplex = async (req, res) => {
 
   addresses.forEach((address) => {
     const building = {};
+    building.apartments = [];
     // addresses.forEach((address) => {
     building.address = address;
-    building.entrance = entrance;
+    const apartment = {
+      number: apartmentsNumber,
+      entrance,
+    };
+    building.apartments.push(apartment);
     buildings.push(building);
   });
   console.log(buildings);
