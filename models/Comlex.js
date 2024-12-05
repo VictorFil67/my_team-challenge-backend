@@ -24,6 +24,62 @@ const buildingSchema = new Schema({
 
 const complexSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: [true, "Name is required"],
+    },
+    images: [
+      {
+        type: String,
+      },
+    ],
+    properties: {
+      parking: {
+        type: Boolean,
+        required: [true, "Parking is required"],
+        default: false,
+      },
+      security: {
+        type: Boolean,
+        required: [true, "Security is required"],
+        default: false,
+      },
+      access_control: {
+        type: Boolean,
+        required: [true, "Access control is required"],
+        default: false,
+      },
+      concierge: {
+        type: Boolean,
+        required: [true, "Concierge is required"],
+        default: false,
+      },
+      playground: {
+        type: Boolean,
+        required: [true, "Playground is required"],
+        default: false,
+      },
+      closed_area: {
+        type: Boolean,
+        required: [true, "Closed area is required"],
+        default: false,
+      },
+      video_surveillance: {
+        type: Boolean,
+        required: [true, "Video surveillance is required"],
+        default: false,
+      },
+      floors: {
+        type: Number,
+        required: [true, "Floors is required"],
+        default: 1,
+      },
+      entrances: {
+        type: Number,
+        required: [true, "Entrances is required"],
+        default: 1,
+      },
+    },
     buildings: [buildingSchema],
   },
   { versionKey: false }
