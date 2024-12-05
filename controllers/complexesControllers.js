@@ -2,7 +2,7 @@ import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import { addComplex } from "../services/complexServices.js";
 
 const createComplex = async (req, res) => {
-  const { addresses, apartmentsNumber, entrance } = req.body;
+  const { addresses, apartmentsNumber, entrances } = req.body;
 
   const apartmentNumbers = [];
   for (let i = 1; i <= apartmentsNumber; i += 1) {
@@ -17,9 +17,22 @@ const createComplex = async (req, res) => {
     // addresses.forEach((address) => {
     building.address = address;
     apartmentNumbers.forEach((apartmentNumber) => {
+      const apartmentsPerEntrance = Math.ceil(apartmentsNumber / entrances);
       const apartment = {
         number: apartmentNumber,
-        entrance,
+        entrance:
+          apartmentNumber <= apartmentsPerEntrance
+            ? 1
+            : apartmentNumber > apartmentsPerEntrance &&
+              apartmentNumber <= 2 * apartmentsPerEntrance
+            ? 2
+            : apartmentNumber > 2 * apartmentsPerEntrance &&
+              apartmentNumber <= 3 * apartmentsPerEntrance
+            ? 3
+            : apartmentNumber > 3 * apartmentsPerEntrance &&
+              apartmentNumber <= 4 * apartmentsPerEntrance
+            ? 5
+            : 6,
       };
       building.apartments.push(apartment);
     });
