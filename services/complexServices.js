@@ -7,3 +7,7 @@ export async function addComplex(data) {
 export async function findComplex(filter) {
   return await Complex.findOne(filter);
 }
+
+export async function updateComplexById(id, data) {
+  return await Complex.findByIdAndUpdate(id, data);
+}

@@ -1,6 +1,10 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
-import { addComplex, findComplex } from "../services/complexServices.js";
+import {
+  addComplex,
+  findComplex,
+  updateComplexById,
+} from "../services/complexServices.js";
 
 const createComplex = async (req, res) => {
   const {
@@ -8,7 +12,6 @@ const createComplex = async (req, res) => {
     images,
     parking,
     addresses,
-    // apartmentsNumber,
     entrances,
     security,
     access_control,
@@ -25,41 +28,14 @@ const createComplex = async (req, res) => {
     throw HttpError(403, `You can't add complex, which already exists`);
   }
 
-  // const apartmentNumbers = [];
-  // for (let i = 1; i <= apartmentsNumber; i += 1) {
-  //   apartmentNumbers.push(i);
-  // }
-  // console.log(apartmentNumbers);
   const buildings = [];
 
   addresses.forEach((address) => {
     const building = {};
-    // building.apartments = [];
     building.address = address;
 
-    // apartmentNumbers.forEach((apartmentNumber) => {
-    //   const apartmentsPerEntrance = Math.ceil(apartmentsNumber / entrances);
-    //   const apartment = {
-    //     number: apartmentNumber,
-    //     entrance:
-    //       apartmentNumber <= apartmentsPerEntrance
-    //         ? 1
-    //         : apartmentNumber > apartmentsPerEntrance &&
-    //           apartmentNumber <= 2 * apartmentsPerEntrance
-    //         ? 2
-    //         : apartmentNumber > 2 * apartmentsPerEntrance &&
-    //           apartmentNumber <= 3 * apartmentsPerEntrance
-    //         ? 3
-    //         : apartmentNumber > 3 * apartmentsPerEntrance &&
-    //           apartmentNumber <= 4 * apartmentsPerEntrance
-    //         ? 5
-    //         : 6,
-    //   };
-    //   building.apartments.push(apartment);
-    // });
     buildings.push(building);
   });
-  // console.log(buildings);
 
   const data = {
     name,
@@ -79,6 +55,17 @@ const createComplex = async (req, res) => {
   };
   const result = await addComplex(data);
   res.status(201).json(result);
+};
+
+const updateComplex = async (req, res) => {
+  const { complexId: _id } = req.params;
+  const result = await updateComplexById(_id, req.body);
+  res.status(200).json(result);
+};
+
+export default {
+  createComplex: ctrlWrapper(createComplex),
+  updateComplex: ctrlWrapper(updateComplex),
 };
 
 // const createComplex = async (req, res) => {
@@ -159,5 +146,3 @@ const createComplex = async (req, res) => {
 //   const result = await addComplex(data);
 //   res.status(201).json(result);
 // };
-
-export default { createComplex: ctrlWrapper(createComplex) };
