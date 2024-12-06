@@ -62,6 +62,10 @@ const createComplex = async (req, res) => {
 };
 
 const updateComplex = async (req, res) => {
+  const { is_admin } = req.user;
+  if (!is_admin) {
+    throw HttpError(403, `You must be an administrator to commit this action`);
+  }
   const { complexId: _id } = req.params;
   const result = await updateComplexById(_id, req.body);
   res.status(200).json(result);
