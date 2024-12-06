@@ -7,6 +7,10 @@ import {
 } from "../services/complexServices.js";
 
 const createComplex = async (req, res) => {
+  const { is_admin } = req.user;
+  if (!is_admin) {
+    throw HttpError(403, `You must be an administrator to commit this action`);
+  }
   const {
     name,
     images,
