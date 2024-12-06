@@ -6,8 +6,9 @@ const complexesRouter = express.Router();
 
 complexesRouter.use(authenticate);
 
-const { createComplex } = complexesControllers;
+const { createComplex, updateComplex } = complexesControllers;
 
 complexesRouter.post("/", createComplex);
+complexesRouter.put("/:complexId", updateComplex);
 
 export default complexesRouter;
