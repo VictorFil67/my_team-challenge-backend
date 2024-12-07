@@ -29,7 +29,7 @@ const addUserAddresses = async (req, res) => {
     to: email,
     subject: "Your addresses",
     html: `<h1>Hello, ${name}!</h1>
-        <p>Congratulations! Your addresses have been successfully added to your profile.</p>
+        <p>Congratulations!</p><p>Your addresses have been successfully added to your profile.</p>
          <p>Now you need to wait for the moderator's approval</p>
          <p>You will be notified of this by email</p>
          <p>If you have any questions, you can always contact our support team.</p>
