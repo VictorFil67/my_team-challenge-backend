@@ -32,13 +32,19 @@ const createComplex = async (req, res) => {
     throw HttpError(403, `You can't add complex, which already exists`);
   }
 
-  const buildings = [];
+  // The first variant
+  // const buildings = [];
 
-  addresses.forEach((address) => {
-    const building = {};
-    building.address = address;
+  // addresses.forEach((address) => {
+  //   const building = {};
+  //   building.address = address;
 
-    buildings.push(building);
+  //   buildings.push(building);
+  // });
+
+  // The second variant
+  const buildings = addresses.map((address) => {
+    return { address };
   });
 
   const data = {
