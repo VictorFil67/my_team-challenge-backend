@@ -36,7 +36,7 @@ const signup = async (req, res) => {
     to: email,
     subject: "Registration",
     html: `<h1>Hello, ${name}!</h1>
-        <p>Congratulations! You have registered successfully.</p>
+        <p>Congratulations!</p><p>You have registered successfully.</p>
          <p>Your next step is to add your address(addresses) to your profile by filling out the necessary form.</p>
          <p>If you have any questions, you can always contact our support team.</p>
         <p style="margin-top: 10px;">Best regards,</p>
