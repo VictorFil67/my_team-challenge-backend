@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import expressOasGenerator from "express-oas-generator";
 import swaggerUi from "swagger-ui-express";
-import * as fs from "fs";
+import fs from "fs";
 // import { createServer } from "node:http";
 // import swaggerDocument from "./docs/swagger.json" assert { type: "json" };
 // import contactsRouter from "./routes/contactsRouter.js";
@@ -21,7 +21,10 @@ dotenv.config();
 
 const app = express();
 
-expressOasGenerator.init(app, { specOutputPath: "./docs/oas.json" });
+const oasPath = "./oas.json";
+// expressOasGenerator.init(app, { specOutputPath: "./docs/oas.json" });
+// Инициализация express-oas-generator
+expressOasGenerator.init(app, {});
 // expressOasGenerator.handleResponses(app, {});
 
 app.use(morgan("tiny"));
@@ -51,14 +54,29 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-// expressOasGenerator.handleRequests();
-const oasPath = "./oas.json";
-if (fs.existsSync(oasPath)) {
+// Проверяем наличие файла oas.json
+if (!fs.existsSync(oasPath)) {
+  console.log(
+    "oas.json не найден. Он будет создан после первого запуска приложения."
+  );
+  fs.writeFileSync(oasPath, JSON.stringify({}), "utf-8"); // Создаем пустой файл
+}
+
+// Подключаем Swagger UI
+try {
   const oasJson = JSON.parse(fs.readFileSync(oasPath, "utf-8"));
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(oasJson));
-} else {
-  console.warn("oas.json does not exist yet. Run the server to generate it.");
+} catch (error) {
+  console.error("Ошибка парсинга oas.json:", error.message);
 }
+
+// expressOasGenerator.handleRequests();
+// if (fs.existsSync(oasPath)) {
+//   const oasJson = JSON.parse(fs.readFileSync(oasPath, "utf-8"));
+//   app.use("/docs", swaggerUi.serve, swaggerUi.setup(oasJson));
+// } else {
+//   console.warn("oas.json does not exist yet. Run the server to generate it.");
+// }
 
 const { DB_HOST, PORT = 3000 } = process.env;
 

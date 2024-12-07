@@ -29,9 +29,9 @@ const addUserAddresses = async (req, res) => {
     to: email,
     subject: "Your addresses",
     html: `<h1>Hello, ${name}!</h1>
-        <p>Congratulations!</p><p>Your addresses have been successfully added to your profile.</p>
-         <p>Now you need to wait for the moderator's approval</p>
-         <p>You will be notified of this by email</p>
+        <p>Congratulations!</p><p>Your addresses <span style='font-weight: bold; color: green;'>(residential complex - ${residential_complex}, building - ${building}, entrance - ${entrance}, apartment - ${apartment})</span> have been successfully added to your profile.</p>
+         <p>Now you need to wait for the moderator's approval.</p>
+         <p>You will be notified of this by email.</p>
          <p>If you have any questions, you can always contact our support team.</p>
         <p style="margin-top: 10px;">Best regards,</p>
         <p style="margin-top: 10px;">The Teamchallenge Chat Team</p>`,
