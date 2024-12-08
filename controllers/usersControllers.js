@@ -45,9 +45,10 @@ const addUserAddresses = async (req, res) => {
   buildings.push({ ...req.body });
 
   const result = await updateUser(_id, { buildings });
-  const { email: adminEmail } = findUser({ is_admin: true });
-  console.log(adminEmail);
 
+  const { email: adminEmail } = await findUser({ is_admin: true });
+  console.log(`adminEmail: ${adminEmail}`);
+  // xegoxa5375sw@cantozil.com
   const userEmail = {
     to: email,
     subject: "Your addresses",
@@ -59,7 +60,15 @@ const addUserAddresses = async (req, res) => {
         <p style="margin-top: 10px;">Best regards,</p>
         <p style="margin-top: 10px;">The Teamchallenge Chat Team</p>`,
   };
+
+  const emailOfAdmin = {
+    to: adminEmail,
+    subject: "For approving",
+    html: `<p>The user ${name} has applied for approving his address <span style='font-weight: bold; color: green;'>(residential complex - ${residential_complex}, building - ${building}, entrance - ${entrance}, apartment - ${apartment})</span></p>`,
+  };
+
   await sendEmail(userEmail);
+  await sendEmail(emailOfAdmin);
   res.status(200).json(result);
 };
 
