@@ -8,13 +8,15 @@ const addUserAddresses = async (req, res) => {
   const { _id, email, name } = req.user;
   const { residential_complex, building, entrance, apartment } = req.body;
 
-  const { buildings: addresses } = await findComplex({
-    name: residential_complex,
-    // building,
-    // entrance,
-    // apartment,
+  const complex = await findComplex({
+    buildings: {
+      $elemMatch: {
+        address: building,
+        apartments: { $elemMatch: { number: 11, entrance: 1 } },
+      },
+    },
   });
-  console.log(addresses);
+  console.log(complex);
   const { buildings } = await findUserById(_id);
 
   const existedAddress = buildings.find(
