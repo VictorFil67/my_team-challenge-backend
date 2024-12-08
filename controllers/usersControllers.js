@@ -72,4 +72,37 @@ const addUserAddresses = async (req, res) => {
   res.status(200).json(result);
 };
 
-export default { addUserAddresses: ctrlWrapper(addUserAddresses) };
+const deleteUserAddress = async (req, res) => {
+  const { _id, email, name } = req.user;
+  const { residential_complex, building, entrance, apartment } = req.body;
+
+  const { buildings } = await findUserById(_id);
+
+  const existedUserAddress = buildings.find(
+    (userAddress) =>
+      userAddress.residential_complex === residential_complex &&
+      userAddress.building === building &&
+      userAddress.entrance === entrance &&
+      userAddress.apartment === apartment
+  );
+  if (!existedUserAddress) {
+    throw HttpError(
+      400,
+      `Sorry, but this address doesn't exist in your addresses list, so you have to enter the correct address`
+    );
+  }
+  const newBuildings = await buildings.filter(
+    (userAddress) =>
+      userAddress.residential_complex !== residential_complex ||
+      userAddress.building !== building ||
+      userAddress.entrance !== entrance ||
+      userAddress.apartment !== apartment
+  );
+  const result = await updateUser(_id, { buildings: newBuildings });
+  res.json(result);
+};
+
+export default {
+  addUserAddresses: ctrlWrapper(addUserAddresses),
+  deleteUserAddress: ctrlWrapper(deleteUserAddress),
+};

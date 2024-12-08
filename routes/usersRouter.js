@@ -8,12 +8,17 @@ const usersRouter = express.Router();
 
 usersRouter.use(authenticate);
 
-const { addUserAddresses } = usersControllers;
+const { addUserAddresses, deleteUserAddress } = usersControllers;
 
 usersRouter.put(
   "/addresses",
   validateBody(addUserAddressesSchema),
   addUserAddresses
+);
+usersRouter.delete(
+  "/addresses",
+  validateBody(addUserAddressesSchema),
+  deleteUserAddress
 );
 
 export default usersRouter;
