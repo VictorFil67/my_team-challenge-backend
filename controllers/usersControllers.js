@@ -2,7 +2,11 @@ import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 import sendEmail from "../helpers/sendEmail.js";
 import { findComplex } from "../services/complexServices.js";
-import { findUserById, updateUser } from "../services/userServices.js";
+import {
+  findUser,
+  findUserById,
+  updateUser,
+} from "../services/userServices.js";
 
 const addUserAddresses = async (req, res) => {
   const { _id, email, name } = req.user;
@@ -41,6 +45,9 @@ const addUserAddresses = async (req, res) => {
   buildings.push({ ...req.body });
 
   const result = await updateUser(_id, { buildings });
+  const { email: adminEmail } = findUser({ is_admin: true });
+  console.log(adminEmail);
+
   const userEmail = {
     to: email,
     subject: "Your addresses",
