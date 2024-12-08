@@ -8,29 +8,34 @@ const addUserAddresses = async (req, res) => {
   const { _id, email, name } = req.user;
   const { residential_complex, building, entrance, apartment } = req.body;
 
-  const complex = await findComplex({
+  const existedAddress = await findComplex({
     buildings: {
       $elemMatch: {
         address: building,
-        apartments: { $elemMatch: { number: 11, entrance: 1 } },
+        apartments: { $elemMatch: { number: apartment, entrance: entrance } },
       },
     },
   });
-  console.log(complex);
+  if (!existedAddress) {
+    throw HttpError(
+      400,
+      `The address: residential complex - ${residential_complex}, building - ${building}, entrance - ${entrance}, apartment - ${apartment} does not exist! Enter the correct data`
+    );
+  }
+  console.log(existedAddress);
   const { buildings } = await findUserById(_id);
 
-  const existedAddress = buildings.find(
+  const existedUserAddress = buildings.find(
     (userAddress) =>
       userAddress.residential_complex === residential_complex &&
       userAddress.building === building &&
       userAddress.entrance === entrance &&
       userAddress.apartment === apartment
   );
-  if (existedAddress) {
+  if (existedUserAddress) {
     throw HttpError(
       403,
       `This address already exists, so you can't write down this address once more`
-      //   `You don't have access to this action, because you have already voted!`
     );
   }
   buildings.push({ ...req.body });
