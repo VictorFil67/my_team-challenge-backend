@@ -1,13 +1,22 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 import sendEmail from "../helpers/sendEmail.js";
+import { findComplex } from "../services/complexServices.js";
 import { findUserById, updateUser } from "../services/userServices.js";
 
 const addUserAddresses = async (req, res) => {
   const { _id, email, name } = req.user;
   const { residential_complex, building, entrance, apartment } = req.body;
+
+  const { buildings: addresses } = await findComplex({
+    name: residential_complex,
+    // building,
+    // entrance,
+    // apartment,
+  });
+  console.log(addresses);
   const { buildings } = await findUserById(_id);
-  //   console.log(buildings);
+
   const existedAddress = buildings.find(
     (userAddress) =>
       userAddress.residential_complex === residential_complex &&
@@ -23,7 +32,7 @@ const addUserAddresses = async (req, res) => {
     );
   }
   buildings.push({ ...req.body });
-  //   console.log(buildings);
+
   const result = await updateUser(_id, { buildings });
   const userEmail = {
     to: email,
