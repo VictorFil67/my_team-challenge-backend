@@ -109,7 +109,8 @@ const approveUserAddress = async (req, res) => {
   const { residential_complex, building, entrance, apartment } = req.query;
   const { _id } = req.user;
 
-  const { is_admin } = await findUser(_id);
+  const { is_admin } = await findUserById(_id);
+  console.log(is_admin);
   if (!is_admin) {
     throw HttpError(
       403,
@@ -117,30 +118,30 @@ const approveUserAddress = async (req, res) => {
     );
   }
 
-  const result = await updateUserAddress(
+  const { modifiedCount, matchedCount } = await updateUserAddress(
+    { _id: userId },
     {
-      _id: userId,
-      buildings: {
-        //   $elemMatch: {
-        // address: building,
-        // apartments: {
-        $elemMatch: {
-          residential_complex,
-          building,
-          number: apartment,
-          entrance,
-        },
-        // },
-        //   },
-      },
+      $set: { "buildings.$[elem].approved": true },
     },
-    { $set: { "buildings.$.approved": true } }
+    {
+      arrayFilters: [
+        {
+          "elem.residential_complex": residential_complex,
+          "elem.building": building,
+          "elem.apartment": apartment,
+          "elem.entrance": entrance,
+        },
+      ],
+    }
   );
-
-  res.json(result);
+  if ((modifiedCount !== 1 && matchedCount === 1) || matchedCount === 0) {
+    throw HttpError(400, "The wrong request data");
+  }
+  res.json("User address data was approved");
 };
 
 export default {
   addUserAddresses: ctrlWrapper(addUserAddresses),
   deleteUserAddress: ctrlWrapper(deleteUserAddress),
+  approveUserAddress: ctrlWrapper(approveUserAddress),
 };

@@ -3,7 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import expressOasGenerator from "express-oas-generator";
+// import expressOasGenerator from "express-oas-generator";
 import swaggerUi from "swagger-ui-express";
 import fs from "fs";
 // import { createServer } from "node:http";
@@ -24,7 +24,7 @@ const app = express();
 const oasPath = "./oas.json";
 // expressOasGenerator.init(app, { specOutputPath: "./docs/oas.json" });
 // Инициализация express-oas-generator
-expressOasGenerator.init(app, {});
+// expressOasGenerator.init(app, {});
 // expressOasGenerator.handleResponses(app, {});
 
 app.use(morgan("tiny"));
@@ -55,20 +55,20 @@ app.use((err, req, res, next) => {
 });
 
 // Проверяем наличие файла oas.json
-if (!fs.existsSync(oasPath)) {
-  console.log(
-    "oas.json не найден. Он будет создан после первого запуска приложения."
-  );
-  fs.writeFileSync(oasPath, JSON.stringify({}), "utf-8"); // Создаем пустой файл
-}
+// if (!fs.existsSync(oasPath)) {
+//   console.log(
+//     "oas.json не найден. Он будет создан после первого запуска приложения."
+//   );
+//   fs.writeFileSync(oasPath, JSON.stringify({}), "utf-8"); // Создаем пустой файл
+// }
 
 // Подключаем Swagger UI
-try {
-  const oasJson = JSON.parse(fs.readFileSync(oasPath, "utf-8"));
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(oasJson));
-} catch (error) {
-  console.error("Ошибка парсинга oas.json:", error.message);
-}
+// try {
+//   const oasJson = JSON.parse(fs.readFileSync(oasPath, "utf-8"));
+//   app.use("/docs", swaggerUi.serve, swaggerUi.setup(oasJson));
+// } catch (error) {
+//   console.error("Ошибка парсинга oas.json:", error.message);
+// }
 
 // expressOasGenerator.handleRequests();
 // if (fs.existsSync(oasPath)) {
@@ -87,9 +87,9 @@ mongoose
 
     app.listen(PORT, () => {
       console.log(`Server is running. Use our API on port: ${PORT}`);
-      console.log(
-        `Swagger docs available at http://localhost:${PORT}/api-docs`
-      );
+      // console.log(
+      //   `Swagger docs available at http://localhost:${PORT}/api-docs`
+      // );
     });
   })
   .catch((error) => {
