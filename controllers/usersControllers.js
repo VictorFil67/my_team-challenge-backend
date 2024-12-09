@@ -99,7 +99,21 @@ const deleteUserAddress = async (req, res) => {
       userAddress.apartment !== apartment
   );
   const result = await updateUser(_id, { buildings: newBuildings });
+
   res.json(result);
+};
+
+const approveUserAddress = async (req, res) => {
+  const { userId } = req.params;
+  const { residential_complex, building, entrance, apartment } = req.query;
+  const { _id } = req.user;
+  const { is_admin } = await findUser(_id);
+  if (!is_admin) {
+    throw HttpError(
+      403,
+      "Sorry, you must be an administrator to perform this action."
+    );
+  }
 };
 
 export default {
