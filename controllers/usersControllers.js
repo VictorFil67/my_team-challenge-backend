@@ -107,6 +107,7 @@ const approveUserAddress = async (req, res) => {
   const { userId } = req.params;
   const { residential_complex, building, entrance, apartment } = req.query;
   const { _id } = req.user;
+
   const { is_admin } = await findUser(_id);
   if (!is_admin) {
     throw HttpError(
