@@ -6,6 +6,7 @@ import {
   findUser,
   findUserById,
   updateUser,
+  updateUserAddress,
 } from "../services/userServices.js";
 
 const addUserAddresses = async (req, res) => {
@@ -115,6 +116,28 @@ const approveUserAddress = async (req, res) => {
       "Sorry, you must be an administrator to perform this action."
     );
   }
+
+  const result = await updateUserAddress(
+    {
+      _id: userId,
+      buildings: {
+        //   $elemMatch: {
+        // address: building,
+        // apartments: {
+        $elemMatch: {
+          residential_complex,
+          building,
+          number: apartment,
+          entrance,
+        },
+        // },
+        //   },
+      },
+    },
+    { $set: { "buildings.$.approved": true } }
+  );
+
+  res.json(result);
 };
 
 export default {
