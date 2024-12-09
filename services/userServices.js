@@ -12,6 +12,9 @@ export function updateUser(id, data) {
   return User.findByIdAndUpdate(id, data, { new: true });
 }
 
-export function updateUserAddress(filter, data) {
-  return User.updateOne(filter, data);
+export function updateUserAddress(filter, data, array) {
+  return User.updateOne(filter, data, array);
 }
+// export function updateUserAddress(filter, data) {
+//   return User.findByIdAndUpdate(filter, data, { new: true });
+// }
