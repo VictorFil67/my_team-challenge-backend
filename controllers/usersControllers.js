@@ -8,6 +8,9 @@ import {
   updateUser,
   updateUserAddress,
 } from "../services/userServices.js";
+import "dotenv/config";
+
+const { DEPLOY_HOST } = process.env;
 
 const addUserAddresses = async (req, res) => {
   const { _id, email, name } = req.user;
@@ -65,7 +68,10 @@ const addUserAddresses = async (req, res) => {
   const emailOfAdmin = {
     to: adminEmail,
     subject: "For approving",
-    html: `<p>The user ${name} has applied for approving his address <span style='font-weight: bold; color: green;'>(residential complex - ${residential_complex}, building - ${building}, entrance - ${entrance}, apartment - ${apartment})</span></p>`,
+    html: `<p>The user ${name} has applied for approving his address <span style='font-weight: bold; color: green;'>(residential complex - ${residential_complex}, building - ${building}, entrance - ${entrance}, apartment - ${apartment})</span></p>
+    <p>Please follow the link below to approve</p>
+    <a href='${DEPLOY_HOST}/approve/${_id}?residential_complex=${residential_complex}&building=${building}&entrance=${entrance}&apartment=${apartment}' style='margin-top: 20px; font-size:18px; font-weight:bold; color:red' target='_blank'>Click to approve</a>
+    `,
   };
 
   await sendEmail(userEmail);
