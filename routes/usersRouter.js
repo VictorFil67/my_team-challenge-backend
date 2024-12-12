@@ -3,6 +3,7 @@ import authenticate from "../middlewares/authenticate.js";
 import usersControllers from "../controllers/usersControllers.js";
 import validateBody from "../decorators/validateBody.js";
 import { addUserAddressesSchema } from "../schemas/usersSchemas.js";
+import isValidId from "../middlewares/isValidId.js";
 
 const usersRouter = express.Router();
 
@@ -21,6 +22,6 @@ usersRouter.delete(
   validateBody(addUserAddressesSchema),
   deleteUserAddress
 );
-usersRouter.patch("/addresses/:userId", approveUserAddress);
+usersRouter.patch("/addresses/:userId", isValidId, approveUserAddress);
 
 export default usersRouter;
