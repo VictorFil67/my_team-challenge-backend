@@ -81,8 +81,15 @@ const logout = async (req, res) => {
   // res.json("Log out successful");
 };
 
+const getCurrent = async (req, res) => {
+  const user = req.user;
+  console.log(user);
+  res.json(user);
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   logout: ctrlWrapper(logout),
+  getCurrent: ctrlWrapper(getCurrent),
 };
