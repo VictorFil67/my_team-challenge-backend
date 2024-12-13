@@ -89,9 +89,27 @@ const getCurrent = async (req, res) => {
   res.json(user);
 };
 
+const getRefreshCurrent = async (req, res) => {
+  const { _id } = req.user;
+  const payload = {
+    id: _id,
+  };
+  const accessToken = jwt.sign(payload, JWT_SECRET, {
+    expiresIn: "1h",
+  });
+  const refreshToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+  await setTokens(id, accessToken, refreshToken);
+
+  res.json({
+    accessToken,
+    refreshToken,
+  });
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   logout: ctrlWrapper(logout),
   getCurrent: ctrlWrapper(getCurrent),
+  getRefreshCurrent: ctrlWrapper(getRefreshCurrent),
 };
