@@ -98,7 +98,7 @@ const getRefreshCurrent = async (req, res) => {
     expiresIn: "1h",
   });
   const refreshToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
-  await setTokens(id, accessToken, refreshToken);
+  await setTokens(_id, accessToken, refreshToken);
 
   res.json({
     accessToken,
