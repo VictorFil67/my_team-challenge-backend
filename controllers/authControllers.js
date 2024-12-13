@@ -82,7 +82,9 @@ const logout = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const user = req.user;
+  const userRes = { ...req.user };
+  delete userRes._doc.password;
+  const user = userRes._doc;
   console.log(user);
   res.json(user);
 };
