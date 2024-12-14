@@ -25,3 +25,15 @@ export async function updateUser(filter, data) {
     return User.findOneAndUpdate(filter, data, { new: true });
   }
 }
+
+export async function recoverPassword(tempCode, data) {
+  const hashPassword = await bcrypt.hash(data.password, 10);
+  return User.findOneAndUpdate(
+    { tempCode },
+    {
+      password: hashPassword,
+      $unset: { tempCode: "", tempCodeTime: "" },
+      // $unset: { tempCode },
+    } //$unset — оператор, который удаляет указанное поле из документа. Значение в $unset не имеет значения (можно использовать пустую строку или null), главное указать имя поля.MongoDB ожидает, что объект $unset будет единым, и все поля для удаления должны быть указаны в нем.
+  );
+}

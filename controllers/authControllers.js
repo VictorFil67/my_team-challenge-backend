@@ -1,7 +1,11 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 import User from "../models/User.js";
-import { register, setTokens } from "../services/authServices.js";
+import {
+  recoverPassword,
+  register,
+  setTokens,
+} from "../services/authServices.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import sendEmail from "../helpers/sendEmail.js";
