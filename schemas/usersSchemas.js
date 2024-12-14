@@ -45,3 +45,7 @@ export const addUserAddressesSchema = Joi.object({
   entrance: Joi.number().required(),
   apartment: Joi.number().required(),
 });
+
+export const forgotPasswordSchema = Joi.object({
+  email: Joi.string().email().required().trim(),
+});
