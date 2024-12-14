@@ -5,12 +5,14 @@ import { register, setTokens } from "../services/authServices.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import sendEmail from "../helpers/sendEmail.js";
-import { findUser } from "../services/userServices.js";
+import { findUser, updateUserByFilter } from "../services/userServices.js";
 import bcrypt from "bcrypt";
+import { generateRandomCode } from "../helpers/generateRandomCode.js";
 
 dotenv.config();
 
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, DEPLOY_HOST } = process.env;
+const DELAY = 30 * 60 * 1000;
 
 const signup = async (req, res) => {
   const { email, name } = req.body;
@@ -117,7 +119,7 @@ const forgotPassword = async (req, res) => {
   const tempCode = generateRandomCode();
   const tempCodeTime = Date.now() + DELAY;
 
-  await updateUser({ email }, { tempCode, tempCodeTime });
+  await updateUserByFilter({ email }, { tempCode, tempCodeTime });
   const userEmail = {
     to: email,
     subject: "Forgot password",
