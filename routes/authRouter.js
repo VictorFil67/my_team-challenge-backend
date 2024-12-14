@@ -24,7 +24,7 @@ authRouter.post("/login", validateBody(signinSchema), signin);
 authRouter.post("/logout", authenticate, logout);
 authRouter.get("/current", authenticate, getCurrent);
 authRouter.get("/refresh", authenticate, getRefreshCurrent);
-authRouter.post(
+authRouter.put(
   "/forgot-password",
   validateBody(forgotPasswordSchema),
   forgotPassword
