@@ -106,10 +106,46 @@ const getRefreshCurrent = async (req, res) => {
   });
 };
 
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await findUser({ email });
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+
+  const tempCode = generateRandomCode();
+  const tempCodeTime = Date.now() + DELAY;
+
+  await updateUser({ email }, { tempCode, tempCodeTime });
+  const userEmail = {
+    to: email,
+    subject: "Forgot password",
+    html: `
+        <h1>Hello, did you forget your password?</h1>
+        <p>If no, ignore this email.</p>
+        <p>Otherwise, please click on the link below, <span style="font-weight: bold;">but remember that this link will expire in <span style="color: red;">${
+          DELAY / 60000
+        } min</span></p>
+        <div style="margin-bottom: 20px;">
+          <a href="${DEPLOY_HOST}/update-password/${tempCode}" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #407bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 15px;">Click to update your password!</a>
+        </div>
+        `,
+  };
+
+  await sendEmail(userEmail);
+
+  res.json({
+    message:
+      "An email has been sent to your email address to recover your password",
+  });
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   logout: ctrlWrapper(logout),
   getCurrent: ctrlWrapper(getCurrent),
   getRefreshCurrent: ctrlWrapper(getRefreshCurrent),
+  forgotPassword: ctrlWrapper(forgotPassword),
 };
