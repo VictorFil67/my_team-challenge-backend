@@ -15,6 +15,6 @@ export function updateUser(id, data) {
 export function updateUserAddress(filter, data, array) {
   return User.updateOne(filter, data, array);
 }
-// export function updateUserAddress(filter, data) {
-//   return User.findByIdAndUpdate(filter, data, { new: true });
-// }
+export function updateUserByFilter(filter, data) {
+  return User.findOneAndUpdate(filter, data, { new: true });
+}
