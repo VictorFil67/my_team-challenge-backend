@@ -143,6 +143,30 @@ const forgotPassword = async (req, res) => {
   });
 };
 
+const updatePassword = async (req, res) => {
+  const { tempCode } = req.params;
+  const { newPassword } = req.body;
+
+  const user = await findUser({ tempCode });
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  if (user.tempCodeTime < Date.now()) {
+    throw HttpError(
+      403,
+      "Unfortunately, your link has expired, so you can't access this action. Try to recover your password again."
+    );
+  }
+
+  await recoverPassword(tempCode, {
+    password: newPassword,
+  });
+
+  res.status(200).json({
+    message: "Your password has been updated successfully",
+  });
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
