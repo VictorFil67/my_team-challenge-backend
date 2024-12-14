@@ -17,6 +17,7 @@ const {
   getCurrent,
   getRefreshCurrent,
   forgotPassword,
+  updatePassword,
 } = authController;
 
 authRouter.post("/register", validateBody(signupSchema), signup);
