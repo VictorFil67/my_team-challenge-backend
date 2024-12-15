@@ -5,11 +5,12 @@ import {
   recoverPassword,
   register,
   setTokens,
+  updateUser,
 } from "../services/authServices.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import sendEmail from "../helpers/sendEmail.js";
-import { findUser, updateUserByFilter } from "../services/userServices.js";
+import { findUser } from "../services/userServices.js";
 import bcrypt from "bcrypt";
 import { generateRandomCode } from "../helpers/generateRandomCode.js";
 
@@ -123,7 +124,7 @@ const forgotPassword = async (req, res) => {
   const tempCode = generateRandomCode();
   const tempCodeTime = Date.now() + DELAY;
 
-  await updateUserByFilter({ email }, { tempCode, tempCodeTime });
+  await updateUser({ email }, { tempCode, tempCodeTime });
   const userEmail = {
     to: email,
     subject: "Forgot password",
