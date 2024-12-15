@@ -173,8 +173,11 @@ const updatePassword = async (req, res) => {
 };
 
 const updateUserdata = async (req, res) => {
-  const { _id } = req.user;
-  const result = await updateUser({ _id }, req.body, "-password");
+  const { _id, is_admin } = req.user;
+  const admin = is_admin ? { is_admin: true } : { is_admin: false };
+  console.log(admin);
+  const data = { ...req.body, ...admin };
+  const result = await updateUser({ _id }, data);
   res.status(200).json(result);
 };
 

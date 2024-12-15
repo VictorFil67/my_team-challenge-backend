@@ -40,3 +40,5 @@ export async function recoverPassword(tempCode, data) {
     } //$unset — оператор, который удаляет указанное поле из документа. Значение в $unset не имеет значения (можно использовать пустую строку или null), главное указать имя поля.MongoDB ожидает, что объект $unset будет единым, и все поля для удаления должны быть указаны в нем.
   );
 }
+// "password": "$2b$10$dCij5bXMhJPwK.6y2fqrdOoB0wRCqBGNCDxPgR//YBknQEqxIVRkS"
+// "password": "$2b$10$aPUhFwz.em4j9tEIXg7eeexUuXyV4d13cPP0InaV0Cdzr8F2mJFd2"
