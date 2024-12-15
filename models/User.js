@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { handleSaveError, setUpdateSetting } from "./hooks.js";
+// import { string } from "joi";
 
 // const isLoggedIn = () => {
 //   console.log(this.tokens)
@@ -74,6 +75,12 @@ const userSchema = new Schema(
       },
     },
     is_admin: { type: Boolean, default: false },
+    tempCode: {
+      type: String,
+    },
+    tempCodeTime: {
+      type: String,
+    },
   },
   { versionKey: false }
 );

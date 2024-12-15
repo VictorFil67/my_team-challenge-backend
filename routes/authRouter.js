@@ -6,6 +6,7 @@ import {
   forgotPasswordSchema,
   signinSchema,
   signupSchema,
+  updatePasswordSchema,
 } from "../schemas/usersSchemas.js";
 
 const authRouter = express.Router();
@@ -29,6 +30,11 @@ authRouter.put(
   "/forgot-password",
   validateBody(forgotPasswordSchema),
   forgotPassword
+);
+authRouter.put(
+  "/update-password/:tempCode",
+  validateBody(updatePasswordSchema),
+  updatePassword
 );
 
 export default authRouter;
