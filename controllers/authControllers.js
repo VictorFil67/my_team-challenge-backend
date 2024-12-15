@@ -20,14 +20,21 @@ const { JWT_SECRET, DEPLOY_HOST } = process.env;
 const DELAY = 30 * 60 * 1000;
 
 const signup = async (req, res) => {
-  const { email, name } = req.body;
+  const { email, name, gender } = req.body;
 
   const user = await findUser({ email });
   if (user) {
     throw HttpError(409, "This email is already in use");
   }
 
-  const newUser = await register(req.body);
+  const avatar =
+    gender === "male"
+      ? `https://avatar.iran.liara.run/public/boy?username=${name}`
+      : gender === "female"
+      ? `https://avatar.iran.liara.run/public/girl?username=${name}`
+      : `https://avatar.iran.liara.run/username?username=${name}`;
+
+  const newUser = await register({ ...req.body, avatar });
 
   const payload = { id: newUser._id };
   const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });

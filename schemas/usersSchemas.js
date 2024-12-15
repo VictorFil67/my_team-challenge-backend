@@ -24,6 +24,7 @@ export const signupSchema = Joi.object({
           "Must be from 10 to 12 digits (+111222333444) with or without '+'"
         )
     ),
+  gender: Joi.string().valid("male", "female"),
 });
 
 export const signinSchema = Joi.object({

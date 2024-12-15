@@ -55,6 +55,7 @@ const userSchema = new Schema(
       trim: true,
       required: [true, "Phone is required"],
     },
+    avatar: { type: String },
     buildings: [buildingSchema],
     tokens: {
       accessToken: {
