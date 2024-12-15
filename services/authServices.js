@@ -13,9 +13,12 @@ export const setTokens = (id, accessToken = "", refreshToken = "") => {
 };
 
 export async function updateUser(filter, data) {
-  if (data.newPassword) {
-    const { newPassword: password } = data;
-    const hashPassword = await bcrypt.hash(password, 10); // const salt = await bcrypt.genSalt(10);
+  if (data.newPassword || data.password) {
+    // const { newPassword: password } = data;
+    const hashPassword = await bcrypt.hash(
+      data.newPassword ? data.newPassword : data.password,
+      10
+    ); // const salt = await bcrypt.genSalt(10);
     return User.findOneAndUpdate(
       filter,
       { ...data, password: hashPassword },
