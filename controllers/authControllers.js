@@ -172,6 +172,12 @@ const updatePassword = async (req, res) => {
   });
 };
 
+const updateUserdata = async (req, res) => {
+  const { _id } = req.user;
+  const result = await updateUser({ _id }, req.body, "-password");
+  res.status(200).json(result);
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
@@ -180,4 +186,5 @@ export default {
   getRefreshCurrent: ctrlWrapper(getRefreshCurrent),
   forgotPassword: ctrlWrapper(forgotPassword),
   updatePassword: ctrlWrapper(updatePassword),
+  updateUserdata: ctrlWrapper(updateUserdata),
 };
