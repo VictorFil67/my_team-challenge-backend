@@ -19,6 +19,7 @@ const {
   getRefreshCurrent,
   forgotPassword,
   updatePassword,
+  updateUserdata,
 } = authController;
 
 authRouter.post("/register", validateBody(signupSchema), signup);
@@ -35,6 +36,12 @@ authRouter.put(
   "/update-password/:tempCode",
   validateBody(updatePasswordSchema),
   updatePassword
+);
+authRouter.put(
+  "/update",
+  authenticate,
+  //   validateBody(updatePasswordSchema),
+  updateUserdata
 );
 
 export default authRouter;
