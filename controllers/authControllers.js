@@ -174,10 +174,16 @@ const updatePassword = async (req, res) => {
 
 const updateUserdata = async (req, res) => {
   const { _id, is_admin } = req.user;
+  const keys = Object.keys(req.body);
+  if (keys.length === 0) {
+    throw HttpError(400, "At least one field must not be empty!");
+  }
   const admin = is_admin ? { is_admin: true } : { is_admin: false };
   console.log(admin);
   const data = { ...req.body, ...admin };
-  const result = await updateUser({ _id }, data);
+  const result = await updateUser({ _id }, data, {
+    projection: { password: 0 },
+  });
   res.status(200).json(result);
 };
 
