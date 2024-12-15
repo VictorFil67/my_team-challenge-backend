@@ -12,7 +12,7 @@ export const setTokens = (id, accessToken = "", refreshToken = "") => {
   return User.findByIdAndUpdate(id, { tokens }, { new: true });
 };
 
-export async function updateUser(filter, data) {
+export async function updateUser(filter, data, config) {
   if (data.newPassword || data.password) {
     // const { newPassword: password } = data;
     const hashPassword = await bcrypt.hash(
@@ -22,10 +22,11 @@ export async function updateUser(filter, data) {
     return User.findOneAndUpdate(
       filter,
       { ...data, password: hashPassword },
+      config,
       { new: true }
     );
   } else {
-    return User.findOneAndUpdate(filter, data, { new: true });
+    return User.findOneAndUpdate(filter, data, config, { new: true });
   }
 }
 
