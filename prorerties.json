@@ -21,7 +21,7 @@
     {
       "address": "string",
       "id": "ObjectId",
-      "appartments": ["_id", "number", "entrance", "services_debt"]
+      "apartments": ["_id", "number", "entrance", "services_debt"]
     }
   ]
 }

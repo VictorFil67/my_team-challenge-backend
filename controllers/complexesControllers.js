@@ -74,6 +74,7 @@ const updateComplex = async (req, res) => {
     throw HttpError(403, `You must be an administrator to commit this action`);
   }
   const { complexId: _id } = req.params;
+
   const result = await updateComplexById(_id, req.body);
   res.status(200).json(result);
 };
