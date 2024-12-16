@@ -14,6 +14,7 @@ const createComplex = async (req, res) => {
   const {
     name,
     images,
+    // properties,
     parking,
     addresses,
     entrances,
@@ -25,7 +26,20 @@ const createComplex = async (req, res) => {
     video_surveillance,
     floors,
   } = req.body;
-
+  // console.log(properties);
+  // const {
+  //   parking,
+  //   // addresses,
+  //   entrances,
+  //   security,
+  //   access_control,
+  //   concierge,
+  //   playground,
+  //   closed_area,
+  //   video_surveillance,
+  //   floors,
+  // } = properties;
+  // console.log(entrances);
   const complex = await findComplex({ name });
 
   if (complex) {
