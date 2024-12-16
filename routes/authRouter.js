@@ -7,6 +7,7 @@ import {
   signinSchema,
   signupSchema,
   updatePasswordSchema,
+  updateUserSchema,
 } from "../schemas/usersSchemas.js";
 
 const authRouter = express.Router();
@@ -40,7 +41,7 @@ authRouter.put(
 authRouter.put(
   "/update",
   authenticate,
-  //   validateBody(updatePasswordSchema),
+  validateBody(updateUserSchema),
   updateUserdata
 );
 
