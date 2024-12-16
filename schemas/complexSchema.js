@@ -32,7 +32,7 @@ export const updateComplexSchema = Joi.object({
   buildings: Joi.array().items(
     Joi.object({
       address: Joi.string(),
-      appartments: Joi.array().items(
+      apartments: Joi.array().items(
         Joi.object({
           number: Joi.number(),
           entrance: Joi.number(),
