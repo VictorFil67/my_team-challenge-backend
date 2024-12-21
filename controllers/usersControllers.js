@@ -17,6 +17,7 @@ const addUserAddresses = async (req, res) => {
   const { residential_complex, building, entrance, apartment } = req.body;
 
   const existedAddress = await findComplex({
+    name: residential_complex,
     buildings: {
       $elemMatch: {
         address: building,
@@ -49,7 +50,7 @@ const addUserAddresses = async (req, res) => {
   buildings.push({ ...req.body });
 
   const result = await updateUser(_id, { buildings });
-
+  console.log(result);
   const { email: adminEmail } = await findUser({ is_admin: true });
   console.log(`adminEmail: ${adminEmail}`);
   // xegoxa5375sw@cantozil.com
@@ -74,8 +75,8 @@ const addUserAddresses = async (req, res) => {
     `,
   };
 
-  await sendEmail(userEmail);
-  await sendEmail(emailOfAdmin);
+  // await sendEmail(userEmail);
+  // await sendEmail(emailOfAdmin);
   res.status(200).json(result);
 };
 
