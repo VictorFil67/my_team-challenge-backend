@@ -31,23 +31,81 @@ const addUserAddresses = async (req, res) => {
       `The address: residential complex - ${residential_complex}, building - ${building}, entrance - ${entrance}, apartment - ${apartment} does not exist! Enter the correct data`
     );
   }
-  console.log(existedAddress);
+  console.log("existedAddress: ", existedAddress);
   const { buildings } = await findUserById(_id);
+  console.log("buildings: ", buildings);
+  // const existedUserAddress = buildings.find(
+  //   (userAddress) =>
+  //     // userAddress.residential_complex === residential_complex &&
+  //     userAddress.residential_complex_id === existedAddress._id &&
+  //     userAddress.building === building &&
+  //     userAddress.entrance === entrance &&
+  //     userAddress.apartment === apartment
+  // );
 
-  const existedUserAddress = buildings.find(
-    (userAddress) =>
-      userAddress.residential_complex === residential_complex &&
-      userAddress.building === building &&
-      userAddress.entrance === entrance &&
-      userAddress.apartment === apartment
-  );
+  const existedUserAddress = await findUser({
+    buildings: {
+      $elemMatch: {
+        residential_complex_id: existedAddress._id,
+        addresses: {
+          $elemMatch: {
+            building,
+            apartments: { $elemMatch: { entrance, apartment } },
+          },
+        },
+      },
+    },
+  });
+  console.log("existedUserAddress: ", existedUserAddress);
   if (existedUserAddress) {
     throw HttpError(
       403,
       `This address already exists, so you can't write down this address once more`
     );
   }
-  buildings.push({ ...req.body });
+
+  // const searchComplex = buildings.find(
+  //   (elem) => elem.residential_complex_id === existedAddress._id
+  // );
+  const searchComplexIndex = buildings.findIndex(
+    (elem) => elem.residential_complex_id === existedAddress._id
+  );
+  console.log("searchComplexIndex: ", searchComplexIndex);
+  // let searchBuilding;
+  // if (searchComplex) {
+  if (searchComplexIndex > -1) {
+    // searchBuilding = searchComplex.addresses.find(
+    //   (elem) => elem.building === building
+    // );
+    const searchBuildingIndex = buildings[
+      searchComplexIndex
+    ].addresses.findIndex((elem) => elem.building === building);
+    if (searchBuildingIndex > -1) {
+      const newBuilding = buildings[searchComplexIndex].addresses[
+        searchBuildingIndex
+      ].apartments.push({ entrance, apartment });
+      buildings[searchComplexIndex].addresses.splice(
+        searchBuildingIndex,
+        1,
+        newBuilding
+      );
+    } else
+      buildings[searchComplexIndex].addresses.push({
+        building,
+        apartments: [{ entrance, apartment }],
+      });
+  } else {
+    buildings.push({
+      residential_complex_id: existedAddress._id,
+      addresses: [{ building, apartments: [{ entrance, apartment }] }],
+    });
+  }
+
+  // if (searchBuilding) {
+  //   const newBuilding = searchBuilding.apartments.push({ entrance, apartment });
+  // } else if (searchComplex) {
+  // }
+  // buildings.push({ ...req.body });
 
   const result = await updateUser(_id, { buildings });
   console.log(result);
