@@ -54,6 +54,7 @@ const addUserAddresses = async (req, res) => {
   const { email: adminEmail } = await findUser({ is_admin: true });
   console.log(`adminEmail: ${adminEmail}`);
   // xegoxa5375sw@cantozil.com
+  // peqogyjy@cyclelove.cc
   const userEmail = {
     to: email,
     subject: "Your addresses",
@@ -75,8 +76,8 @@ const addUserAddresses = async (req, res) => {
     `,
   };
 
-  // await sendEmail(userEmail);
-  // await sendEmail(emailOfAdmin);
+  await sendEmail(userEmail);
+  await sendEmail(emailOfAdmin);
   res.status(200).json(result);
 };
 

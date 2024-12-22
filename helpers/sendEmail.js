@@ -16,7 +16,10 @@ const nodemailerConfig = {
 const transport = nodemailer.createTransport(nodemailerConfig);
 
 const sendEmail = (data) => {
+  // console.log("first");
   const email = { ...data, from: UKR_NET_EMAIL };
+  // console.log("second");
+  // console.log(transport.sendMail(email));
   return transport.sendMail(email);
 };
 
