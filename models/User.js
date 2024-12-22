@@ -54,7 +54,7 @@ const addressSchema = new Schema({
   apartments: [apartmentSchema],
 });
 const buildingSchema = new Schema({
-  residential_complex: {
+  residential_complex_id: {
     type: Schema.Types.ObjectId,
     ref: "residential_complex",
   },
