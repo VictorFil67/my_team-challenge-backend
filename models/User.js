@@ -1,18 +1,36 @@
 import { Schema, model } from "mongoose";
 import { handleSaveError, setUpdateSetting } from "./hooks.js";
 
-const buildingSchema = new Schema({
-  residential_complex: {
-    type: String,
-    trim: true,
-    required: [true, "Residential complex is required"],
-  },
-  building: {
-    type: String,
-    lowercase: true,
-    trim: true,
-    reguired: [true, "Building is required"],
-  },
+// const buildingSchema = new Schema({
+//   residential_complex: {
+//     type: String,
+//     trim: true,
+//     required: [true, "Residential complex is required"],
+//   },
+//   building: {
+//     type: String,
+//     lowercase: true,
+//     trim: true,
+//     reguired: [true, "Building is required"],
+//   },
+//   apartment: {
+//     type: Number,
+//     required: [true, "Apartment number is required"],
+//   },
+//   entrance: {
+//     type: Number,
+//     required: [true, "Entrance is required"],
+//   },
+//   moderator: {
+//     type: Boolean,
+//     default: false,
+//   },
+//   approved: {
+//     type: Boolean,
+//     default: false,
+//   },
+// });
+const apartmentSchema = new Schema({
   apartment: {
     type: Number,
     required: [true, "Apartment number is required"],
@@ -21,14 +39,30 @@ const buildingSchema = new Schema({
     type: Number,
     required: [true, "Entrance is required"],
   },
-  moderator: {
-    type: Boolean,
-    default: false,
-  },
   approved: {
     type: Boolean,
     default: false,
   },
+});
+const addressSchema = new Schema({
+  building: {
+    type: String,
+    lowercase: true,
+    trim: true,
+    reguired: [true, "Building is required"],
+  },
+  apartments: [apartmentSchema],
+});
+const buildingSchema = new Schema({
+  residential_complex: {
+    type: Schema.Types.ObjectId,
+    ref: "residential_complex",
+  },
+  moderator: {
+    type: Boolean,
+    default: false,
+  },
+  addresses: [addressSchema],
 });
 
 const userSchema = new Schema(
