@@ -165,7 +165,7 @@ const deleteUserAddress = async (req, res) => {
   });
 
   const { buildings } = await findUserById(_id);
-
+  console.log(buildings);
   // const existedUserAddress = buildings.find(
   //   (userAddress) =>
   //     userAddress.residential_complex === residential_complex &&
@@ -174,6 +174,7 @@ const deleteUserAddress = async (req, res) => {
   //     userAddress.apartment === apartment
   // );
   const existedUserAddress = await findUser({
+    _id,
     buildings: {
       $elemMatch: {
         residential_complex_id: complexId,
@@ -192,7 +193,28 @@ const deleteUserAddress = async (req, res) => {
       `Sorry, but this address doesn't exist in your addresses list, so you have to enter the correct address`
     );
   }
-  console.log(existedUserAddress);
+  // console.log(existedUserAddress);
+  const searchComplexIndex = buildings.findIndex(
+    (elem) => elem.residential_complex_id.toString() === complexId.toString()
+  );
+  console.log(searchComplexIndex);
+  const searchBuildingIndex = buildings[searchComplexIndex].addresses.findIndex(
+    (elem) => elem.building === building
+  );
+  console.log(searchBuildingIndex);
+  let newApartments = buildings[searchComplexIndex].addresses[
+    searchBuildingIndex
+  ].apartments.filter(
+    (elem) => elem.apartment !== apartment || elem.entrance !== entrance
+  );
+  console.log(newApartments);
+  buildings[searchComplexIndex].addresses[searchBuildingIndex].apartments =
+    newApartments;
+  console.log(
+    buildings[searchComplexIndex].addresses[searchBuildingIndex].apartments
+  );
+  console.log(buildings);
+  // console.log(searchBuildingIndex);
   // const newBuildings = await buildings.filter(
   //   (userAddress) =>
   //     userAddress.residential_complex_id !== complexId ||
