@@ -207,7 +207,7 @@ const deleteUserAddress = async (req, res) => {
   ].apartments.filter(
     (elem) => elem.apartment !== apartment || elem.entrance !== entrance
   );
-  console.log(newApartments);
+  console.log("newApartments: ", newApartments);
   if (newApartments.length === 0) {
     const newAddresses = buildings[searchComplexIndex].addresses.filter(
       (elem) => elem.building !== building
@@ -225,9 +225,9 @@ const deleteUserAddress = async (req, res) => {
     buildings[searchComplexIndex].addresses[searchBuildingIndex].apartments =
       newApartments;
   }
-  console.log(
-    buildings[searchComplexIndex].addresses[searchBuildingIndex].apartments
-  );
+  // console.log(
+  //   buildings[searchComplexIndex].addresses[searchBuildingIndex].apartments
+  // );
   console.log(buildings);
   // console.log(searchBuildingIndex);
   // const newBuildings = await buildings.filter(
