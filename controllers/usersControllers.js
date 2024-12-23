@@ -202,14 +202,29 @@ const deleteUserAddress = async (req, res) => {
     (elem) => elem.building === building
   );
   console.log(searchBuildingIndex);
-  let newApartments = buildings[searchComplexIndex].addresses[
+  const newApartments = buildings[searchComplexIndex].addresses[
     searchBuildingIndex
   ].apartments.filter(
     (elem) => elem.apartment !== apartment || elem.entrance !== entrance
   );
   console.log(newApartments);
-  buildings[searchComplexIndex].addresses[searchBuildingIndex].apartments =
-    newApartments;
+  if (newApartments.length === 0) {
+    const newAddresses = buildings[searchComplexIndex].addresses.filter(
+      (elem) => elem.building !== building
+    );
+    if (newAddresses.length === 0) {
+      const newBuildings = buildings.filter(
+        (elem) =>
+          elem.residential_complex_id.toString() !== complexId.toString()
+      );
+      buildings = newBuildings;
+    } else {
+      buildings[searchComplexIndex].addresses = newAddresses;
+    }
+  } else {
+    buildings[searchComplexIndex].addresses[searchBuildingIndex].apartments =
+      newApartments;
+  }
   console.log(
     buildings[searchComplexIndex].addresses[searchBuildingIndex].apartments
   );
@@ -223,7 +238,11 @@ const deleteUserAddress = async (req, res) => {
   //     userAddress.apartment !== apartment
   // );
   // const result = await updateUser(_id, { buildings: newBuildings });
-  const result = await updateUser(_id, { buildings });
+  const result = await updateUser(
+    _id,
+    { buildings },
+    { projection: { password: 0 } }
+  );
 
   res.json(result);
 };
