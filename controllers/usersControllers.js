@@ -15,6 +15,7 @@ const { DEPLOY_HOST } = process.env;
 const addUserAddresses = async (req, res) => {
   const { _id, email, name } = req.user;
   const { residential_complex, building, entrance, apartment } = req.body;
+  console.log(building);
 
   const existedAddress = await findComplex({
     name: residential_complex,
@@ -31,7 +32,7 @@ const addUserAddresses = async (req, res) => {
       `The address: residential complex - ${residential_complex}, building - ${building}, entrance - ${entrance}, apartment - ${apartment} does not exist! Enter the correct data`
     );
   }
-  console.log("existedAddress ID: ", existedAddress._id);
+  // console.log("existedAddress ID: ", existedAddress._id);
   const { buildings } = await findUserById(_id);
   // console.log("buildings: ", buildings);
   // const existedUserAddress = buildings.find(
@@ -68,34 +69,34 @@ const addUserAddresses = async (req, res) => {
   //   (elem) => elem.residential_complex_id === existedAddress._id
   // );
   const searchComplexIndex = buildings.findIndex((elem) => {
-    console.log("elem.residential_complex_id: ", elem.residential_complex_id);
-    console.log("existedAddress ID: ", existedAddress._id);
+    // console.log("elem.residential_complex_id: ", elem.residential_complex_id);
+    // console.log("existedAddress ID: ", existedAddress._id);
     return (
       elem.residential_complex_id.toString() === existedAddress._id.toString()
     );
   });
-  console.log("searchComplexIndex: ", searchComplexIndex);
+  // console.log("searchComplexIndex: ", searchComplexIndex);
   // let searchBuilding;
   // if (searchComplex) {
   if (searchComplexIndex > -1) {
     // searchBuilding = searchComplex.addresses.find(
     //   (elem) => elem.building === building
     // );
-    console.log(
-      `buildings[
-      searchComplexIndex
-    ]: `,
-      buildings[searchComplexIndex]
-    );
+    // console.log(
+    //   `buildings[
+    //   searchComplexIndex
+    // ]: `,
+    //   buildings[searchComplexIndex]
+    // );
     const searchBuildingIndex = buildings[
       searchComplexIndex
     ].addresses.findIndex((elem) => elem.building === building);
-    console.log("searchBuildingIndex: ", searchBuildingIndex);
+    // console.log("searchBuildingIndex: ", searchBuildingIndex);
     if (searchBuildingIndex > -1) {
       const newBuilding = buildings[searchComplexIndex].addresses[
         searchBuildingIndex
       ].apartments.push({ entrance, apartment });
-      console.log("newBuilding: ", newBuilding);
+      // console.log("newBuilding: ", newBuilding);
       // buildings[searchComplexIndex].addresses.splice(
       //   searchBuildingIndex,
       //   1,
@@ -119,7 +120,7 @@ const addUserAddresses = async (req, res) => {
   // }
   // buildings.push({ ...req.body });
 
-  const result = await updateUser(_id, { buildings });
+  const result = await updateUser(_id, { buildings }, "-password");
   // console.log(result);
   const { email: adminEmail } = await findUser({ is_admin: true });
   console.log(`adminEmail: ${adminEmail}`);

@@ -42,7 +42,7 @@ export const signinSchema = Joi.object({
 
 export const addUserAddressesSchema = Joi.object({
   residential_complex: Joi.string().trim().required(),
-  building: Joi.string().trim().required(),
+  building: Joi.string().trim().lowercase().required(),
   entrance: Joi.number().required(),
   apartment: Joi.number().required(),
 });
