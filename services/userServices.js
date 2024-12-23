@@ -8,8 +8,8 @@ export function findUserById(id) {
   return User.findById(id);
 }
 
-export function updateUser(id, data) {
-  return User.findByIdAndUpdate(id, data, { new: true });
+export function updateUser(id, data, config) {
+  return User.findByIdAndUpdate(id, data, config, { new: true });
 }
 
 export function updateUserAddress(filter, data, array) {

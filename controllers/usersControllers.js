@@ -15,7 +15,7 @@ const { DEPLOY_HOST } = process.env;
 const addUserAddresses = async (req, res) => {
   const { _id, email, name } = req.user;
   const { residential_complex, building, entrance, apartment } = req.body;
-  console.log(building);
+  // console.log(building);
 
   const existedAddress = await findComplex({
     name: residential_complex,
@@ -120,10 +120,14 @@ const addUserAddresses = async (req, res) => {
   // }
   // buildings.push({ ...req.body });
 
-  const result = await updateUser(_id, { buildings }, "-password");
+  const result = await updateUser(
+    _id,
+    { buildings },
+    { projection: { password: 0 } }
+  );
   // console.log(result);
   const { email: adminEmail } = await findUser({ is_admin: true });
-  console.log(`adminEmail: ${adminEmail}`);
+  // console.log(`adminEmail: ${adminEmail}`);
   // xegoxa5375sw@cantozil.com
   // peqogyjy@cyclelove.cc
   const userEmail = {
@@ -156,29 +160,48 @@ const deleteUserAddress = async (req, res) => {
   const { _id, email, name } = req.user;
   const { residential_complex, building, entrance, apartment } = req.body;
 
+  const { _id: complexId } = await findComplex({
+    name: residential_complex,
+  });
+
   const { buildings } = await findUserById(_id);
 
-  const existedUserAddress = buildings.find(
-    (userAddress) =>
-      userAddress.residential_complex === residential_complex &&
-      userAddress.building === building &&
-      userAddress.entrance === entrance &&
-      userAddress.apartment === apartment
-  );
+  // const existedUserAddress = buildings.find(
+  //   (userAddress) =>
+  //     userAddress.residential_complex === residential_complex &&
+  //     userAddress.building === building &&
+  //     userAddress.entrance === entrance &&
+  //     userAddress.apartment === apartment
+  // );
+  const existedUserAddress = await findUser({
+    buildings: {
+      $elemMatch: {
+        residential_complex_id: complexId,
+        addresses: {
+          $elemMatch: {
+            building,
+            apartments: { $elemMatch: { entrance, apartment } },
+          },
+        },
+      },
+    },
+  });
   if (!existedUserAddress) {
     throw HttpError(
       400,
       `Sorry, but this address doesn't exist in your addresses list, so you have to enter the correct address`
     );
   }
-  const newBuildings = await buildings.filter(
-    (userAddress) =>
-      userAddress.residential_complex !== residential_complex ||
-      userAddress.building !== building ||
-      userAddress.entrance !== entrance ||
-      userAddress.apartment !== apartment
-  );
-  const result = await updateUser(_id, { buildings: newBuildings });
+  console.log(existedUserAddress);
+  // const newBuildings = await buildings.filter(
+  //   (userAddress) =>
+  //     userAddress.residential_complex_id !== complexId ||
+  //     userAddress.building !== building ||
+  //     userAddress.entrance !== entrance ||
+  //     userAddress.apartment !== apartment
+  // );
+  // const result = await updateUser(_id, { buildings: newBuildings });
+  const result = await updateUser(_id, { buildings });
 
   res.json(result);
 };
