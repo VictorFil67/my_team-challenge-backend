@@ -261,18 +261,29 @@ const approveUserAddress = async (req, res) => {
     );
   }
 
+  const { _id: complexId } = await findComplex({
+    name: residential_complex,
+  });
+
   const { modifiedCount, matchedCount } = await updateUserAddress(
     { _id: userId },
     {
-      $set: { "buildings.$[elem].approved": true },
+      // $set: { "buildings.$[elem].approved": true },
+      $set: {
+        "buildings.$[buildingElem].addresses.$[addressElem].apartments.$[apartmentElem].approved": true, //Updating a specific array element
+      },
     },
     {
       arrayFilters: [
+        /********************************************************
+         ***there is a filtering object for each nesting level***/
         {
-          "elem.residential_complex": residential_complex,
-          "elem.building": building,
-          "elem.apartment": apartment,
-          "elem.entrance": entrance,
+          "buildingElem.residential_complex_id": complexId,
+        }, //Condition for filtering buildings
+        { "addressElem.building": building }, //Condition for filtering addresses
+        {
+          "apartmentElem.apartment": apartment, //Condition for filtering apartments
+          "apartmentElem.entrance": entrance, //Condition for filtering entrance
         },
       ],
     }
