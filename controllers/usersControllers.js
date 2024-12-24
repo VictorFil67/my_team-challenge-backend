@@ -164,7 +164,7 @@ const deleteUserAddress = async (req, res) => {
     name: residential_complex,
   });
 
-  const { buildings } = await findUserById(_id);
+  let { buildings } = await findUserById(_id);
   console.log(buildings);
   // const existedUserAddress = buildings.find(
   //   (userAddress) =>
