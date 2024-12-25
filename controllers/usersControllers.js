@@ -69,8 +69,8 @@ const addUserAddresses = async (req, res) => {
   //   (elem) => elem.residential_complex_id === existedAddress._id
   // );
   const searchComplexIndex = buildings.findIndex((elem) => {
-    // console.log("elem.residential_complex_id: ", elem.residential_complex_id);
-    // console.log("existedAddress ID: ", existedAddress._id);
+    console.log("elem.residential_complex_id: ", elem.residential_complex_id);
+    console.log("existedAddress ID: ", existedAddress._id);
     return (
       elem.residential_complex_id.toString() === existedAddress._id.toString()
     );
