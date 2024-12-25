@@ -7,7 +7,7 @@ const validateBody = (schema) => {
       return next(HttpError(400, error.message));
     }
     req.body = value; //In order for the data to be in a form transformed as a result of validation
-    console.log(value);
+    // console.log(value);
     next();
   };
   return func;
