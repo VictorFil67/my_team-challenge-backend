@@ -10,7 +10,7 @@ import {
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import sendEmail from "../helpers/sendEmail.js";
-import { findUser } from "../services/userServices.js";
+import { findUser, findUserById } from "../services/userServices.js";
 import bcrypt from "bcrypt";
 import { generateRandomCode } from "../helpers/generateRandomCode.js";
 
@@ -83,7 +83,7 @@ const signin = async (req, res) => {
   const refreshToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
   await setTokens(_id, accessToken, refreshToken);
 
-  const loggedInUser = await findUser({ _id });
+  const loggedInUser = await findUserById(_id, "-password");
 
   res.status(200).json(loggedInUser);
 };
