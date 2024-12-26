@@ -1,5 +1,5 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
-import { getChatRooms } from "../services/chatRoomservices.js";
+import { getChatRoom, getChatRooms } from "../services/chatRoomservices.js";
 
 const getUserChatRooms = async (req, res) => {
   const { _id } = req.user;
@@ -10,6 +10,15 @@ const getUserChatRooms = async (req, res) => {
     },
   });
   res.status(200).json(result);
+};
+
+const getActiveChat = async (req, res) => {
+  const { _id: userId } = req.user;
+  const { chatId: _id } = req.body;
+  const result = getChatRoom({
+    _id,
+    users: userId,
+  });
 };
 
 export default {
