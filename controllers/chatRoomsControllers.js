@@ -26,7 +26,7 @@ const getActiveChat = async (req, res) => {
   if (!chat) {
     throw HttpError(404, `Sorry, such a chat doesn't exist`);
   }
-  const result = await findUserById(userId);
+  const result = await findUserById(userId, "-password");
   res.status(200).json(result);
 };
 

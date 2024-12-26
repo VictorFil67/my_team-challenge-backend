@@ -4,8 +4,8 @@ export function findUser(filter) {
   return User.findOne(filter);
 }
 
-export function findUserById(id) {
-  return User.findById(id);
+export function findUserById(id, config) {
+  return User.findById(id, config);
 }
 
 export function updateUser(id, data, config) {
