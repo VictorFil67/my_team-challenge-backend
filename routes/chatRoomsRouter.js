@@ -6,6 +6,6 @@ const chatRoomsRouter = express.Router();
 
 const { getUserChatRooms } = chatRoomsControllers;
 
-chatRoomsRouter.post("/", authenticate, getUserChatRooms);
+chatRoomsRouter.get("/", authenticate, getUserChatRooms);
 
 export default chatRoomsRouter;
