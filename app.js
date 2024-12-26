@@ -37,7 +37,7 @@ app.use(express.static("upload/images"));
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/complexes", complexesRouter);
-// app.use("/chatRooms", chatRoomsRouter);
+app.use("/chatRooms", chatRoomsRouter);
 // app.use("/notifications", notificationsRouter);
 // app.use("/api/contacts", contactsRouter);
 // app.use("/api", complexRouter);

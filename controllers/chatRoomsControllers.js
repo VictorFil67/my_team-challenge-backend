@@ -1,5 +1,5 @@
-import ctrlWrapper from "../decorators/ctrlWrapper";
-import { getChatRooms } from "../services/chatRoomservices";
+import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import { getChatRooms } from "../services/chatRoomservices.js";
 
 const getUserChatRooms = async (req, res) => {
   const { _id } = req.user;
