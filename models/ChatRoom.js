@@ -9,6 +9,7 @@ const ChatRoomShema = new Schema(
     },
     picture: {
       type: String,
+      default: "",
     },
     building_id: {
       type: Schema.Types.ObjectId,

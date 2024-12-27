@@ -1,6 +1,12 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
-import { getChatRoom, getChatRooms } from "../services/chatRoomservices.js";
+import {
+  createRoom,
+  getChatRoom,
+  getChatRooms,
+  updateRoom,
+} from "../services/chatRoomservices.js";
+import { findComplex } from "../services/complexServices.js";
 import { findUserById } from "../services/userServices.js";
 
 const getUserChatRooms = async (req, res) => {
@@ -30,7 +36,47 @@ const getActiveChat = async (req, res) => {
   res.status(200).json(result);
 };
 
+const createChatRooom = async (req, res) => {
+  const { _id } = req.user;
+  const { userId } = req.params;
+  const { residential_complex, building } = req.query;
+  const { is_admin } = await findUserById(_id);
+  if (!is_admin) {
+    throw HttpError(
+      403,
+      `Sorry, but you don't have access to commit  this action`
+    );
+  }
+
+  const { buildings } = await findComplex({
+    name: residential_complex,
+  });
+  const { _id: building_id } = buildings.find(
+    (elem) => elem.address === building
+  );
+
+  const name = residential_complex.concat(" ", building);
+  const chat = await getChatRoom({
+    name,
+    building_id,
+  });
+  console.log(chat);
+  let result;
+  if (chat) {
+    chat.users.push(userId);
+    result = await updateRoom({ _id: chat._id }, chat);
+  } else {
+    const users = [userId];
+    const newChatRoom = { name, building_id, users };
+    result = await createRoom(newChatRoom);
+  }
+  console.log(result);
+  res.status(201).json({ message: "User address data was approved", result });
+  //   const result=await
+};
+
 export default {
   getUserChatRooms: ctrlWrapper(getUserChatRooms),
   getActiveChat: ctrlWrapper(getActiveChat),
+  createChatRooom: ctrlWrapper(createChatRooom),
 };

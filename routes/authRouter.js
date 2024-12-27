@@ -9,6 +9,7 @@ import {
   updatePasswordSchema,
   updateUserSchema,
 } from "../schemas/usersSchemas.js";
+import authControllers from "../controllers/authControllers.js";
 
 const authRouter = express.Router();
 
@@ -21,7 +22,7 @@ const {
   forgotPassword,
   updatePassword,
   updateUserdata,
-} = authController;
+} = authControllers;
 
 authRouter.post("/register", validateBody(signupSchema), signup);
 authRouter.post("/login", validateBody(signinSchema), signin);

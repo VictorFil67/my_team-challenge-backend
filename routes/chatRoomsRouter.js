@@ -4,9 +4,11 @@ import authenticate from "../middlewares/authenticate.js";
 
 const chatRoomsRouter = express.Router();
 
+chatRoomsRouter.use(authenticate);
+
 const { getUserChatRooms, getActiveChat } = chatRoomsControllers;
 
-chatRoomsRouter.get("/", authenticate, getUserChatRooms);
-chatRoomsRouter.get("/:chatId", authenticate, getActiveChat);
+chatRoomsRouter.get("/", getUserChatRooms);
+chatRoomsRouter.get("/:chatId", getActiveChat);
 
 export default chatRoomsRouter;

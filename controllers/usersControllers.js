@@ -9,8 +9,10 @@ import {
   updateUserAddress,
 } from "../services/userServices.js";
 import "dotenv/config";
+import chatRoomsControllers from "./chatRoomsControllers.js";
 
 const { DEPLOY_HOST } = process.env;
+const { createChatRooom } = chatRoomsControllers;
 
 const addUserAddresses = async (req, res) => {
   const { _id, email, name } = req.user;
@@ -45,6 +47,7 @@ const addUserAddresses = async (req, res) => {
   // );
 
   const existedUserAddress = await findUser({
+    _id,
     buildings: {
       $elemMatch: {
         residential_complex_id: existedAddress._id,
@@ -247,7 +250,7 @@ const deleteUserAddress = async (req, res) => {
   res.json(result);
 };
 
-const approveUserAddress = async (req, res) => {
+const approveUserAddress = async (req, res, next) => {
   const { userId } = req.params;
   const { residential_complex, building, entrance, apartment } = req.query;
   const { _id } = req.user;
@@ -291,7 +294,9 @@ const approveUserAddress = async (req, res) => {
   if ((modifiedCount !== 1 && matchedCount === 1) || matchedCount === 0) {
     throw HttpError(400, "The wrong request data");
   }
-  res.json("User address data was approved");
+  // res.json("User address data was approved");
+  next();
+  // await createChatRooom(req, res);
 };
 
 export default {
