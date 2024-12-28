@@ -5,7 +5,8 @@ const ChatRoomShema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Name is required"],
+      default: "",
+      //   required: [true, "Name is required"],
     },
     picture: {
       type: String,
