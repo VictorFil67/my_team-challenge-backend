@@ -10,8 +10,12 @@ const usersRouter = express.Router();
 
 usersRouter.use(authenticate);
 
-const { addUserAddresses, deleteUserAddress, approveUserAddress } =
-  usersControllers;
+const {
+  addUserAddresses,
+  deleteUserAddress,
+  approveUserAddress,
+  setModeratorStatus,
+} = usersControllers;
 const { createChatRooom } = chatRoomsControllers;
 
 usersRouter.put(
@@ -29,6 +33,11 @@ usersRouter.patch(
   isValidId,
   approveUserAddress,
   createChatRooom
+);
+usersRouter.patch(
+  "/addresses/:userId/:complex_id",
+  isValidId,
+  setModeratorStatus
 );
 
 export default usersRouter;

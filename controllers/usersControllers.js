@@ -301,15 +301,28 @@ const approveUserAddress = async (req, res, next) => {
 
 const setModeratorStatus = async (req, res) => {
   const { userId, complex_id } = req.params;
+  // const keys = Object.keys(req.query);
+  const values = Object.values(req.query);
+  // console.log(req.query);
+  // console.log(keys[0]);
+  // console.log(values[0]);
   const { is_admin } = req.user;
   if (!is_admin) {
     throw HttpError(403, `Sorry, only admins can assign  moderator status`);
   }
-  const result = await updateUserAddress(
+  const { modifiedCount, matchedCount } = await updateUserAddress(
     { _id: userId },
-    { $set: { "buildings.$[elem].moderator": true } },
-    { arrayFilters: [{ "elem._id": complex_id }] }
+    {
+      $set: {
+        "buildings.$[elem].moderator": values[0] ? true : false,
+      },
+    },
+    { arrayFilters: [{ "elem.residential_complex_id": complex_id }] }
   );
+  if ((modifiedCount !== 1 && matchedCount === 1) || matchedCount === 0) {
+    throw HttpError(400, "The wrong request data");
+  }
+  const result = await findUserById({ _id: userId }, "-password");
   res.status(200).json(result);
 };
 
@@ -317,4 +330,5 @@ export default {
   addUserAddresses: ctrlWrapper(addUserAddresses),
   deleteUserAddress: ctrlWrapper(deleteUserAddress),
   approveUserAddress: ctrlWrapper(approveUserAddress),
+  setModeratorStatus: ctrlWrapper(setModeratorStatus),
 };
