@@ -299,6 +299,20 @@ const approveUserAddress = async (req, res, next) => {
   // await createChatRooom(req, res);
 };
 
+const setModeratorStatus = async (req, res) => {
+  const { userId, complex_id } = req.params;
+  const { is_admin } = req.user;
+  if (!is_admin) {
+    throw HttpError(403, `Sorry, only admins can assign  moderator status`);
+  }
+  const result = await updateUserAddress(
+    { _id: userId },
+    { $set: { "buildings.$[elem].moderator": true } },
+    { arrayFilters: [{ "elem._id": complex_id }] }
+  );
+  res.status(200).json(result);
+};
+
 export default {
   addUserAddresses: ctrlWrapper(addUserAddresses),
   deleteUserAddress: ctrlWrapper(deleteUserAddress),
