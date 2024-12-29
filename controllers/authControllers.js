@@ -185,9 +185,15 @@ const updateUserdata = async (req, res) => {
   if (keys.length === 0) {
     throw HttpError(400, "At least one field must not be empty!");
   }
+  // Prevent changing the moderator status ************
+  const { buildings, ...restBody } = req.body;
+  console.log(buildings);
+  console.log("restBody: ", restBody);
+
   const admin = is_admin ? { is_admin: true } : { is_admin: false };
   console.log(admin);
-  const data = { ...req.body, ...admin };
+  const data = { ...restBody, ...admin };
+  // ***************************************************
   const result = await updateUser({ _id }, data, {
     projection: { password: 0 },
   });
