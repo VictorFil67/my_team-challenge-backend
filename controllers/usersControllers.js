@@ -12,12 +12,10 @@ import "dotenv/config";
 import chatRoomsControllers from "./chatRoomsControllers.js";
 
 const { DEPLOY_HOST } = process.env;
-const { createChatRooom } = chatRoomsControllers;
 
 const addUserAddresses = async (req, res) => {
   const { _id, email, name } = req.user;
   const { residential_complex, building, entrance, apartment } = req.body;
-  // console.log(building);
 
   const existedAddress = await findComplex({
     name: residential_complex,
@@ -34,17 +32,8 @@ const addUserAddresses = async (req, res) => {
       `The address: residential complex - ${residential_complex}, building - ${building}, entrance - ${entrance}, apartment - ${apartment} does not exist! Enter the correct data`
     );
   }
-  // console.log("existedAddress ID: ", existedAddress._id);
+
   const { buildings } = await findUserById(_id);
-  // console.log("buildings: ", buildings);
-  // const existedUserAddress = buildings.find(
-  //   (userAddress) =>
-  //     // userAddress.residential_complex === residential_complex &&
-  //     userAddress.residential_complex_id === existedAddress._id &&
-  //     userAddress.building === building &&
-  //     userAddress.entrance === entrance &&
-  //     userAddress.apartment === apartment
-  // );
 
   const existedUserAddress = await findUser({
     _id,
@@ -60,7 +49,7 @@ const addUserAddresses = async (req, res) => {
       },
     },
   });
-  // console.log("existedUserAddress: ", existedUserAddress);
+
   if (existedUserAddress) {
     throw HttpError(
       403,
@@ -68,12 +57,7 @@ const addUserAddresses = async (req, res) => {
     );
   }
 
-  // const searchComplex = buildings.find(
-  //   (elem) => elem.residential_complex_id === existedAddress._id
-  // );
   const searchComplexIndex = buildings.findIndex((elem) => {
-    console.log("elem.residential_complex_id: ", elem.residential_complex_id);
-    console.log("existedAddress ID: ", existedAddress._id);
     return (
       elem.residential_complex_id.toString() === existedAddress._id.toString()
     );
