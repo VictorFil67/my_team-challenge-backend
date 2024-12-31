@@ -308,7 +308,8 @@ const setModeratorStatus = async (req, res) => {
   }
 
   const { email, name } = await findUserById({ _id: userId });
-  const { name: complex } = findComplex({ complex_id });
+  console.log(name);
+  const { name: complex } = await findComplex({ _id: complex_id });
   const userEmail = {
     to: email,
     subject: "Moderator",
