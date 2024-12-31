@@ -306,6 +306,20 @@ const setModeratorStatus = async (req, res) => {
   if ((modifiedCount !== 1 && matchedCount === 1) || matchedCount === 0) {
     throw HttpError(400, "The wrong request data");
   }
+
+  const { email, name } = await findUserById({ _id: userId });
+  const { name: complex } = findComplex({ complex_id });
+  const userEmail = {
+    to: email,
+    subject: "Moderator",
+    html: `<h1>Hello, ${name}!</h1>
+        <p>Congratulations!</p><p>You have become the moderator of ${complex}.</p>
+         <p>Now you have the right to manage users and commit actions that deal with your duties</p>
+        <p style="margin-top: 10px;">Best regards,</p>
+        <p style="margin-top: 10px;">The Teamchallenge Chat Team</p>`,
+  };
+  await sendEmail(userEmail);
+
   const result = await findUserById({ _id: userId }, "-password");
   res.status(200).json(result);
 };
