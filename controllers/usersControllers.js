@@ -67,17 +67,11 @@ const addUserAddresses = async (req, res) => {
     const searchBuildingIndex = buildings[
       searchComplexIndex
     ].addresses.findIndex((elem) => elem.building === building);
-    // console.log("searchBuildingIndex: ", searchBuildingIndex);
+
     if (searchBuildingIndex > -1) {
       const newBuilding = buildings[searchComplexIndex].addresses[
         searchBuildingIndex
       ].apartments.push({ entrance, apartment });
-      // console.log("newBuilding: ", newBuilding);
-      // buildings[searchComplexIndex].addresses.splice(
-      //   searchBuildingIndex,
-      //   1,
-      //   newBuilding
-      // );
     } else
       buildings[searchComplexIndex].addresses.push({
         building,
