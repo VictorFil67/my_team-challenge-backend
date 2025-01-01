@@ -62,19 +62,8 @@ const addUserAddresses = async (req, res) => {
       elem.residential_complex_id.toString() === existedAddress._id.toString()
     );
   });
-  // console.log("searchComplexIndex: ", searchComplexIndex);
-  // let searchBuilding;
-  // if (searchComplex) {
+
   if (searchComplexIndex > -1) {
-    // searchBuilding = searchComplex.addresses.find(
-    //   (elem) => elem.building === building
-    // );
-    // console.log(
-    //   `buildings[
-    //   searchComplexIndex
-    // ]: `,
-    //   buildings[searchComplexIndex]
-    // );
     const searchBuildingIndex = buildings[
       searchComplexIndex
     ].addresses.findIndex((elem) => elem.building === building);
