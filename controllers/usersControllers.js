@@ -33,6 +33,10 @@ const addUserAddresses = async (req, res) => {
     );
   }
 
+  const { _id: building_id } = existedAddress.buildings.find(
+    (elem) => elem.address === building
+  );
+
   const { buildings } = await findUserById(_id);
 
   const existedUserAddress = await findUser({
@@ -74,13 +78,16 @@ const addUserAddresses = async (req, res) => {
       ].apartments.push({ entrance, apartment });
     } else
       buildings[searchComplexIndex].addresses.push({
+        building_id,
         building,
         apartments: [{ entrance, apartment }],
       });
   } else {
     buildings.push({
       residential_complex_id: existedAddress._id,
-      addresses: [{ building, apartments: [{ entrance, apartment }] }],
+      addresses: [
+        { building_id, building, apartments: [{ entrance, apartment }] },
+      ],
     });
   }
 
