@@ -45,6 +45,10 @@ const apartmentSchema = new Schema({
   },
 });
 const addressSchema = new Schema({
+  building_id: {
+    type: Schema.Types.ObjectId,
+    ref: "residential_complex",
+  },
   building: {
     type: String,
     lowercase: true,
