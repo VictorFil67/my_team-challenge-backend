@@ -8,10 +8,21 @@ const createNotification = async (req, res) => {
   const { residential_complex_id, building_id } = req.params;
   const { text, type } = req.body;
 
-  const { moderator } = buildings.find(
-    (elem) => (elem.residential_complex_id = residential_complex_id)
-  );
-
+  const searchComplex = buildings.find((elem) => {
+    return (
+      elem.residential_complex_id.toString() ===
+      residential_complex_id.toString()
+    );
+  });
+  console.log(searchComplex);
+  if (!searchComplex) {
+    throw HttpError(
+      404,
+      `The user is not related to the specified complex and is not an admin`
+    );
+  }
+  const moderator = searchComplex.moderator;
+  console.log(moderator);
   if (!is_admin && !moderator) {
     throw HttpError(403, "You don't have access to this action!");
   }
