@@ -1,6 +1,7 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 import { findComplex } from "../services/complexServices.js";
+import { addNotification } from "../services/notificationsServices.js";
 
 const createNotification = async (req, res) => {
   const { is_admin, buildings } = req.user;
