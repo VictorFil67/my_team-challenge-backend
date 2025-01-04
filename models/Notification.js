@@ -12,13 +12,13 @@ const notificationSchema = new Schema(
       enum: ["Events", "Emergency"],
       required: [true, "Choose the type of notification!"],
     },
-    residential_complex: {
-      type: String,
-      required: [true, "Choose the residential complex!"],
+    residential_complex_id: {
+      type: Schema.Types.ObjectId,
+      ref: "residential_complex",
     },
     building_id: {
       type: Schema.Types.ObjectId,
-      ref: "building",
+      ref: "residential_complex",
     },
   },
   { versionKey: false, timestamps: true }
