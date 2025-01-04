@@ -15,7 +15,7 @@ import complexesRouter from "./routes/complexesRouter.js";
 import chatRoomsRouter from "./routes/chatRoomsRouter.js";
 // import complexRouter from "./routes/complexRouter.js";
 // import * as chatControllers from "./controllers/chatControllers.js";
-// import notificationsRouter from "./routes/notificationsRouter.js";
+import notificationsRouter from "./routes/notificationsRouter.js";
 // import votingsRouter from "./routes/votingsRouter.js";
 
 dotenv.config();
@@ -38,7 +38,7 @@ app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/complexes", complexesRouter);
 app.use("/chatRooms", chatRoomsRouter);
-// app.use("/notifications", notificationsRouter);
+app.use("/notifications", notificationsRouter);
 // app.use("/api/contacts", contactsRouter);
 // app.use("/api", complexRouter);
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
