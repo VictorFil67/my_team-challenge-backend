@@ -14,14 +14,12 @@ const createNotification = async (req, res) => {
       residential_complex_id.toString()
     );
   });
-  console.log(searchComplex);
-  if (!searchComplex) {
-    throw HttpError(
-      404,
-      `The user is not related to the specified complex and is not an admin`
-    );
+  //   console.log(searchComplex);
+  if (!is_admin && !searchComplex) {
+    throw HttpError(404, `The user is not related to the specified complex.`);
   }
-  const moderator = searchComplex.moderator;
+
+  const moderator = is_admin ? false : searchComplex.moderator;
   console.log(moderator);
   if (!is_admin && !moderator) {
     throw HttpError(403, "You don't have access to this action!");
