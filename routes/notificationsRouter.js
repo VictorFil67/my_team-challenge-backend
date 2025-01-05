@@ -8,9 +8,6 @@ notificationsRouter.use(authenticate);
 
 const { createNotification } = notificationsControllers;
 
-notificationsRouter.post(
-  "/:residential_complex_id/:building_id",
-  createNotification
-);
+notificationsRouter.post("/:residential_complex_id", createNotification);
 
 export default notificationsRouter;
