@@ -14,7 +14,7 @@ const createNotification = async (req, res) => {
       residential_complex_id.toString()
     );
   });
-  //   console.log(searchComplex);
+
   if (!is_admin && !searchComplex) {
     throw HttpError(404, `The user is not related to the specified complex.`);
   }
@@ -43,15 +43,6 @@ const createNotification = async (req, res) => {
       })
     : await addNotification({ text, type, residential_complex_id });
 
-  //   let complex;
-  //   const { residential_complex: complexAdmin } = req.query;
-  //   const { residential_complex: complexModerator } = user;
-  //   const { text, type, section } = req.body;
-  //   if (complexAdmin) {
-  //     complex = complexAdmin;
-  //   } else {
-  //     complex = complexModerator;
-  //   }
   res.status(201).json(result);
 };
 
