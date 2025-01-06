@@ -46,8 +46,25 @@ const createNotification = async (req, res) => {
   res.status(201).json(result);
 };
 
-const getNotifications = async (req, res) => {};
+const getNotifications = async (req, res) => {
+  const { is_admin, buildings } = req.user;
+  const { residential_complex_id } = req.params;
+  const { page = 1, limit = 20, type = "", building_id = "" } = req.query;
+  const skip = (page - 1) * limit;
+
+  const complex = buildings.find(
+    (elem) =>
+      elem.residential_complex_id.toString() ===
+      residential_complex_id.toString()
+  );
+  console.log(complex);
+  if (!is_admin && !complex) {
+    throw HttpError(403, "You don't have access to this action!");
+  }
+  res.status(200).json("Everything is OK");
+};
 
 export default {
   createNotification: ctrlWrapper(createNotification),
+  getNotifications: ctrlWrapper(getNotifications),
 };
