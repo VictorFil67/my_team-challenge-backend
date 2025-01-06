@@ -1,7 +1,10 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 import { findComplex } from "../services/complexServices.js";
-import { addNotification } from "../services/notificationsServices.js";
+import {
+  addNotification,
+  listNotificationsByFilter,
+} from "../services/notificationsServices.js";
 
 const createNotification = async (req, res) => {
   const { is_admin, buildings } = req.user;
@@ -71,8 +74,30 @@ const getNotifications = async (req, res) => {
     });
   }
   // console.log("building: ", building);
+  if (!is_admin && building_id && !building) {
+    throw HttpError(403, "You don't have access to this action!");
+  }
 
-  res.status(200).json("Everything is OK");
+  const result = building_id
+    ? type
+      ? await listNotificationsByFilter(
+          { residential_complex_id, type, building_id },
+          { skip, limit }
+        )
+      : await listNotificationsByFilter(
+          { residential_complex_id, building_id },
+          { skip, limit }
+        )
+    : type
+    ? await listNotificationsByFilter(
+        { residential_complex_id, type, building_id: { $exists: false } },
+        { skip, limit }
+      )
+    : await listNotificationsByFilter(
+        { residential_complex_id, building_id: { $exists: false } },
+        { skip, limit }
+      );
+  res.status(200).json(result);
 };
 
 export default {
