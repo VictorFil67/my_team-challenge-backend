@@ -9,13 +9,18 @@ const notificationsRouter = express.Router();
 
 notificationsRouter.use(authenticate);
 
-const { createNotification } = notificationsControllers;
+const { createNotification, getNotifications } = notificationsControllers;
 
 notificationsRouter.post(
   "/:residential_complex_id",
   validateBody(notificationsSchema),
   isValidId,
   createNotification
+);
+notificationsRouter.get(
+  "/:residential_complex_id",
+  isValidId,
+  getNotifications
 );
 
 export default notificationsRouter;
