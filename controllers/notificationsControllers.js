@@ -57,10 +57,21 @@ const getNotifications = async (req, res) => {
       elem.residential_complex_id.toString() ===
       residential_complex_id.toString()
   );
-  console.log(complex);
+  // console.log(complex);
   if (!is_admin && !complex) {
     throw HttpError(403, "You don't have access to this action!");
   }
+  let building;
+  if (building_id) {
+    building = complex.addresses.find((elem) => {
+      if (elem.building_id) {
+        // console.log("elem.building_id: ", elem.building_id);
+        return elem.building_id.toString() === building_id.toString();
+      }
+    });
+  }
+  // console.log("building: ", building);
+
   res.status(200).json("Everything is OK");
 };
 
