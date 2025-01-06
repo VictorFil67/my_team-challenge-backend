@@ -46,6 +46,8 @@ const createNotification = async (req, res) => {
   res.status(201).json(result);
 };
 
+const getNotifications = async (req, res) => {};
+
 export default {
   createNotification: ctrlWrapper(createNotification),
 };
