@@ -3,6 +3,8 @@ import HttpError from "../helpers/HttpError.js";
 import { findComplex } from "../services/complexServices.js";
 import {
   addNotification,
+  deleteNotification,
+  findNotification,
   listNotificationsByFilter,
 } from "../services/notificationsServices.js";
 
@@ -102,6 +104,25 @@ const getNotifications = async (req, res) => {
 const removeNotification = async (req, res) => {
   const { _id } = req.params;
   const { is_admin, buildings } = req.user;
+
+  const { residential_complex_id } = await findNotification(_id);
+  const complex = buildings.find(
+    (elem) =>
+      elem.residential_complex_id.toString() ===
+      residential_complex_id.toString()
+  );
+
+  const hasRight = complex ? complex.moderator : is_admin;
+  if (!hasRight) {
+    throw HttpError(
+      403,
+      `Sorry, but if you want to delete notification you must have rights of administrator or complex moderator`
+    );
+  }
+
+  const result = await deleteNotification(_id);
+
+  res.status(200).json(result);
 };
 
 export default {

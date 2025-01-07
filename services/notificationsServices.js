@@ -11,3 +11,7 @@ export function listNotificationsByFilter(filter, query) {
 export function findNotification(id) {
   return Notification.findById(id);
 }
+
+export async function deleteNotification(id) {
+  return await Notification.findByIdAndDelete(id);
+}
