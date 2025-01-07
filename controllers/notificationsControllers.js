@@ -116,7 +116,7 @@ const removeNotification = async (req, res) => {
   if (!hasRight) {
     throw HttpError(
       403,
-      `Sorry, but if you want to delete notification you must have rights of administrator or complex moderator`
+      `Sorry, but if you want to delete a notification you must have the rights of the administrator or complex moderator`
     );
   }
 
@@ -128,4 +128,5 @@ const removeNotification = async (req, res) => {
 export default {
   createNotification: ctrlWrapper(createNotification),
   getNotifications: ctrlWrapper(getNotifications),
+  removeNotification: ctrlWrapper(removeNotification),
 };
