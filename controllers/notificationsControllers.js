@@ -99,6 +99,11 @@ const getNotifications = async (req, res) => {
   res.status(200).json(result);
 };
 
+const removeNotification = async (req, res) => {
+  const { _id } = req.params;
+  const { is_admin, buildings } = req.user;
+};
+
 export default {
   createNotification: ctrlWrapper(createNotification),
   getNotifications: ctrlWrapper(getNotifications),
