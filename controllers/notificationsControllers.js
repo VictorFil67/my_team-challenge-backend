@@ -101,6 +101,33 @@ const getNotifications = async (req, res) => {
   res.status(200).json(result);
 };
 
+const updateNotification = async (req, res) => {
+  const { _id } = req.params;
+  const { is_admin, buildings } = req.user;
+
+  const keys = Object.keys(req.body);
+  if (keys.length === 0) {
+    throw HttpError(400, "At least one field must not be empty!");
+  }
+
+  const { residential_complex_id } = await findNotification(_id);
+  const complex = buildings.find(
+    (elem) =>
+      elem.residential_complex_id.toString() ===
+      residential_complex_id.toString()
+  );
+
+  const hasRight = complex ? complex.moderator : is_admin;
+  if (!hasRight) {
+    throw HttpError(
+      403,
+      `Sorry, but if you want to update a notification you must have the rights of the administrator or complex moderator`
+    );
+  }
+
+  res.status(200);
+};
+
 const removeNotification = async (req, res) => {
   const { _id } = req.params;
   const { is_admin, buildings } = req.user;
