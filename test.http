@@ -5,3 +5,13 @@ Content-Type: application/json
     "email": "peqogyjy@cyclelove.cc ",
     "password":"123456Ab"
 }
+
+###
+
+PUT  http://localhost:4000/notifications/login 
+Content-Type: application/json
+
+{
+    "email": "peqogyjy@cyclelove.cc ",
+    "password":"123456Ab"
+}
