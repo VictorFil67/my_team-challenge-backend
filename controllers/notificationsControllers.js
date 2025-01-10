@@ -1,11 +1,12 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
-import { findComplex } from "../services/complexServices.js";
+import { findComplex, updateComplexById } from "../services/complexServices.js";
 import {
   addNotification,
   deleteNotification,
   findNotification,
   listNotificationsByFilter,
+  updateNotificationById,
 } from "../services/notificationsServices.js";
 
 const createNotification = async (req, res) => {
@@ -125,7 +126,9 @@ const updateNotification = async (req, res) => {
     );
   }
 
-  res.status(200);
+  const result = await updateNotificationById(_id, req.body);
+
+  res.status(200).json(result);
 };
 
 const removeNotification = async (req, res) => {
@@ -155,5 +158,6 @@ const removeNotification = async (req, res) => {
 export default {
   createNotification: ctrlWrapper(createNotification),
   getNotifications: ctrlWrapper(getNotifications),
+  updateNotification: ctrlWrapper(updateNotification),
   removeNotification: ctrlWrapper(removeNotification),
 };
