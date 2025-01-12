@@ -104,14 +104,16 @@ const createChatForTwo = async (req, res) => {
 };
 
 const getIsUserChatModerator = async (req, res) => {
-  const { _id } = req.params;
+  const { chatId: _id } = req.params;
   const { buildings } = req.user;
 
   const { building_id } = await getChatRoom({ _id });
+  console.log("building_id: ", building_id);
 
   const complexesIds = buildings
     .filter((elem) => elem.moderator)
     .map((elem) => elem.residential_complex_id);
+  console.log("complexesIds: ", complexesIds);
 
   const result = await findComplex({
     _id: complexesIds[0],
@@ -130,4 +132,5 @@ export default {
   getActiveChat: ctrlWrapper(getActiveChat),
   createChatRooom: ctrlWrapper(createChatRooom),
   createChatForTwo: ctrlWrapper(createChatForTwo),
+  getIsUserChatModerator: ctrlWrapper(getIsUserChatModerator),
 };
