@@ -9,7 +9,6 @@ import {
   updateUserAddress,
 } from "../services/userServices.js";
 import "dotenv/config";
-import chatRoomsControllers from "./chatRoomsControllers.js";
 
 const { DEPLOY_HOST } = process.env;
 
@@ -91,18 +90,12 @@ const addUserAddresses = async (req, res) => {
     });
   }
 
-  // if (searchBuilding) {
-  //   const newBuilding = searchBuilding.apartments.push({ entrance, apartment });
-  // } else if (searchComplex) {
-  // }
-  // buildings.push({ ...req.body });
-
   const result = await updateUser(
     _id,
     { buildings },
     { projection: { password: 0 } }
   );
-  // console.log(result);
+
   const { email: adminEmail } = await findUser({ is_admin: true });
   // console.log(`adminEmail: ${adminEmail}`);
   // xegoxa5375sw@cantozil.com
@@ -142,14 +135,7 @@ const deleteUserAddress = async (req, res) => {
   });
 
   let { buildings } = await findUserById(_id);
-  console.log(buildings);
-  // const existedUserAddress = buildings.find(
-  //   (userAddress) =>
-  //     userAddress.residential_complex === residential_complex &&
-  //     userAddress.building === building &&
-  //     userAddress.entrance === entrance &&
-  //     userAddress.apartment === apartment
-  // );
+
   const existedUserAddress = await findUser({
     _id,
     buildings: {
