@@ -103,6 +103,28 @@ const createChatForTwo = async (req, res) => {
   res.status(201).json(result);
 };
 
+const getIsUserChatModerator = async (req, res) => {
+  const { _id } = req.params;
+  const { buildings } = req.user;
+
+  const { building_id } = await getChatRoom({ _id });
+
+  const complexesIds = buildings
+    .filter((elem) => elem.moderator)
+    .map((elem) => elem.residential_complex_id);
+
+  const result = await findComplex({
+    _id: complexesIds[0],
+    buildings: {
+      $elemMatch: {
+        _id: building_id,
+      },
+    },
+  });
+
+  res.json(result);
+};
+
 export default {
   getUserChatRooms: ctrlWrapper(getUserChatRooms),
   getActiveChat: ctrlWrapper(getActiveChat),
