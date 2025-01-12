@@ -18,6 +18,6 @@ const {
 chatRoomsRouter.get("/", getUserChatRooms);
 chatRoomsRouter.get("/:chatId", isValidId, getActiveChat);
 chatRoomsRouter.post("/", isValidIdInBody, createChatForTwo);
-chatRoomsRouter.get("/is_moderaror/:chatId", getIsUserChatModerator);
+chatRoomsRouter.get("/is_moderaror/:chatId", isValidId, getIsUserChatModerator);
 
 export default chatRoomsRouter;
