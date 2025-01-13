@@ -106,24 +106,31 @@ const createChatForTwo = async (req, res) => {
 const getIsUserChatModerator = async (req, res) => {
   const { chatId: _id } = req.params;
   const { buildings } = req.user;
-  console.log(req.user);
+  // console.log(req.user);
   const { building_id } = await getChatRoom({ _id });
   console.log("building_id: ", building_id);
 
-  const complexesIds = buildings
-    .filter((elem) => elem.moderator)
-    .map((elem) => elem.residential_complex_id);
-  console.log("complexesIds: ", complexesIds);
+  // const complexesIds = buildings
+  //   .filter((elem) => elem.moderator)
+  //   .map((elem) => elem.residential_complex_id);
+  // console.log("complexesIds: ", complexesIds);
 
-  const result = await findComplex({
-    _id: complexesIds[0],
+  const { _id: residential_complex_id } = await findComplex({
+    // _id: complexesIds[0],
     buildings: {
       $elemMatch: {
         _id: building_id,
       },
     },
   });
-  if (!result) {
+  console.log("residential_complex_id: ", residential_complex_id);
+  const { moderator } = buildings.find(
+    (elem) =>
+      elem.residential_complex_id.toString() ===
+      residential_complex_id.toString()
+  );
+  console.log("moderator: ", moderator);
+  if (!moderator) {
     throw HttpError(404, "The user is not  a moderator");
   }
   const userAsModerator = { ...req.user };
