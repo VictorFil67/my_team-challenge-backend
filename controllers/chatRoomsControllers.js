@@ -106,7 +106,7 @@ const createChatForTwo = async (req, res) => {
 const getIsUserChatModerator = async (req, res) => {
   const { chatId: _id } = req.params;
   const { buildings } = req.user;
-
+  console.log(req.user);
   const { building_id } = await getChatRoom({ _id });
   console.log("building_id: ", building_id);
 
@@ -123,8 +123,14 @@ const getIsUserChatModerator = async (req, res) => {
       },
     },
   });
-
-  res.json(result);
+  if (!result) {
+    throw HttpError(404, "The user is not  a moderator");
+  }
+  const userAsModerator = { ...req.user };
+  delete userAsModerator._doc.password;
+  const user = userAsModerator._doc;
+  // const userAsModerator=
+  res.json(user);
 };
 
 export default {
