@@ -1,6 +1,17 @@
 import { Schema, model } from "mongoose";
 import { handleSaveError, setUpdateSetting } from "./hooks.js";
 
+const optionSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    default: 0,
+  },
+});
+
 const votingSchema = new Schema(
   {
     headline: {
