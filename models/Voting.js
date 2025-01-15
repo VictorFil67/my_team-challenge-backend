@@ -12,6 +12,14 @@ const optionSchema = new Schema({
   },
 });
 
+const votedUserSchema = new Schema({
+  votedUserId: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
+  votedUserOptions: [optionUserSchema],
+});
+
 const votingSchema = new Schema(
   {
     headline: {
