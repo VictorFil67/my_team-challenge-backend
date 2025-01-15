@@ -12,6 +12,25 @@ const optionSchema = new Schema({
   },
 });
 
+const optionUserSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  isVote: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const votedUserSchema = new Schema({
+  votedUserId: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
+  votedUserOptions: [optionUserSchema],
+});
+
 const votingSchema = new Schema(
   {
     headline: {
