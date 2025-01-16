@@ -16,7 +16,7 @@ import chatRoomsRouter from "./routes/chatRoomsRouter.js";
 // import complexRouter from "./routes/complexRouter.js";
 // import * as chatControllers from "./controllers/chatControllers.js";
 import notificationsRouter from "./routes/notificationsRouter.js";
-// import votingsRouter from "./routes/votingsRouter.js";
+import votingsRouter from "./routes/votingsRouter.js";
 
 dotenv.config();
 
@@ -39,13 +39,13 @@ app.use("/users", usersRouter);
 app.use("/complexes", complexesRouter);
 app.use("/chat_rooms", chatRoomsRouter);
 app.use("/notifications", notificationsRouter);
+app.use("/votings", votingsRouter);
 // app.use("/api/contacts", contactsRouter);
 // app.use("/api", complexRouter);
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // const oasJson = JSON.parse(fs.readFileSync("./oas.json"));
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(oasJson));
 // // app.use("/chat", chatRouter);
-// app.use("/votings", votingsRouter);
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });

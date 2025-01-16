@@ -1,3 +1,4 @@
+import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import { addVoting } from "../services/votingsServices.js";
 
 const createVoting = async (req, res) => {
@@ -24,4 +25,8 @@ const createVoting = async (req, res) => {
   const result = await addVoting({ ...req.body, votedUsers: [] });
   console.log(result);
   res.status(201).json(result);
+};
+
+export default {
+  createVoting: ctrlWrapper(createVoting),
 };
