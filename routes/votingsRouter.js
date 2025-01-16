@@ -8,6 +8,6 @@ votingsRouter.use(authenticate);
 
 const { createVoting } = votingsControllers;
 
-votingsRouter.post("/", createVoting);
+votingsRouter.post("/:residential_complex_id", createVoting);
 
 export default votingsRouter;

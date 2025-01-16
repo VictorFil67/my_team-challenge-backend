@@ -1,4 +1,5 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import HttpError from "../helpers/HttpError.js";
 import { addVoting } from "../services/votingsServices.js";
 
 const createVoting = async (req, res) => {
