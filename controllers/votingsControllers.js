@@ -1,7 +1,8 @@
+import { addVoting } from "../services/votingsServices.js";
+
 const createVoting = async (req, res) => {
   const { is_admin, buildings } = req.user;
   const { residential_complex_id } = req.params;
-  //   const { text, type, building_id } = req.body;
 
   const searchComplex = buildings.find((elem) => {
     return (
@@ -19,4 +20,8 @@ const createVoting = async (req, res) => {
   if (!is_admin && !moderator) {
     throw HttpError(403, "You don't have access to this action!");
   }
+
+  const result = await addVoting({ ...req.body, votedUsers: [] });
+  console.log(result);
+  res.status(201).json(result);
 };
