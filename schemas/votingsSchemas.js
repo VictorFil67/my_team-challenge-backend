@@ -1,3 +1,10 @@
+import Joi from "joi";
+
+const createOptionSchema = Joi.object({
+  name: Joi.string().required(),
+  quantity: Joi.boolean().default(false),
+});
+
 export const createVotingSchema = Joi.object({
   headline: Joi.string().required(),
   // description: Joi.string(),
