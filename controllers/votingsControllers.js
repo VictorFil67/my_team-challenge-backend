@@ -154,4 +154,5 @@ const vote = async (req, res) => {
 export default {
   createVoting: ctrlWrapper(createVoting),
   getVotings: ctrlWrapper(getVotings),
+  vote: ctrlWrapper(vote),
 };
