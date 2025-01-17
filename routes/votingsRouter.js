@@ -15,6 +15,6 @@ votingsRouter.post(
   validateBody(createVotingSchema),
   createVoting
 );
-// votingsRouter.get("/", getVotings);
+votingsRouter.get("/", getVotings);
 
 export default votingsRouter;

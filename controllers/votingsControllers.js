@@ -72,5 +72,5 @@ const getVotings = async (req, res) => {
 
 export default {
   createVoting: ctrlWrapper(createVoting),
-  //   getVotings: ctrlWrapper(getVotings),
+  getVotings: ctrlWrapper(getVotings),
 };
