@@ -14,3 +14,7 @@ export const votingsList = (query) => {
 export const addVote = (votingId, vote) => {
   return Voting.findByIdAndUpdate(votingId, vote);
 };
+
+export const findVotingById = (votingId) => {
+  return Voting.findById(votingId);
+};
