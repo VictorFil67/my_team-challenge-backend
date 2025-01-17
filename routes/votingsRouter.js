@@ -8,7 +8,7 @@ const votingsRouter = express.Router();
 
 votingsRouter.use(authenticate);
 
-const { createVoting, getVotings } = votingsControllers;
+const { createVoting, getVotings, vote } = votingsControllers;
 
 votingsRouter.post(
   "/:residential_complex_id",

@@ -1,6 +1,11 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
-import { addVoting, votingsList } from "../services/votingsServices.js";
+import {
+  addVote,
+  addVoting,
+  findVotingById,
+  votingsList,
+} from "../services/votingsServices.js";
 
 const createVoting = async (req, res) => {
   const { is_admin, buildings } = req.user;
@@ -83,7 +88,7 @@ const vote = async (req, res) => {
     option.isVote = option.quantity;
     return option;
   });
-  const userVote = { votedUserId: _id, votedUserOptions: userOptions };
+  const userVote = { _id, votedUserOptions: userOptions };
 
   const { options: oldOptions, votedUsers } = await findVotingById({
     _id: votingId,
