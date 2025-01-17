@@ -71,6 +71,86 @@ const getVotings = async (req, res) => {
   res.json(finalResult);
 };
 
+const vote = async (req, res) => {
+  const { _id, role } = req.user;
+  if (role === "not_verified") {
+    throw HttpError(403, "You don't have access to this action!");
+  }
+  const { votingId } = req.params;
+  const { options } = req.body;
+  const trueOptions = options.filter((option) => option.quantity === true);
+  const userOptions = trueOptions.map((option) => {
+    option.isVote = option.quantity;
+    return option;
+  });
+  const userVote = { votedUserId: _id, votedUserOptions: userOptions };
+
+  const { options: oldOptions, votedUsers } = await findVotingById({
+    _id: votingId,
+  });
+  //the first variant
+  const votedUser = votedUsers.find(
+    (user) => user._id.toString() === _id.toString()
+  );
+  console.log(votedUser);
+  if (votedUser) {
+    throw HttpError(
+      403,
+      "You don't have access to this action, because you have already voted!"
+    );
+  }
+  //the second variant
+  const isVotedUser = votedUsers.findIndex(
+    (user) => user._id.toString() === _id.toString()
+  );
+  console.log(isVotedUser);
+  if (isVotedUser > -1) {
+    throw HttpError(
+      403,
+      "You don't have access to this action, because you have already voted!"
+    );
+  }
+  // ----------------------
+  votedUsers.push(userVote);
+  const voteQuantities = options.map(
+    (option) => (option.quantity = option.quantity ? 1 : 0)
+  );
+
+  console.log(voteQuantities);
+  const optionsAfterVoting = oldOptions.map((oldOption, idx) => {
+    const newQuantity = oldOption.quantity + voteQuantities[idx];
+
+    //the first variant
+    oldOption.quantity = newQuantity;
+    return oldOption;
+    //the second variant
+    // const newOption = { ...oldOption, quantity: newQuantity };
+    // console.log(newOption._doc);
+    // return newOption._doc;
+  });
+
+  const result = await addVote(
+    { _id: votingId },
+    { options: optionsAfterVoting, votedUsers }
+  );
+
+  if (result.displayType === "Percentages") {
+    const total = result.options.reduce(
+      (akk, option) => akk + option.quantity,
+      0
+    );
+    console.log(total);
+    const optionsInPercents = result.options.map((option) => {
+      const percentQuantity = Math.round((option.quantity / total) * 100);
+      option.quantity = percentQuantity;
+      return option;
+    });
+    result.options = optionsInPercents;
+  }
+
+  res.json(result);
+};
+
 export default {
   createVoting: ctrlWrapper(createVoting),
   getVotings: ctrlWrapper(getVotings),
