@@ -10,3 +10,7 @@ export const votingsList = (query) => {
     ? Voting.find({ endDate: { $gt: date } }, "", query)
     : Voting.find({ endDate: { $lte: date } }, "", query);
 };
+
+export const addVote = (votingId, vote) => {
+  return Voting.findByIdAndUpdate(votingId, vote);
+};

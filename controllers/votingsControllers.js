@@ -35,27 +35,28 @@ const getVotings = async (req, res) => {
     page = 1,
     limit = 20,
     displayType = "Number",
-    status = "active",
+    status = "",
   } = req.query;
   const skip = (page - 1) * limit;
 
   const data = await votingsList({ skip, limit, status });
+  //   console.log(data);
   const result = data.map((item) => {
     const votedUser = item.votedUsers.find(
       (user) => user._id.toString() === _id.toString()
     );
-    console.log(votedUser);
+    // console.log(votedUser);
     item.votedUsers = votedUser;
     return item;
   });
-
+  //   console.log(result);
   const finalResult = result.map((item) => {
     if (item.displayType === "Percentages") {
       const total = item.options.reduce(
         (akk, option) => akk + option.quantity,
         0
       );
-      console.log(total);
+      //   console.log(total);
       const optionsInPercents = item.options.map((option) => {
         const percentQuantity = Math.round((option.quantity / total) * 100);
         option.quantity = percentQuantity;
