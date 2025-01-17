@@ -8,12 +8,13 @@ const votingsRouter = express.Router();
 
 votingsRouter.use(authenticate);
 
-const { createVoting } = votingsControllers;
+const { createVoting, getVotings } = votingsControllers;
 
 votingsRouter.post(
   "/:residential_complex_id",
   validateBody(createVotingSchema),
   createVoting
 );
+// votingsRouter.get("/", getVotings);
 
 export default votingsRouter;
