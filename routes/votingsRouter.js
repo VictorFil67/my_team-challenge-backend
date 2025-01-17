@@ -16,5 +16,6 @@ votingsRouter.post(
   createVoting
 );
 votingsRouter.get("/", getVotings);
+votingsRouter.patch("/:votingId", vote);
 
 export default votingsRouter;
