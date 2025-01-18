@@ -4,8 +4,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 // import expressOasGenerator from "express-oas-generator";
-import swaggerUi from "swagger-ui-express";
-import fs from "fs";
+// import swaggerUi from "swagger-ui-express";
+// import fs from "fs";
 // import { createServer } from "node:http";
 // import swaggerDocument from "./docs/swagger.json" assert { type: "json" };
 // import contactsRouter from "./routes/contactsRouter.js";
@@ -22,7 +22,7 @@ dotenv.config();
 
 const app = express();
 
-const oasPath = "./oas.json";
+// const oasPath = "./oas.json";
 // expressOasGenerator.init(app, { specOutputPath: "./docs/oas.json" });
 // Инициализация express-oas-generator
 // expressOasGenerator.init(app, {});
@@ -40,8 +40,6 @@ app.use("/complexes", complexesRouter);
 app.use("/chat_rooms", chatRoomsRouter);
 app.use("/notifications", notificationsRouter);
 app.use("/votings", votingsRouter);
-// app.use("/api/contacts", contactsRouter);
-// app.use("/api", complexRouter);
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // const oasJson = JSON.parse(fs.readFileSync("./oas.json"));
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(oasJson));
