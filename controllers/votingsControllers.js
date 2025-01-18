@@ -81,6 +81,15 @@ const vote = async (req, res) => {
   const { votingId } = req.params;
   const { options } = req.body;
 
+  const date = new Date();
+  console.log(date);
+  const { startDate, endDate } = await findVotingById(votingId);
+  if (date < startDate || date > endDate) {
+    throw HttpError(
+      403,
+      "You can vote from the start date to the end date of the voting"
+    );
+  }
   const trueOptions = options.filter((option) => option.quantity === true);
   const userOptions = trueOptions.map((option) => {
     option.isVote = option.quantity;
