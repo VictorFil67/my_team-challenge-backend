@@ -92,7 +92,6 @@ const logout = async (req, res) => {
   const { _id: id } = req.user;
   await setTokens(id);
   res.status(204).json();
-  // res.json("Log out successful");
 };
 
 const getCurrent = async (req, res) => {
@@ -100,6 +99,7 @@ const getCurrent = async (req, res) => {
   delete userRes._doc.password;
   const user = userRes._doc;
   console.log(user);
+  // const { password, ...userWithoutPassword } = req.user;
   res.json(user);
 };
 
