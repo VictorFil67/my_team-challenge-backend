@@ -92,7 +92,6 @@ const logout = async (req, res) => {
   const { _id: id } = req.user;
   await setTokens(id);
   res.status(204).json();
-  // res.json("Log out successful");
 };
 
 const getCurrent = async (req, res) => {
