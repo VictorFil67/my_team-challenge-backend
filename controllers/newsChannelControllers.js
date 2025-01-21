@@ -1,4 +1,6 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import cloudinary from "../helpers/cloudinary.js";
+import fs from "fs/promises";
 import { findComplex } from "../services/complexServices.js";
 import { addNewsChannel } from "../services/newsChannelServices.js";
 
@@ -6,6 +8,13 @@ const createNewsChannel = async (req, res) => {
   const { is_admin, buildings } = req.user;
   const { residential_complex_id, building_id } = req.params;
   const { title } = req.body;
+  console.log("Math.random() ", Math.random());
+  const { url: picture } = await cloudinary.uploader.upload(req.file.path, {
+    folder: "teamchallenge",
+  });
+  const { path: oldPath } = req.file;
+
+  await fs.rm(oldPath);
 
   const searchComplex = buildings.find((elem) => {
     return (
@@ -35,6 +44,7 @@ const createNewsChannel = async (req, res) => {
 
   const result = complex
     ? await addNewsChannel({
+        picture,
         title,
         residential_complex_id,
         building_id,
