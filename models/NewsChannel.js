@@ -10,7 +10,7 @@ const newsChannelSchema = new Schema(
       type: String,
       required: [true, "Type title"],
     },
-    complex_id: {
+    residential_complex_id: {
       type: Schema.Types.ObjectId,
       ref: "residential_complex",
     },
@@ -26,6 +26,6 @@ newsChannelSchema.post("save", handleSaveError);
 newsChannelSchema.pre("findOneAndUpdate", setUpdateSetting);
 newsChannelSchema.post("findOneAndUpdate", handleSaveError);
 
-const NewsChannel = model("news_channel", news_channelSchema);
+const NewsChannel = model("news_channel", newsChannelSchema);
 
 export default NewsChannel;
