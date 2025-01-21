@@ -20,7 +20,7 @@ const {
 } = notificationsControllers;
 
 notificationsRouter.post(
-  "/:residential_complex_id",
+  "/:residential_complex_id/:building_id?",
   validateBody(notificationsSchema),
   isValidId,
   createNotification
