@@ -11,8 +11,8 @@ import {
 
 const createNotification = async (req, res) => {
   const { is_admin, buildings } = req.user;
-  const { residential_complex_id } = req.params;
-  const { text, type, building_id } = req.body;
+  const { residential_complex_id, building_id } = req.params;
+  const { text, type } = req.body;
 
   const searchComplex = buildings.find((elem) => {
     return (
