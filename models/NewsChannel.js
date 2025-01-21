@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 import { handleSaveError, setUpdateSetting } from "./hooks.js";
 
-const news_channelSchema = new Schema(
+const newsChannelSchema = new Schema(
   {
     picture: {
       type: String,
@@ -22,10 +22,10 @@ const news_channelSchema = new Schema(
   { versionKey: false, timestamps: false }
 );
 
-news_channelSchema.post("save", handleSaveError);
-news_channelSchema.pre("findOneAndUpdate", setUpdateSetting);
-news_channelSchema.post("findOneAndUpdate", handleSaveError);
+newsChannelSchema.post("save", handleSaveError);
+newsChannelSchema.pre("findOneAndUpdate", setUpdateSetting);
+newsChannelSchema.post("findOneAndUpdate", handleSaveError);
 
-const News_channel = model("news_channel", news_channelSchema);
+const NewsChannel = model("news_channel", news_channelSchema);
 
-export default News_channel;
+export default NewsChannel;
