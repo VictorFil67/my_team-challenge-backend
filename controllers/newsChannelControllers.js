@@ -1,4 +1,6 @@
-import { addNewsChannel } from "../services/newsChannelServices";
+import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import { findComplex } from "../services/complexServices.js";
+import { addNewsChannel } from "../services/newsChannelServices.js";
 
 const createNewsChannel = async (req, res) => {
   const { is_admin, buildings } = req.user;
@@ -41,3 +43,5 @@ const createNewsChannel = async (req, res) => {
 
   res.status(201).json(result);
 };
+
+export default { createNewsChannel: ctrlWrapper(createNewsChannel) };
