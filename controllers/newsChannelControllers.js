@@ -54,4 +54,33 @@ const createNewsChannel = async (req, res) => {
   res.status(201).json(result);
 };
 
+const getNewsChannels = async (req, res) => {
+  const { is_admin, buildings } = req.user;
+  const { residential_complex_id } = req.params;
+  const { page = 1, limit = 20, type = "", building_id = "" } = req.query;
+  const skip = (page - 1) * limit;
+
+  const complex = buildings.find(
+    (elem) =>
+      elem.residential_complex_id.toString() ===
+      residential_complex_id.toString()
+  );
+
+  if (!is_admin && !complex) {
+    throw HttpError(403, "You don't have access to this action!");
+  }
+  let building;
+  if (building_id) {
+    building = complex.addresses.find((elem) => {
+      if (elem.building_id) {
+        return elem.building_id.toString() === building_id.toString();
+      }
+    });
+  }
+
+  if (!is_admin && building_id && !building) {
+    throw HttpError(403, "You don't have access to this action!");
+  }
+  res.json("Check OK");
+};
 export default { createNewsChannel: ctrlWrapper(createNewsChannel) };
