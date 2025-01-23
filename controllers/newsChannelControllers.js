@@ -2,7 +2,10 @@ import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import cloudinary from "../helpers/cloudinary.js";
 import fs from "fs/promises";
 import { findComplex } from "../services/complexServices.js";
-import { addNewsChannel } from "../services/newsChannelServices.js";
+import {
+  addNewsChannel,
+  getNewsChannelsList,
+} from "../services/newsChannelServices.js";
 
 const createNewsChannel = async (req, res) => {
   const { is_admin, buildings } = req.user;
@@ -24,7 +27,7 @@ const createNewsChannel = async (req, res) => {
   });
 
   if (!is_admin && !searchComplex) {
-    throw HttpError(404, `The user is not related to the specified complex.`);
+    throw HttpError(403, `The user is not related to the specified complex.`);
   }
 
   const moderator = is_admin ? false : searchComplex.moderator;
@@ -56,8 +59,8 @@ const createNewsChannel = async (req, res) => {
 
 const getNewsChannels = async (req, res) => {
   const { is_admin, buildings } = req.user;
-  const { residential_complex_id } = req.params;
-  const { page = 1, limit = 20, type = "", building_id = "" } = req.query;
+  const { residential_complex_id, building_id } = req.params;
+  const { page = 1, limit = 20 } = req.query;
   const skip = (page - 1) * limit;
   // console.log(first);
   const complex = buildings.find(
@@ -69,6 +72,8 @@ const getNewsChannels = async (req, res) => {
   if (!is_admin && !complex) {
     throw HttpError(403, "You don't have access to this action!");
   }
+  const moderator = is_admin ? false : complex.moderator;
+
   let building;
   if (building_id) {
     building = complex.addresses.find((elem) => {
@@ -78,10 +83,22 @@ const getNewsChannels = async (req, res) => {
     });
   }
 
-  if (!is_admin && building_id && !building) {
+  if (!is_admin && !moderator && building_id && !building) {
     throw HttpError(403, "You don't have access to this action!");
   }
-  res.json("Check OK");
+  console.log("building_id: ", building_id);
+  console.log("building: ", building);
+  const result = building_id
+    ? await getNewsChannelsList(
+        { residential_complex_id, building_id },
+        { skip, limit }
+      )
+    : await getNewsChannelsList(
+        { residential_complex_id, building_id: { $exists: false } },
+        { skip, limit }
+      );
+
+  res.json(result);
 };
 export default {
   createNewsChannel: ctrlWrapper(createNewsChannel),

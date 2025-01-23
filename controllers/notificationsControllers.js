@@ -22,7 +22,7 @@ const createNotification = async (req, res) => {
   });
 
   if (!is_admin && !searchComplex) {
-    throw HttpError(404, `The user is not related to the specified complex.`);
+    throw HttpError(403, `The user is not related to the specified complex.`);
   }
 
   const moderator = is_admin ? false : searchComplex.moderator;
