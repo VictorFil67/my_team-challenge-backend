@@ -9,12 +9,13 @@ const newsChannelRouter = Router();
 
 newsChannelRouter.use(authenticate);
 
-const { createNewsChannel } = newsChannelControllers;
+const { createNewsChannel, getNewsChannels } = newsChannelControllers;
 
 newsChannelRouter.post(
   "/:residential_complex_id/:building_id?",
   upload.single("picture"),
   createNewsChannel
 );
+newsChannelRouter.get("/:residential_complex_id", getNewsChannels);
 
 export default newsChannelRouter;

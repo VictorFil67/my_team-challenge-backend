@@ -59,7 +59,7 @@ const getNewsChannels = async (req, res) => {
   const { residential_complex_id } = req.params;
   const { page = 1, limit = 20, type = "", building_id = "" } = req.query;
   const skip = (page - 1) * limit;
-
+  // console.log(first);
   const complex = buildings.find(
     (elem) =>
       elem.residential_complex_id.toString() ===
@@ -83,4 +83,7 @@ const getNewsChannels = async (req, res) => {
   }
   res.json("Check OK");
 };
-export default { createNewsChannel: ctrlWrapper(createNewsChannel) };
+export default {
+  createNewsChannel: ctrlWrapper(createNewsChannel),
+  getNewsChannels: ctrlWrapper(getNewsChannels),
+};
