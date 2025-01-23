@@ -16,6 +16,10 @@ newsChannelRouter.post(
   upload.single("picture"),
   createNewsChannel
 );
-newsChannelRouter.get("/:residential_complex_id", getNewsChannels);
+
+newsChannelRouter.get(
+  "/:residential_complex_id/:building_id?",
+  getNewsChannels
+);
 
 export default newsChannelRouter;
