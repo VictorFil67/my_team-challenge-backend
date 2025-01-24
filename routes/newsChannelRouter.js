@@ -4,6 +4,8 @@ import { Router } from "express";
 import authenticate from "../middlewares/authenticate.js";
 import newsChannelControllers from "../controllers/newsChannelControllers.js";
 import upload from "../middlewares/upload.js";
+import validateBody from "../decorators/validateBody.js";
+import { newsChanneSchema } from "../schemas/newsChanneSchema.js";
 
 const newsChannelRouter = Router();
 
@@ -14,6 +16,7 @@ const { createNewsChannel, getNewsChannels } = newsChannelControllers;
 newsChannelRouter.post(
   "/:residential_complex_id/:building_id?",
   upload.single("picture"),
+  validateBody(newsChanneSchema),
   createNewsChannel
 );
 
