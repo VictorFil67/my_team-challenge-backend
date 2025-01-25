@@ -13,7 +13,7 @@ const createNewsChannel = async (req, res) => {
   const { is_admin, buildings } = req.user;
   const { residential_complex_id, building_id } = req.params;
   const { title } = req.body;
-  console.log("Math.random() ", Math.random());
+  // console.log("Math.random() ", Math.random());
   const { url: picture } = await cloudinary.uploader.upload(req.file.path, {
     folder: "teamchallenge",
   });
