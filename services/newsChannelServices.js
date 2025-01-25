@@ -7,3 +7,7 @@ export async function addNewsChannel(data) {
 export async function getNewsChannelsList(filter, query) {
   return await NewsChannel.find(filter, "", query).sort({ updatedAt: -1 });
 }
+
+export async function findNewsChannel(filter, query) {
+  return await NewsChannel.findOne(filter, "", query);
+}

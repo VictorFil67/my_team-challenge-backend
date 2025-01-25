@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const newsChanneSchema = Joi.object({
+export const newsChannelSchema = Joi.object({
   picture: Joi.string(),
   title: Joi.string().required(),
 });
