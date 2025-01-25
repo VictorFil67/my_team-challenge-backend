@@ -11,3 +11,7 @@ export async function getNewsChannelsList(filter, query) {
 export async function findNewsChannel(filter) {
   return await NewsChannel.findOne(filter);
 }
+
+export async function findNewsChannelById(id) {
+  return await NewsChannel.findById(id);
+}
