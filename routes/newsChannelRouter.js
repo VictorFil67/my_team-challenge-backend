@@ -5,7 +5,8 @@ import authenticate from "../middlewares/authenticate.js";
 import newsChannelControllers from "../controllers/newsChannelControllers.js";
 import upload from "../middlewares/upload.js";
 import validateBody from "../decorators/validateBody.js";
-import { newsChanneSchema } from "../schemas/newsChanneSchema.js";
+import { newsChannelSchema } from "../schemas/newsChannelSchema.js";
+import isValidId from "../middlewares/isValidId.js";
 
 const newsChannelRouter = Router();
 
@@ -16,12 +17,14 @@ const { createNewsChannel, getNewsChannels } = newsChannelControllers;
 newsChannelRouter.post(
   "/:residential_complex_id/:building_id?",
   upload.single("picture"),
-  validateBody(newsChanneSchema),
+  validateBody(newsChannelSchema),
+  isValidId,
   createNewsChannel
 );
 
 newsChannelRouter.get(
   "/:residential_complex_id/:building_id?",
+  isValidId,
   getNewsChannels
 );
 
