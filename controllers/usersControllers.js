@@ -55,7 +55,7 @@ const addUserAddresses = async (req, res) => {
 
   if (existedUserAddress) {
     throw HttpError(
-      403,
+      409,
       `This address already exists, so you can't write down this address once more`
     );
   }
