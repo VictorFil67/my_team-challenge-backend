@@ -4,8 +4,10 @@ import fs from "fs/promises";
 import { findComplex } from "../services/complexServices.js";
 import {
   addNewsChannel,
+  findNewsChannel,
   getNewsChannelsList,
 } from "../services/newsChannelServices.js";
+import HttpError from "../helpers/HttpError.js";
 
 const createNewsChannel = async (req, res) => {
   const { is_admin, buildings } = req.user;
@@ -36,6 +38,19 @@ const createNewsChannel = async (req, res) => {
     throw HttpError(403, "You don't have access to this action!");
   }
 
+  const newsChannel = building_id
+    ? await findNewsChannel({ residential_complex_id, building_id })
+    : await findNewsChannel({
+        residential_complex_id,
+        building_id: { $exists: false },
+      });
+  console.log("newsChannel: ", newsChannel);
+  if (newsChannel) {
+    throw HttpError(
+      409,
+      `This news channel already exists, so you can't write down this news channel once more`
+    );
+  }
   const complex = await findComplex({
     _id: residential_complex_id,
     buildings: {
