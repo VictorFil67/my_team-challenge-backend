@@ -1,8 +1,9 @@
+import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import {
   findNewsChannel,
   findNewsChannelById,
 } from "../services/newsChannelServices.js";
-import { makenews } from "../services/newsServies.js";
+import { makeNews } from "../services/newsServies.js";
 
 const createNews = async (req, res) => {
   const { is_admin, buildings } = req.user;
@@ -23,10 +24,14 @@ const createNews = async (req, res) => {
     throw HttpError(403, "You don't have access to this action!");
   }
 
-  const newNews = await makenews({
+  const newNews = await makeNews({
     ...req.body,
     news_channel_id: _id,
     reaction: [],
   });
   res.status(201).json(newNews);
+};
+
+export default {
+  createNews: ctrlWrapper(createNews),
 };

@@ -11,7 +11,7 @@ const newsSchema = new Schema(
       required: [true, "Type title"],
     },
     titleUA: {
-      Stype: tring,
+      type: String,
       required: [true, "Type title"],
     },
     text: {
