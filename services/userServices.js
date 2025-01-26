@@ -15,6 +15,11 @@ export function updateUser(id, data, config) {
 export function updateUserAddress(filter, data, array) {
   return User.updateOne(filter, data, array);
 }
+
 export function updateUserByFilter(filter, data) {
   return User.findOneAndUpdate(filter, data, { new: true });
+}
+
+export function createUser(data) {
+  return User.create(data);
 }
