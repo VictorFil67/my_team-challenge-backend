@@ -86,12 +86,12 @@ const userSchema = new Schema(
     password: {
       type: String,
       minlength: [8, "Password mast have at least 8 characters"],
-      required: [true, "Password is required"],
+      // required: [true, "Password is required"],
     },
     phone: {
       type: String,
       trim: true,
-      required: [true, "Phone is required"],
+      // required: [true, "Phone is required"],
     },
     avatar: { type: String },
     buildings: [buildingSchema],
@@ -111,6 +111,10 @@ const userSchema = new Schema(
     },
     tempCodeTime: {
       type: String,
+    },
+    googleId: {
+      type: String, // ID пользователя Google
+      unique: true,
     },
   },
   { versionKey: false }
