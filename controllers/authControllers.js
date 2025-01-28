@@ -99,7 +99,6 @@ const getCurrent = async (req, res) => {
   delete userRes._doc.password;
   const user = userRes._doc;
   console.log(user);
-  // const { password, ...userWithoutPassword } = req.user;
   res.json(user);
 };
 
