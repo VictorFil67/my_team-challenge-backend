@@ -17,7 +17,7 @@ import notificationsRouter from "./routes/notificationsRouter.js";
 import votingsRouter from "./routes/votingsRouter.js";
 import newsChannelRouter from "./routes/newsChannelRouter.js";
 import newsRouter from "./routes/NewsRouter.js";
-import googleAuthRouter from "./routes/googleAuthRouter.js";
+// import googleAuthRouter from "./routes/googleAuthRouter.js";
 
 dotenv.config();
 
@@ -43,7 +43,7 @@ app.use("/notifications", notificationsRouter);
 app.use("/votings", votingsRouter);
 app.use("/news_channels", newsChannelRouter);
 app.use("/news", newsRouter);
-app.use("/", googleAuthRouter);
+// app.use("/", googleAuthRouter);
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
