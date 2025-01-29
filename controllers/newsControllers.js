@@ -34,12 +34,12 @@ const createNews = async (req, res) => {
 
 const getNews = async (req, res) => {
   const { is_admin, buildings } = req.user;
-  const { news_channel_id } = req.params;
+  const { newsChannelId } = req.params;
   const { page = 1, limit = 20 } = req.query;
   const skip = (page - 1) * limit;
 
   const { residential_complex_id, building_id } = await findNewsChannelById({
-    _id: news_channel_id,
+    _id: newsChannelId,
   });
 
   const complex = buildings.find(
@@ -64,11 +64,15 @@ const getNews = async (req, res) => {
     throw HttpError(403, "You don't have access to this action!");
   }
 
-  const result = await getNewsList({ news_channel_id }, { skip, limit });
+  const result = await getNewsList(
+    { news_channel_id: newsChannelId },
+    { skip, limit }
+  );
 
   res.send(result);
 };
 
 export default {
   createNews: ctrlWrapper(createNews),
+  getNews: ctrlWrapper(getNews),
 };
