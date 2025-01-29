@@ -32,6 +32,7 @@ const createNews = async (req, res) => {
   res.status(201).json(newNews);
 };
 
+const getNews = async (req, res) => {};
 export default {
   createNews: ctrlWrapper(createNews),
 };
