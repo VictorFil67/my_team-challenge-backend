@@ -7,3 +7,11 @@ export async function makeNews(data) {
 export function getNewsList(filter, query) {
   return News.find(filter, "", query).sort({ updateAt: -1 });
 }
+
+export function findNewsById(id) {
+  return News.findById(id);
+}
+
+export function addReactionById(id, data) {
+  return News.findByIdAndUpdate(id, data);
+}
