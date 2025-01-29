@@ -8,8 +8,9 @@ const newsRouter = express.Router();
 
 newsRouter.use(authenticate);
 
-const { createNews } = newsControllers;
+const { createNews, getNews } = newsControllers;
 
 newsRouter.post("/:newsChannelId", validateBody(createNewsSchema), createNews);
+newsRouter.get("/:newsChannelId", getNews);
 
 export default newsRouter;
