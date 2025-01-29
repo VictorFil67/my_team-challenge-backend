@@ -1,4 +1,5 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import HttpError from "../helpers/HttpError.js";
 import {
   findNewsChannel,
   findNewsChannelById,
@@ -83,6 +84,7 @@ const addReaction = async (req, res) => {
   const { newsId } = req.params;
 
   const { news_channel_id, reactions } = await findNewsById({ _id: newsId });
+  console.log("reactions from DB: ", reactions);
   const { residential_complex_id, building_id } = await findNewsChannelById({
     _id: news_channel_id,
   });
@@ -109,26 +111,37 @@ const addReaction = async (req, res) => {
     throw HttpError(403, "You don't have access to this action!");
   }
 
-  const { reaction: userReaction } = reactions.find(
-    (elem) => elem.userId.toString() === _id.toString()
+  const userReaction = reactions.find(
+    (elem) => elem.userId?.toString() === _id.toString()
   );
-  if (reaction === userReaction) {
+  console.log("reaction: ", reaction);
+  console.log("userReaction: ", userReaction);
+
+  if (userReaction && reaction === userReaction.reaction) {
     throw HttpError(
       403,
       "You allready have such a reaction. You can only change it."
     );
   }
 
-  const reactionIndex = react.findindex(
-    (elem) => elem.userId.toString() === _id.toString()
-  );
-  const newReaction = { reaction: userReaction, _id };
-
-  reactions = userReaction
-    ? reactions.splice(reactionIndex, 1, newReaction)
-    : reactions.push(newReaction);
-
-  const result = await addReactionById({ _id: newsId }, { reaction });
+  const newReaction = { reaction, userId: _id };
+  console.log("newReaction: ", newReaction);
+  if (!userReaction) {
+    reactions.push(newReaction);
+    console.log("reactions for no: ", reactions);
+  } else {
+    const reactionIndex = reactions.findIndex(
+      (elem) => elem.userId?.toString() === _id.toString()
+    );
+    reactions.splice(reactionIndex, 1, newReaction);
+    console.log("reactions for exists: ", reactions);
+  }
+  console.log("reactions: ", reactions);
+  // const newReactions = userReaction
+  //   ? reactions.splice(reactionIndex, 1, newReaction)
+  //   : reactions.push(newReaction);
+  // console.log("newReactions: ", newReactions);
+  const result = await addReactionById({ _id: newsId }, { reactions });
 
   res.json(result);
 };
@@ -136,4 +149,5 @@ const addReaction = async (req, res) => {
 export default {
   createNews: ctrlWrapper(createNews),
   getNews: ctrlWrapper(getNews),
+  addReaction: ctrlWrapper(addReaction),
 };
