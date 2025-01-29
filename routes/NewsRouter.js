@@ -1,6 +1,8 @@
 import newsControllers from "../controllers/newsControllers.js";
+import validateBody from "../decorators/validateBody.js";
 import authenticate from "../middlewares/authenticate.js";
 import express from "express";
+import { createNewsSchema } from "../schemas/newsSchema.js";
 
 const newsRouter = express.Router();
 
@@ -8,6 +10,6 @@ newsRouter.use(authenticate);
 
 const { createNews } = newsControllers;
 
-newsRouter.post("/:newsChannelId", createNews);
+newsRouter.post("/:newsChannelId", validateBody(createNewsSchema), createNews);
 
 export default newsRouter;
