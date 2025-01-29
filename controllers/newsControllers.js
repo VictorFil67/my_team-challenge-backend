@@ -3,7 +3,7 @@ import {
   findNewsChannel,
   findNewsChannelById,
 } from "../services/newsChannelServices.js";
-import { makeNews } from "../services/newsServies.js";
+import { getNewsList, makeNews } from "../services/newsServies.js";
 
 const createNews = async (req, res) => {
   const { is_admin, buildings } = req.user;
@@ -30,6 +30,43 @@ const createNews = async (req, res) => {
     reaction: [],
   });
   res.status(201).json(newNews);
+};
+
+const getNews = async (req, res) => {
+  const { is_admin, buildings } = req.user;
+  const { news_channel_id } = req.params;
+  const { page = 1, limit = 20 } = req.query;
+  const skip = (page - 1) * limit;
+
+  const { residential_complex_id, building_id } = await findNewsChannelById({
+    _id: news_channel_id,
+  });
+
+  const complex = buildings.find(
+    (elem) =>
+      elem.residential_complex_id.toString() ===
+      residential_complex_id.toString()
+  );
+
+  if (!is_admin && !complex) {
+    throw HttpError(403, "You don't have access to this action!");
+  }
+  let building;
+  if (building_id) {
+    building = complex.addresses.find((elem) => {
+      if (elem.building_id) {
+        return elem.building_id.toString() === building_id.toString();
+      }
+    });
+  }
+
+  if (!is_admin && building_id && !building) {
+    throw HttpError(403, "You don't have access to this action!");
+  }
+
+  const result = await getNewsList({ news_channel_id }, { skip, limit });
+
+  res.send(result);
 };
 
 export default {
