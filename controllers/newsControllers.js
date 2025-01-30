@@ -16,13 +16,16 @@ const createNews = async (req, res) => {
   const { is_admin, buildings } = req.user;
   const { newsChannelId: _id } = req.params;
 
-  const { residential_complex_id } = await findNewsChannelById(_id);
+  const newsChannel = await findNewsChannelById(_id);
+  if (!newsChannel) {
+    throw HttpError(404, "Such news Channel does not exist");
+  }
   let is_moderator;
   if (!is_admin) {
     const { moderator } = buildings.find(
       (elem) =>
         elem.residential_complex_id.toString() ===
-        residential_complex_id.toString()
+        newsChannel.residential_complex_id.toString()
     );
     is_moderator = moderator;
   }
