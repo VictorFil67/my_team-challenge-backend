@@ -148,7 +148,30 @@ const addReaction = async (req, res) => {
 };
 
 const deleteNews = async (req, res) => {
+  const { is_admin, buildings } = req.user;
   const { newsId: _id } = req.params;
+
+  // const { news_channel_id } = await findNewsById(_id);
+  const news = await findNewsById(_id);
+  console.log("news: ", news);
+  if (!news) {
+    throw HttpError(404, "Such news does not exist");
+  }
+  // console.log("news_channel_id: ", news_channel_id);
+  const { residential_complex_id } = await findNewsChannelById({
+    _id: news.news_channel_id,
+  });
+  console.log("residential_complex_id: ", residential_complex_id);
+  const { moderator } = buildings.find(
+    (elem) =>
+      elem.residential_complex_id.toString() ===
+      residential_complex_id.toString()
+  );
+
+  if (!is_admin && !moderator) {
+    throw HttpError(403, "You don't have access to this action!");
+  }
+
   const result = await removeNewsById(_id);
   res.json(result);
 };
@@ -157,4 +180,5 @@ export default {
   createNews: ctrlWrapper(createNews),
   getNews: ctrlWrapper(getNews),
   addReaction: ctrlWrapper(addReaction),
+  deleteNews: ctrlWrapper(deleteNews),
 };

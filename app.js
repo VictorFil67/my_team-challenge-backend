@@ -17,6 +17,7 @@ import notificationsRouter from "./routes/notificationsRouter.js";
 import votingsRouter from "./routes/votingsRouter.js";
 import newsChannelRouter from "./routes/newsChannelRouter.js";
 import newsRouter from "./routes/NewsRouter.js";
+
 // import googleAuthRouter from "./routes/googleAuthRouter.js";
 
 dotenv.config();
