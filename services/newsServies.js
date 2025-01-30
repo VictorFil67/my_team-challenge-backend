@@ -15,3 +15,7 @@ export function findNewsById(id) {
 export function addReactionById(id, data) {
   return News.findByIdAndUpdate(id, data);
 }
+
+export function removeNewsById(id) {
+  return News.findByIdAndDelete(id);
+}

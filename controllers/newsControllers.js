@@ -9,6 +9,7 @@ import {
   findNewsById,
   getNewsList,
   makeNews,
+  removeNewsById,
 } from "../services/newsServies.js";
 
 const createNews = async (req, res) => {
@@ -143,6 +144,12 @@ const addReaction = async (req, res) => {
   // console.log("newReactions: ", newReactions);
   const result = await addReactionById({ _id: newsId }, { reactions });
 
+  res.json(result);
+};
+
+const deleteNews = async (req, res) => {
+  const { newsId: _id } = req.params;
+  const result = await removeNewsById(_id);
   res.json(result);
 };
 
