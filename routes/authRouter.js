@@ -10,6 +10,7 @@ import {
   updateUserSchema,
 } from "../schemas/usersSchemas.js";
 import authControllers from "../controllers/authControllers.js";
+import upload from "../middlewares/upload.js";
 
 const authRouter = express.Router();
 
@@ -24,7 +25,12 @@ const {
   updateUserdata,
 } = authControllers;
 
-authRouter.post("/register", validateBody(signupSchema), signup);
+authRouter.post(
+  "/register",
+  upload.single("avatar"),
+  validateBody(signupSchema),
+  signup
+);
 authRouter.post("/login", validateBody(signinSchema), signin);
 authRouter.post("/logout", authenticate, logout);
 authRouter.get("/current", authenticate, getCurrent);

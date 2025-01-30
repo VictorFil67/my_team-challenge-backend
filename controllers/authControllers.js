@@ -13,6 +13,8 @@ import sendEmail from "../helpers/sendEmail.js";
 import { findUser, findUserById } from "../services/userServices.js";
 import bcrypt from "bcrypt";
 import { generateRandomCode } from "../helpers/generateRandomCode.js";
+import cloudinary from "../helpers/cloudinary.js";
+import fs from "fs/promises";
 
 dotenv.config();
 
@@ -27,12 +29,24 @@ const signup = async (req, res) => {
     throw HttpError(409, "This email is already in use");
   }
 
-  const avatar =
-    gender === "male"
-      ? `https://avatar.iran.liara.run/public/boy?username=${name}`
-      : gender === "female"
-      ? `https://avatar.iran.liara.run/public/girl?username=${name}`
-      : `https://avatar.iran.liara.run/username?username=${name}`;
+  // ***Add user's picture
+  let avatar;
+  if (req.file) {
+    const { url } = await cloudinary.uploader.upload(req.file.path, {
+      folder: "teamchallenge",
+    });
+    const { path: oldPath } = req.file;
+
+    await fs.rm(oldPath);
+    avatar = url;
+  } else {
+    avatar =
+      gender === "male"
+        ? `https://avatar.iran.liara.run/public/boy?username=${name}`
+        : gender === "female"
+        ? `https://avatar.iran.liara.run/public/girl?username=${name}`
+        : `https://avatar.iran.liara.run/username?username=${name}`;
+  }
 
   const newUser = await register({ ...req.body, avatar });
 
@@ -44,7 +58,7 @@ const signup = async (req, res) => {
   const tokens = await setTokens(newUser._id, accessToken, refreshToken);
   console.log(tokens);
 
-  const loggedInUser = await User.findById({ _id: newUser._id }, "-password");
+  const loggedInUser = await findUserById({ _id: newUser._id }, "-password");
 
   const userEmail = {
     to: email,
