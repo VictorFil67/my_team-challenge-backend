@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node ./app.js",
     "dev": "nodemon ./app.js",
-    "test": "mocha ./src/tests/*.spec.js --exit"
+    "test": "mocha ./tests/*.spec.js --exit"
   },
   "keywords": [],
   "author": "",
