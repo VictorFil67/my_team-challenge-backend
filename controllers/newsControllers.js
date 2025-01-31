@@ -88,7 +88,7 @@ const addReaction = async (req, res) => {
   const { newsId } = req.params;
 
   const { news_channel_id, reactions } = await findNewsById({ _id: newsId });
-  console.log("reactions from DB: ", reactions);
+  // console.log("reactions from DB: ", reactions);
   const { residential_complex_id, building_id } = await findNewsChannelById({
     _id: news_channel_id,
   });
@@ -114,32 +114,78 @@ const addReaction = async (req, res) => {
   if (!is_admin && building_id && !building) {
     throw HttpError(403, "You don't have access to this action!");
   }
-
-  const userReaction = reactions.find(
-    (elem) => elem.userId?.toString() === _id.toString()
-  );
-  console.log("reaction: ", reaction);
+  const userReaction = reactions.find((elem) => elem.reaction === reaction);
   console.log("userReaction: ", userReaction);
+  const otherUserReaction = reactions.find((elem) =>
+    elem.userIds.includes(_id)
+  );
+  console.log("otherUserReaction: ", otherUserReaction);
+  let existedUserIdForReaction;
 
-  if (userReaction && reaction === userReaction.reaction) {
+  let newReaction = {};
+  if (userReaction) {
+    existedUserIdForReaction = userReaction.userIds.includes(_id);
+  } else {
+    newReaction = { reaction, userIds: [_id] };
+    reactions.push(newReaction);
+    console.log("newReaction: ", newReaction);
+    console.log("reactions: ", reactions);
+  }
+  if (existedUserIdForReaction) {
     throw HttpError(
       403,
       "You allready have such a reaction. You can only change it."
     );
-  }
-
-  const newReaction = { reaction, userId: _id };
-  console.log("newReaction: ", newReaction);
-  if (!userReaction) {
-    reactions.push(newReaction);
-    console.log("reactions for no: ", reactions);
-  } else {
-    const reactionIndex = reactions.findIndex(
-      (elem) => elem.userId?.toString() === _id.toString()
+  } else if (!existedUserIdForReaction && userReaction) {
+    console.log("before");
+    console.log("userReaction: ", userReaction);
+    console.log("after");
+    userReaction.userIds.push(_id);
+    const userReactionIndex = reactions.findIndex(
+      (elem) => (elem.reaction = reaction)
     );
-    reactions.splice(reactionIndex, 1, newReaction);
-    console.log("reactions for exists: ", reactions);
+    reactions.splice(userReactionIndex, 1, userReaction);
   }
+  // const otherUserReaction = reactions.find((elem) =>
+  //   elem.userIds.includes(_id)
+  // );
+  if (otherUserReaction) {
+    console.log("before");
+    console.log("otherUserReaction: ", otherUserReaction);
+    const otherUserReactionIndex = reactions.findIndex((elem) =>
+      elem.userIds.includes(_id)
+    );
+    const userIdIndex = otherUserReaction.userIds.indexOf(_id);
+    otherUserReaction.userIds.splice(userIdIndex, 1);
+    console.log("after");
+    console.log("otherUserReaction: ", otherUserReaction);
+    reactions.splice(otherUserReactionIndex, 1, otherUserReaction);
+  }
+  // const userReaction = reactions.find(
+  //   (elem) => elem.userId?.toString() === _id.toString()
+  // );
+  console.log("reaction: ", reaction);
+  console.log("userReaction: ", userReaction);
+
+  // if (userReaction && reaction === userReaction.reaction) {
+  //   throw HttpError(
+  //     403,
+  //     "You allready have such a reaction. You can only change it."
+  //   );
+  // }
+
+  // const newReaction = { reaction, userId: _id };
+
+  // if (!userReaction) {
+  //   reactions.push(newReaction);
+  //   console.log("reactions for no: ", reactions);
+  // } else {
+  //   const reactionIndex = reactions.findIndex(
+  //     (elem) => elem.userId?.toString() === _id.toString()
+  //   );
+  //   reactions.splice(reactionIndex, 1, newReaction);
+  //   console.log("reactions for exists: ", reactions);
+  // }
   console.log("reactions: ", reactions);
   // const newReactions = userReaction
   //   ? reactions.splice(reactionIndex, 1, newReaction)
