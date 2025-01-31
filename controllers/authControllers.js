@@ -85,7 +85,7 @@ const signin = async (req, res) => {
     throw HttpError(401, "Email is wrong");
   }
   const { password: hashPassword, _id } = user;
-  const compare = await bcrypt.compare(password, hashPassword);
+  const compare = bcrypt.compare(password, hashPassword);
   if (!compare) {
     throw HttpError(401, "Password is wrong");
   }

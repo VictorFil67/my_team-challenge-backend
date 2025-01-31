@@ -3,6 +3,7 @@ import HttpError from "../helpers/HttpError.js";
 import {
   addComplex,
   findComplex,
+  getListOfComplexes,
   updateComplexById,
 } from "../services/complexServices.js";
 
@@ -77,6 +78,11 @@ const updateComplex = async (req, res) => {
 
   const result = await updateComplexById(_id, req.body);
   res.status(200).json(result);
+};
+
+const getComlexes = async (req, res) => {
+  const result = await getListOfComplexes();
+  res.json(result);
 };
 
 export default {
