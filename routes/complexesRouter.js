@@ -9,15 +9,22 @@ import validateBody from "../decorators/validateBody.js";
 
 const complexesRouter = express.Router();
 
-complexesRouter.use(authenticate);
+// complexesRouter.use(authenticate);
 
-const { createComplex, updateComplex } = complexesControllers;
+const { createComplex, updateComplex, getComlexes } = complexesControllers;
 
-complexesRouter.post("/", validateBody(createComplexSchema), createComplex);
+complexesRouter.post(
+  "/",
+  authenticate,
+  validateBody(createComplexSchema),
+  createComplex
+);
 complexesRouter.put(
   "/:complexId",
+  authenticate,
   validateBody(updateComplexSchema),
   updateComplex
 );
+complexesRouter.get("/", getComlexes);
 
 export default complexesRouter;
