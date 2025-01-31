@@ -88,6 +88,7 @@ const getComlexes = async (req, res) => {
 export default {
   createComplex: ctrlWrapper(createComplex),
   updateComplex: ctrlWrapper(updateComplex),
+  getComlexes: ctrlWrapper(getComlexes),
 };
 
 // const createComplex = async (req, res) => {
