@@ -81,12 +81,12 @@ const updateComplex = async (req, res) => {
   res.status(200).json(result);
 };
 
-const getComlexes = async (req, res) => {
+const getComplexes = async (req, res) => {
   const result = await getListOfComplexes();
   res.json(result);
 };
 
-const getCompex = async (req, res) => {
+const getComplex = async (req, res) => {
   const { complexId: _id } = req.params;
   const result = await findComplexById(_id);
   res.json(result);
@@ -95,7 +95,8 @@ const getCompex = async (req, res) => {
 export default {
   createComplex: ctrlWrapper(createComplex),
   updateComplex: ctrlWrapper(updateComplex),
-  getComlexes: ctrlWrapper(getComlexes),
+  getComplexes: ctrlWrapper(getComplexes),
+  getComplex: ctrlWrapper(getComplex),
 };
 
 // const createComplex = async (req, res) => {
