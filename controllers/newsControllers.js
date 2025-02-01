@@ -88,7 +88,7 @@ const addReaction = async (req, res) => {
   const { newsId } = req.params;
 
   const { news_channel_id, reactions } = await findNewsById({ _id: newsId });
-  // console.log("reactions from DB: ", reactions);
+
   const { residential_complex_id, building_id } = await findNewsChannelById({
     _id: news_channel_id,
   });
@@ -121,17 +121,17 @@ const addReaction = async (req, res) => {
   const existedIncomeReaction = reactions.find(
     (elem) => elem.reaction === reaction
   );
-  console.log("existedIncomeReaction: ", existedIncomeReaction);
+  // console.log("existedIncomeReaction: ", existedIncomeReaction);
   const otherUserReaction = reactions.find(
     (elem) => elem.userIds.includes(_id)
     // && elem.reaction !== reaction
   );
-  console.log("otherUserReaction: ", otherUserReaction);
+  // console.log("otherUserReaction: ", otherUserReaction);
   let equalReactions = false;
-  if (existedIncomeReaction.reaction === otherUserReaction.reaction) {
+  if (existedIncomeReaction?.reaction === otherUserReaction?.reaction) {
     equalReactions = true;
   }
-  console.log("equalReactions: ", equalReactions);
+  // console.log("equalReactions: ", equalReactions);
   let newReaction = {};
   let existedUserIdForIncomeReaction;
 
@@ -140,6 +140,7 @@ const addReaction = async (req, res) => {
     newReaction = { reaction, userIds: [_id] };
     reactions.push(newReaction);
     console.log("reactions after newReaction: ", reactions);
+
     // ***The 2nd case***
   } else if (existedIncomeReaction && !otherUserReaction) {
     existedUserIdForIncomeReaction =
@@ -151,29 +152,38 @@ const addReaction = async (req, res) => {
       );
     } else {
       existedIncomeReaction.userIds.push(_id);
-      const userReactionIndex = reactions.findIndex(
-        (elem) => (elem.reaction = reaction)
+      // console.log("existedIncomeReaction: ", existedIncomeReaction);
+      const existedIncomeReactionIndex = reactions.findIndex(
+        (elem) => elem.reaction === reaction
       );
-      reactions.splice(userReactionIndex, 1, existedIncomeReaction);
+      reactions.splice(existedIncomeReactionIndex, 1, existedIncomeReaction);
+      // console.log("reactions after added reaction: ", reactions);
       console.log(
         "reactions for existedIncomeReaction && !otherUserReaction after add userId: ",
         reactions
       );
     }
+
     // ***The 3d case***
   } else if (!existedIncomeReaction && otherUserReaction) {
     newReaction = { reaction, userIds: [_id] };
     reactions.push(newReaction);
+    const userIdIndex = otherUserReaction.userIds.indexOf(_id);
+    // if (userIdIndex > -1) {
     const otherUserReactionIndex = reactions.findIndex((elem) =>
       elem.userIds.includes(_id)
     );
-    const userIdIndex = otherUserReaction.userIds.indexOf(_id);
     otherUserReaction.userIds.splice(userIdIndex, 1);
-    reactions.splice(otherUserReactionIndex, 1, otherUserReaction);
+    if (otherUserReaction.userIds.length !== 0) {
+      reactions.splice(otherUserReactionIndex, 1, otherUserReaction);
+    } else {
+      reactions.splice(otherUserReactionIndex, 1);
+    }
     console.log(
       "reactions for !existedIncomeReaction && otherUserReaction after add newReaction: ",
       reactions
     );
+    // }
     // ***The 4th case***
   } else if (existedIncomeReaction && otherUserReaction) {
     if (equalReactions) {
@@ -182,94 +192,31 @@ const addReaction = async (req, res) => {
         "You allready have such a reaction. You can only change it."
       );
     } else {
-      existedIncomeReaction.userIds.push(_id);
       const otherUserReactionIndex = reactions.findIndex((elem) =>
         elem.userIds.includes(_id)
       );
       const userIdIndex = otherUserReaction.userIds.indexOf(_id);
       otherUserReaction.userIds.splice(userIdIndex, 1);
-      reactions.splice(otherUserReactionIndex, 1, otherUserReaction);
+      if (otherUserReaction.userIds.length !== 0) {
+        reactions.splice(otherUserReactionIndex, 1, otherUserReaction);
+      } else {
+        reactions.splice(otherUserReactionIndex, 1);
+      }
+      existedIncomeReaction.userIds.push(_id);
+      // console.log("existedIncomeReaction: ", existedIncomeReaction);
+      const existedIncomeReactionIndex = reactions.findIndex(
+        (elem) => elem.reaction === reaction
+      );
+      reactions.splice(existedIncomeReactionIndex, 1, existedIncomeReaction);
+      // console.log("reactions after added reaction: ", reactions);
+
       console.log(
         "reactions for existedIncomeReaction && otherUserReaction after add userId to existed reaction and delete from the other one: ",
         reactions
       );
     }
   }
-  // else if (condition) {
-  // }
-  // {
-  // }
-  // let existedUserIdForReaction;
 
-  // let newReaction = {};
-  // if (userReaction) {
-  //   existedUserIdForReaction = userReaction.userIds.includes(_id);
-  // } else {
-  //   newReaction = { reaction, userIds: [_id] };
-  //   reactions.push(newReaction);
-  //   console.log("newReaction: ", newReaction);
-  //   console.log("reactions: ", reactions);
-  // }
-  // if (existedUserIdForReaction) {
-  //   throw HttpError(
-  //     403,
-  //     "You allready have such a reaction. You can only change it."
-  //   );
-  // } else if (!existedUserIdForReaction && userReaction) {
-  //   console.log("before");
-  //   console.log("userReaction: ", userReaction);
-  //   console.log("after");
-  //   userReaction.userIds.push(_id);
-  //   const userReactionIndex = reactions.findIndex(
-  //     (elem) => (elem.reaction = reaction)
-  //   );
-  //   reactions.splice(userReactionIndex, 1, userReaction);
-  // }
-  // // const otherUserReaction = reactions.find((elem) =>
-  // //   elem.userIds.includes(_id)
-  // // );
-  // if (otherUserReaction) {
-  //   console.log("before");
-  //   console.log("otherUserReaction: ", otherUserReaction);
-  //   const otherUserReactionIndex = reactions.findIndex((elem) =>
-  //     elem.userIds.includes(_id)
-  //   );
-  //   const userIdIndex = otherUserReaction.userIds.indexOf(_id);
-  //   otherUserReaction.userIds.splice(userIdIndex, 1);
-  //   console.log("after");
-  //   console.log("otherUserReaction: ", otherUserReaction);
-  //   reactions.splice(otherUserReactionIndex, 1, otherUserReaction);
-  // }
-  // // const userReaction = reactions.find(
-  // //   (elem) => elem.userId?.toString() === _id.toString()
-  // // );
-  // console.log("reaction: ", reaction);
-  // console.log("userReaction: ", userReaction);
-
-  // if (userReaction && reaction === userReaction.reaction) {
-  //   throw HttpError(
-  //     403,
-  //     "You allready have such a reaction. You can only change it."
-  //   );
-  // }
-
-  // const newReaction = { reaction, userId: _id };
-
-  // if (!userReaction) {
-  //   reactions.push(newReaction);
-  //   console.log("reactions for no: ", reactions);
-  // } else {
-  //   const reactionIndex = reactions.findIndex(
-  //     (elem) => elem.userId?.toString() === _id.toString()
-  //   );
-  //   reactions.splice(reactionIndex, 1, newReaction);
-  //   console.log("reactions for exists: ", reactions);
-  // }
-  // console.log("reactions: ", reactions);
-  // const newReactions = userReaction
-  //   ? reactions.splice(reactionIndex, 1, newReaction)
-  //   : reactions.push(newReaction);
-  // console.log("newReactions: ", newReactions);
   const result = await addReactionById({ _id: newsId }, { reactions });
 
   res.json(result);
