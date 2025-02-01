@@ -123,9 +123,15 @@ const addReaction = async (req, res) => {
   );
   console.log("existedIncomeReaction: ", existedIncomeReaction);
   const otherUserReaction = reactions.find(
-    (elem) => elem.userIds.includes(_id) && elem.reaction !== reaction
+    (elem) => elem.userIds.includes(_id)
+    // && elem.reaction !== reaction
   );
   console.log("otherUserReaction: ", otherUserReaction);
+  let equalReactions = false;
+  if (existedIncomeReaction.reaction === otherUserReaction.reaction) {
+    equalReactions = true;
+  }
+  console.log("equalReactions: ", equalReactions);
   let newReaction = {};
   let existedUserIdForIncomeReaction;
 
@@ -163,13 +169,31 @@ const addReaction = async (req, res) => {
     );
     const userIdIndex = otherUserReaction.userIds.indexOf(_id);
     otherUserReaction.userIds.splice(userIdIndex, 1);
-    // console.log("after");
-    // console.log("otherUserReaction: ", otherUserReaction);
     reactions.splice(otherUserReactionIndex, 1, otherUserReaction);
     console.log(
       "reactions for !existedIncomeReaction && otherUserReaction after add newReaction: ",
       reactions
     );
+    // ***The 4th case***
+  } else if (existedIncomeReaction && otherUserReaction) {
+    if (equalReactions) {
+      throw HttpError(
+        403,
+        "You allready have such a reaction. You can only change it."
+      );
+    } else {
+      existedIncomeReaction.userIds.push(_id);
+      const otherUserReactionIndex = reactions.findIndex((elem) =>
+        elem.userIds.includes(_id)
+      );
+      const userIdIndex = otherUserReaction.userIds.indexOf(_id);
+      otherUserReaction.userIds.splice(userIdIndex, 1);
+      reactions.splice(otherUserReactionIndex, 1, otherUserReaction);
+      console.log(
+        "reactions for existedIncomeReaction && otherUserReaction after add userId to existed reaction and delete from the other one: ",
+        reactions
+      );
+    }
   }
   // else if (condition) {
   // }
