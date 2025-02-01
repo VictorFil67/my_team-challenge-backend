@@ -114,6 +114,10 @@ const addReaction = async (req, res) => {
   if (!is_admin && building_id && !building) {
     throw HttpError(403, "You don't have access to this action!");
   }
+
+  //***/ Cases of reactions***
+
+  // ****Conditions***
   const existedIncomeReaction = reactions.find(
     (elem) => elem.reaction === reaction
   );
@@ -124,10 +128,13 @@ const addReaction = async (req, res) => {
   console.log("otherUserReaction: ", otherUserReaction);
   let newReaction = {};
   let existedUserIdForIncomeReaction;
+
+  // ***The 1st case***
   if (!existedIncomeReaction && !otherUserReaction) {
     newReaction = { reaction, userIds: [_id] };
     reactions.push(newReaction);
     console.log("reactions after newReaction: ", reactions);
+    // ***The 2nd case***
   } else if (existedIncomeReaction && !otherUserReaction) {
     existedUserIdForIncomeReaction =
       existedIncomeReaction.userIds.includes(_id);
@@ -143,10 +150,26 @@ const addReaction = async (req, res) => {
       );
       reactions.splice(userReactionIndex, 1, existedIncomeReaction);
       console.log(
-        "reactions for userReaction && !otherUserReaction after add userId: ",
+        "reactions for existedIncomeReaction && !otherUserReaction after add userId: ",
         reactions
       );
     }
+    // ***The 3d case***
+  } else if (!existedIncomeReaction && otherUserReaction) {
+    newReaction = { reaction, userIds: [_id] };
+    reactions.push(newReaction);
+    const otherUserReactionIndex = reactions.findIndex((elem) =>
+      elem.userIds.includes(_id)
+    );
+    const userIdIndex = otherUserReaction.userIds.indexOf(_id);
+    otherUserReaction.userIds.splice(userIdIndex, 1);
+    // console.log("after");
+    // console.log("otherUserReaction: ", otherUserReaction);
+    reactions.splice(otherUserReactionIndex, 1, otherUserReaction);
+    console.log(
+      "reactions for !existedIncomeReaction && otherUserReaction after add newReaction: ",
+      reactions
+    );
   }
   // else if (condition) {
   // }
