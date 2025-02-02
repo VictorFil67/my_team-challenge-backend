@@ -15,7 +15,7 @@ const createComplex = async (req, res) => {
   }
   const {
     name,
-    images,
+    // images,
 
     parking,
     addresses,
@@ -28,6 +28,12 @@ const createComplex = async (req, res) => {
     video_surveillance,
     floors,
   } = req.body;
+  const { url: image } = await cloudinary.uploader.upload(req.file.path, {
+    folder: "teamchallenge",
+  });
+  const { path: oldPath } = req.file;
+  console.log("oldPath: ", oldPath);
+  await fs.rm(oldPath);
 
   const complex = await findComplex({ name });
 
@@ -52,7 +58,7 @@ const createComplex = async (req, res) => {
 
   const data = {
     name,
-    images,
+    image,
     properties: {
       parking,
       security,
