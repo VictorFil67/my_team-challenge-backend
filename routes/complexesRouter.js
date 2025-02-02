@@ -6,6 +6,7 @@ import {
   updateComplexSchema,
 } from "../schemas/complexSchema.js";
 import validateBody from "../decorators/validateBody.js";
+import upload from "../middlewares/upload.js";
 
 const complexesRouter = express.Router();
 
@@ -17,6 +18,7 @@ const { createComplex, updateComplex, getComplexes, getComplex } =
 complexesRouter.post(
   "/",
   authenticate,
+  upload.single("image"),
   validateBody(createComplexSchema),
   createComplex
 );
