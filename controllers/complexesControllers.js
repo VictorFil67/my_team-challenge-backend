@@ -1,6 +1,7 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import cloudinary from "../helpers/cloudinary.js";
 import HttpError from "../helpers/HttpError.js";
+import fs from "fs/promises";
 import {
   addComplex,
   findComplex,

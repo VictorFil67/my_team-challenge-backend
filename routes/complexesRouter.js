@@ -19,7 +19,7 @@ complexesRouter.post(
   "/",
   authenticate,
   upload.single("image"),
-  validateBody(createComplexSchema),
+  // validateBody(createComplexSchema),
   createComplex
 );
 complexesRouter.put(
