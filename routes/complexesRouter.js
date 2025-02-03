@@ -18,7 +18,7 @@ const { createComplex, updateComplex, getComplexes, getComplex } =
 complexesRouter.post(
   "/",
   authenticate,
-  upload.single("image"),
+  upload.array("image", 10),
   // validateBody(createComplexSchema),
   createComplex
 );
