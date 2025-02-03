@@ -30,9 +30,21 @@ const createComplex = async (req, res) => {
     video_surveillance,
     floors,
   } = req.body;
-  const { url: image } = await cloudinary.uploader.upload(req.file.path, {
-    folder: "teamchallenge",
-  });
+  console.log("first*******************");
+  console.log(req.files);
+  // ***For uploading one file***
+  // const { url: image } = await cloudinary.uploader.upload(req.file.path, {
+  //   folder: "teamchallenge",
+  // });
+  // ***For uploading a few files***
+  const uploadedResults = await Promise.all(
+    req.files.map((file) =>
+      cloudinary.uploader.upload(file.path, {
+        folder: "teamchallenge",
+      })
+    )
+  );
+  console.log("uploadedResults: ", uploadedResults);
   const { path: oldPath } = req.file;
   console.log("oldPath: ", oldPath);
   await fs.rm(oldPath);
