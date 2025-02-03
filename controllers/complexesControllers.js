@@ -36,6 +36,9 @@ const createComplex = async (req, res) => {
   // const { url: image } = await cloudinary.uploader.upload(req.file.path, {
   //   folder: "teamchallenge",
   // });
+  // const { path: oldPath } = req.file;
+  // await fs.rm(oldPath);
+
   // ***For uploading a few files***
   const uploadedResults = await Promise.all(
     req.files.map((file) =>
@@ -44,10 +47,13 @@ const createComplex = async (req, res) => {
       })
     )
   );
-  console.log("uploadedResults: ", uploadedResults);
-  const { path: oldPath } = req.file;
-  console.log("oldPath: ", oldPath);
-  await fs.rm(oldPath);
+  const images = uploadedResults.map((elem) => elem.url);
+  const paths = req.files.map((elem) => elem.path);
+
+  console.log("images: ", images);
+  console.log("paths: ", paths);
+  // await Promise.all(paths.forEach((elem) => fs.rm(elem)));
+  paths.forEach((elem) => fs.rm(elem));
 
   const complex = await findComplex({ name });
 
@@ -72,7 +78,7 @@ const createComplex = async (req, res) => {
 
   const data = {
     name,
-    image,
+    images,
     properties: {
       parking,
       security,

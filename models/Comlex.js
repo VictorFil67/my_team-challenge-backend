@@ -28,9 +28,11 @@ const complexSchema = new Schema(
       type: String,
       required: [true, "Name is required"],
     },
-    image: {
-      type: String,
-    },
+    images: [
+      {
+        type: String,
+      },
+    ],
 
     properties: {
       parking: {
