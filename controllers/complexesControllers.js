@@ -53,7 +53,7 @@ const createComplex = async (req, res) => {
   console.log("images: ", images);
   console.log("paths: ", paths);
   // await Promise.all(paths.forEach((elem) => fs.rm(elem)));
-  paths.forEach((elem) => fs.rm(elem));
+  await paths.forEach((elem) => fs.rm(elem));
 
   const complex = await findComplex({ name });
 

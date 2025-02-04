@@ -10,21 +10,21 @@ import upload from "../middlewares/upload.js";
 
 const complexesRouter = express.Router();
 
-// complexesRouter.use(authenticate);
+complexesRouter.use(authenticate);
 
 const { createComplex, updateComplex, getComplexes, getComplex } =
   complexesControllers;
 
 complexesRouter.post(
   "/",
-  authenticate,
+  // authenticate,
   upload.array("image", 10),
   // validateBody(createComplexSchema),
   createComplex
 );
 complexesRouter.put(
   "/:complexId",
-  authenticate,
+  // authenticate,
   validateBody(updateComplexSchema),
   updateComplex
 );
