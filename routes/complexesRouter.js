@@ -17,14 +17,12 @@ const { createComplex, updateComplex, getComplexes, getComplex } =
 
 complexesRouter.post(
   "/",
-  // authenticate,
   upload.array("image", 10),
-  // validateBody(createComplexSchema),
+  validateBody(createComplexSchema),
   createComplex
 );
 complexesRouter.put(
   "/:complexId",
-  // authenticate,
   validateBody(updateComplexSchema),
   updateComplex
 );
