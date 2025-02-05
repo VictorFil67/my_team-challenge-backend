@@ -17,7 +17,7 @@ import newsRouter from "../routes/NewsRouter.js";
 
 const app = express();
 
-app.use(morgan("tiny"));
+// app.use(morgan("tiny"));
 app.use(express.json());
 app.use(express.static("upload/images"));
 app.use("/auth", authRouter);
@@ -42,6 +42,21 @@ function getToken(done) {
         throw err;
       }
       bearerToken = res.body.tokens.accessToken;          
+      done();
+    });
+}
+
+let userID = null;
+
+function getUserID(done) {
+  request(app)
+    .get('/auth/current')
+    .set("Authorization", "Bearer " + bearerToken)
+    .end(function(err, res) {
+      if (err) {
+        throw err;
+      }
+      userID = res.body._id;
       done();
     });
 }
@@ -162,10 +177,146 @@ describe('Testing routes', () => {
   })
 
   describe('Test /complexes', function() {
-    beforeEach(getToken);
+    before(getToken);
 
-    it("POST /", function() {
-      
+    let complexID = '679d1503432a1455984d8e52';
+    it("POST /", function(done) {
+      request(app)
+        .post('/complexes')
+        .send({
+          name: 'Test Complex', 
+          images: ['abc'],
+          addresses: ['1', '2', '3a'],
+        })
+        .set('Authorization', 'Bearer ' + bearerToken)
+        .expect(403)
+        .end(function(err, res) {          
+          if (err) {
+            throw err;
+          }
+          if (res.body._id) {
+            complexID = res.body._id;
+          }
+          
+          done();
+        });
+    });
+
+    it("PUT /:complexId", function(done) {
+      request(app)
+        .put('/complexes' + '/' + complexID)
+        .send({
+          name: 'Test Complex', 
+          images: ['def'],
+          buildings: [ 
+            { address: "0", apartments: [{ number: 1, entrance: 1 }, { number: 2, entrance: 1 }] },
+            { address: "1", apartments: [{ number: 1, entrance: 1 }, { number: 2, entrance: 1 }] } 
+          ],
+        })
+        .set('Authorization', 'Bearer ' + bearerToken)
+        .expect(200)
+        .end(function(err, res) {          
+          if (err) {
+            throw err;
+          }
+          done();
+        });
+    });
+  })
+
+
+
+  describe('Test /users', function() {
+    before(getToken);
+    before(getUserID);
+
+    it("PUT /addresses", function(done) {
+      this.timeout(5000);
+      request(app)
+        .put('/users/addresses')
+        .send({
+          residential_complex: "Test Complex", building: "0", entrance: 1, apartment: 1,
+        })
+        .set('Authorization', 'Bearer ' + bearerToken)
+        .expect(200)
+        .end(function(err, res) {          
+          if (err) {
+            throw err;
+          }
+          request(app)
+            .put('/users/addresses')
+            .send({
+              residential_complex: "Test Complex", building: "0", entrance: 1, apartment: 2,
+            })
+            .set('Authorization', 'Bearer ' + bearerToken)
+            .expect(200)
+            .end(function(err, res) {          
+              if (err) {
+                throw err;
+              }
+              done();
+            });
+        });
+    });
+  
+    it("PATCH /addresses/:userID", function(done) {
+      request(app)
+        .patch('/users/addresses/' + userID)
+        .query({
+          residential_complex: "Test Complex", building: "0", entrance: 1, apartment: 2,
+        })
+        .set('Authorization', 'Bearer ' + bearerToken)
+        .expect(201)
+        .end(function(err, res) {          
+          if (err) {
+            throw err;
+          }
+          done();
+        });
+    });
+  
+    it("PATCH /addresses/:userID/:complexId", function(done) {
+      request(app)
+        .patch('/users/addresses/' + userID + '/' + '679d1503432a1455984d8e52')
+        .query({
+          moderator: true
+        })
+        .set('Authorization', 'Bearer ' + bearerToken)
+        .expect(200)
+        .end(function(err, res) {          
+          if (err) {
+            throw err;
+          }
+          done();
+        });
+    });
+  
+    it("DELETE /addresses", function(done) {
+      request(app)
+        .delete('/users/addresses')
+        .send({
+          residential_complex: "Test Complex", building: "0", entrance: 1, apartment: 1,
+        })
+        .set('Authorization', 'Bearer ' + bearerToken)
+        .expect(200)
+        .end(function(err, res) {          
+          if (err) {
+            throw err;
+          }
+          request(app)
+            .delete('/users/addresses')
+            .send({
+              residential_complex: "Test Complex", building: "0", entrance: 1, apartment: 2,
+            })
+            .set('Authorization', 'Bearer ' + bearerToken)
+            .expect(200)
+            .end(function(err, res) {          
+              if (err) {
+                throw err;
+              }
+              done();
+            });
+        });
     });
   })
 })
