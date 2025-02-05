@@ -12,8 +12,13 @@ const complexesRouter = express.Router();
 
 complexesRouter.use(authenticate);
 
-const { createComplex, updateComplex, getComplexes, getComplex } =
-  complexesControllers;
+const {
+  createComplex,
+  updateComplex,
+  getComplexes,
+  getComplex,
+  deleteComplex,
+} = complexesControllers;
 
 complexesRouter.post(
   "/",
@@ -28,5 +33,6 @@ complexesRouter.put(
 );
 complexesRouter.get("/", getComplexes);
 complexesRouter.get("/:complexId", getComplex);
+complexesRouter.delete("/:complexId", deleteComplex);
 
 export default complexesRouter;

@@ -133,6 +133,7 @@ export default {
   updateComplex: ctrlWrapper(updateComplex),
   getComplexes: ctrlWrapper(getComplexes),
   getComplex: ctrlWrapper(getComplex),
+  deleteComplex: ctrlWrapper(deleteComplex),
 };
 
 // const createComplex = async (req, res) => {
