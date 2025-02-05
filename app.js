@@ -13,13 +13,12 @@ import authRouter from "./routes/authRouter.js";
 import usersRouter from "./routes/usersRouter.js";
 import complexesRouter from "./routes/complexesRouter.js";
 import chatRoomsRouter from "./routes/chatRoomsRouter.js";
-// import complexRouter from "./routes/complexRouter.js";
-// import * as chatControllers from "./controllers/chatControllers.js";
 import notificationsRouter from "./routes/notificationsRouter.js";
 import votingsRouter from "./routes/votingsRouter.js";
 import newsChannelRouter from "./routes/newsChannelRouter.js";
 import newsRouter from "./routes/NewsRouter.js";
-import googleAuthRouter from "./routes/googleAuthRouter.js";
+
+// import googleAuthRouter from "./routes/googleAuthRouter.js";
 
 dotenv.config();
 
@@ -45,11 +44,7 @@ app.use("/notifications", notificationsRouter);
 app.use("/votings", votingsRouter);
 app.use("/news_channels", newsChannelRouter);
 app.use("/news", newsRouter);
-app.use("/", googleAuthRouter);
-// app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-// const oasJson = JSON.parse(fs.readFileSync("./oas.json"));
-// app.use("/docs", swaggerUi.serve, swaggerUi.setup(oasJson));
-// // app.use("/chat", chatRouter);
+// app.use("/", googleAuthRouter);
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });

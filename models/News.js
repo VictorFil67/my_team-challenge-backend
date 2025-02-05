@@ -27,10 +27,16 @@ const newsSchema = new Schema(
         reaction: {
           type: String,
         },
-        userId: {
-          type: Schema.Types.ObjectId,
-          ref: "user",
-        },
+        // userId: {
+        //   type: Schema.Types.ObjectId,
+        //   ref: "user",
+        // },
+        userIds: [
+          {
+            type: Schema.Types.ObjectId,
+            ref: "user",
+          },
+        ],
       },
     ],
     news_channel_id: {

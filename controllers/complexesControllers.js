@@ -1,8 +1,12 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import cloudinary from "../helpers/cloudinary.js";
 import HttpError from "../helpers/HttpError.js";
+import fs from "fs/promises";
 import {
   addComplex,
   findComplex,
+  findComplexById,
+  getListOfComplexes,
   updateComplexById,
 } from "../services/complexServices.js";
 
@@ -13,7 +17,7 @@ const createComplex = async (req, res) => {
   }
   const {
     name,
-    images,
+    // images,
 
     parking,
     addresses,
@@ -26,6 +30,30 @@ const createComplex = async (req, res) => {
     video_surveillance,
     floors,
   } = req.body;
+  console.log("first*******************");
+  console.log(req.files);
+  // ***For uploading one file***
+  // const { url: image } = await cloudinary.uploader.upload(req.file.path, {
+  //   folder: "teamchallenge",
+  // });
+  // const { path: oldPath } = req.file;
+  // await fs.rm(oldPath);
+
+  // ***For uploading a few files***
+  const uploadedResults = await Promise.all(
+    req.files.map((file) =>
+      cloudinary.uploader.upload(file.path, {
+        folder: "teamchallenge",
+      })
+    )
+  );
+  const images = uploadedResults.map((elem) => elem.url);
+  const paths = req.files.map((elem) => elem.path);
+
+  console.log("images: ", images);
+  console.log("paths: ", paths);
+  // await Promise.all(paths.forEach((elem) => fs.rm(elem)));
+  await paths.forEach((elem) => fs.rm(elem));
 
   const complex = await findComplex({ name });
 
@@ -79,9 +107,22 @@ const updateComplex = async (req, res) => {
   res.status(200).json(result);
 };
 
+const getComplexes = async (req, res) => {
+  const result = await getListOfComplexes();
+  res.json(result);
+};
+
+const getComplex = async (req, res) => {
+  const { complexId: _id } = req.params;
+  const result = await findComplexById(_id);
+  res.json(result);
+};
+
 export default {
   createComplex: ctrlWrapper(createComplex),
   updateComplex: ctrlWrapper(updateComplex),
+  getComplexes: ctrlWrapper(getComplexes),
+  getComplex: ctrlWrapper(getComplex),
 };
 
 // const createComplex = async (req, res) => {

@@ -11,3 +11,11 @@ export async function findComplex(filter) {
 export async function updateComplexById(id, data) {
   return await Complex.findByIdAndUpdate(id, data);
 }
+
+export function getListOfComplexes() {
+  return Complex.find();
+}
+
+export function findComplexById(id) {
+  return Complex.findById(id);
+}

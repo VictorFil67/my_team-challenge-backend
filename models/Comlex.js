@@ -33,6 +33,7 @@ const complexSchema = new Schema(
         type: String,
       },
     ],
+
     properties: {
       parking: {
         type: Boolean,

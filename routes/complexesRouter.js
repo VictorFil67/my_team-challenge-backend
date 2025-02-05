@@ -6,18 +6,27 @@ import {
   updateComplexSchema,
 } from "../schemas/complexSchema.js";
 import validateBody from "../decorators/validateBody.js";
+import upload from "../middlewares/upload.js";
 
 const complexesRouter = express.Router();
 
 complexesRouter.use(authenticate);
 
-const { createComplex, updateComplex } = complexesControllers;
+const { createComplex, updateComplex, getComplexes, getComplex } =
+  complexesControllers;
 
-complexesRouter.post("/", validateBody(createComplexSchema), createComplex);
+complexesRouter.post(
+  "/",
+  upload.array("image", 10),
+  validateBody(createComplexSchema),
+  createComplex
+);
 complexesRouter.put(
   "/:complexId",
   validateBody(updateComplexSchema),
   updateComplex
 );
+complexesRouter.get("/", getComplexes);
+complexesRouter.get("/:complexId", getComplex);
 
 export default complexesRouter;
