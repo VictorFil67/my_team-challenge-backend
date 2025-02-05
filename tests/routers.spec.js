@@ -13,6 +13,9 @@ import notificationsRouter from "../routes/notificationsRouter.js";
 import votingsRouter from "../routes/votingsRouter.js";
 import newsChannelRouter from "../routes/newsChannelRouter.js";
 import newsRouter from "../routes/NewsRouter.js";
+import { readFileSync } from "fs";
+import path from "path";
+import { homedir } from "os";
 // import googleAuthRouter from "../routes/googleAuthRouter.js";
 
 const app = express();
@@ -183,11 +186,9 @@ describe('Testing routes', () => {
     it("POST /", function(done) {
       request(app)
         .post('/complexes')
-        .send({
-          name: 'Test Complex', 
-          images: ['abc'],
-          addresses: ['1', '2', '3a'],
-        })
+        .field('name', 'Test Complex')
+        .field('addresses', ['1', '2', '3a'])
+        .attach(readFileSync(path.join(homedir(), 'Downloads/Designer (7).jpeg'), 'utf8'))
         .set('Authorization', 'Bearer ' + bearerToken)
         .expect(403)
         .end(function(err, res) {          
