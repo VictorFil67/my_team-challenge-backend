@@ -7,6 +7,7 @@ import {
   findComplex,
   findComplexById,
   getListOfComplexes,
+  removeComplex,
   updateComplexById,
 } from "../services/complexServices.js";
 
@@ -122,6 +123,9 @@ const deleteComplex = async (req, res) => {
     throw HttpError(403, `You must be an administrator to commit this action`);
   }
   const { complexId: _id } = req.params;
+  const result = await removeComplex(_id);
+
+  res.json(result);
 };
 
 export default {
