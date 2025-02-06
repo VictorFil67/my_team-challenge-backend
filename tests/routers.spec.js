@@ -33,6 +33,9 @@ app.use("/news_channels", newsChannelRouter);
 app.use("/news", newsRouter);
 
 let bearerToken = null;
+const complexID = '67a3a0c37ca64083c1ff9799';
+let newsID = null;
+const newsChannelID = '6795115a5824a1b87515b14d';
 
 function getToken(done) {
   request(app)
@@ -182,13 +185,13 @@ describe('Testing routes', () => {
   describe('Test /complexes', function() {
     before(getToken);
 
-    let complexID = '679d1503432a1455984d8e52';
     it("POST /", function(done) {
+      this.timeout(10000);
       request(app)
         .post('/complexes')
         .field('name', 'Test Complex')
         .field('addresses', ['1', '2', '3a'])
-        .attach(readFileSync(path.join(homedir(), 'Downloads/Designer (7).jpeg'), 'utf8'))
+        .attach("image", path.join(homedir(), 'Downloads/Designer (7).jpeg'), 'utf8')
         .set('Authorization', 'Bearer ' + bearerToken)
         .expect(403)
         .end(function(err, res) {          
@@ -203,15 +206,14 @@ describe('Testing routes', () => {
         });
     });
 
-    it("PUT /:complexId", function(done) {
+    it("PUT /:complexId", function(done) {      
       request(app)
         .put('/complexes' + '/' + complexID)
         .send({
           name: 'Test Complex', 
-          images: ['def'],
           buildings: [ 
-            { address: "0", apartments: [{ number: 1, entrance: 1 }, { number: 2, entrance: 1 }] },
-            { address: "1", apartments: [{ number: 1, entrance: 1 }, { number: 2, entrance: 1 }] } 
+            { address: '1', apartments: [{ number: 1, entrance: 1 }, { number: 2, entrance: 1 }] },
+            { address: '2', apartments: [{ number: 1, entrance: 1 }, { number: 2, entrance: 1 }] } 
           ],
         })
         .set('Authorization', 'Bearer ' + bearerToken)
@@ -236,7 +238,7 @@ describe('Testing routes', () => {
       request(app)
         .put('/users/addresses')
         .send({
-          residential_complex: "Test Complex", building: "0", entrance: 1, apartment: 1,
+          residential_complex: "Test Complex", building: "1", entrance: 1, apartment: 1,
         })
         .set('Authorization', 'Bearer ' + bearerToken)
         .expect(200)
@@ -247,7 +249,7 @@ describe('Testing routes', () => {
           request(app)
             .put('/users/addresses')
             .send({
-              residential_complex: "Test Complex", building: "0", entrance: 1, apartment: 2,
+              residential_complex: "Test Complex", building: "1", entrance: 1, apartment: 2,
             })
             .set('Authorization', 'Bearer ' + bearerToken)
             .expect(200)
@@ -264,7 +266,7 @@ describe('Testing routes', () => {
       request(app)
         .patch('/users/addresses/' + userID)
         .query({
-          residential_complex: "Test Complex", building: "0", entrance: 1, apartment: 2,
+          residential_complex: "Test Complex", building: "1", entrance: 1, apartment: 2,
         })
         .set('Authorization', 'Bearer ' + bearerToken)
         .expect(201)
@@ -278,7 +280,7 @@ describe('Testing routes', () => {
   
     it("PATCH /addresses/:userID/:complexId", function(done) {
       request(app)
-        .patch('/users/addresses/' + userID + '/' + '679d1503432a1455984d8e52')
+        .patch('/users/addresses/' + userID + '/' + complexID)
         .query({
           moderator: true
         })
@@ -296,7 +298,7 @@ describe('Testing routes', () => {
       request(app)
         .delete('/users/addresses')
         .send({
-          residential_complex: "Test Complex", building: "0", entrance: 1, apartment: 1,
+          residential_complex: "Test Complex", building: "1", entrance: 1, apartment: 1,
         })
         .set('Authorization', 'Bearer ' + bearerToken)
         .expect(200)
@@ -307,7 +309,7 @@ describe('Testing routes', () => {
           request(app)
             .delete('/users/addresses')
             .send({
-              residential_complex: "Test Complex", building: "0", entrance: 1, apartment: 2,
+              residential_complex: "Test Complex", building: "1", entrance: 1, apartment: 2,
             })
             .set('Authorization', 'Bearer ' + bearerToken)
             .expect(200)
@@ -317,6 +319,67 @@ describe('Testing routes', () => {
               }
               done();
             });
+        });
+    });
+  })
+
+  describe('Test /news', function() {
+    before(getToken);
+
+    it("POST /:newsChannelId", function(done) {
+      request(app)
+        .post('/news/' + newsChannelID)
+        .send({ picture: "Test",
+          title: "TEST NEWS",
+          titleUA: "ТЕСТОВА НОВИНА",
+          text: "Test news",
+          textUA: "Тестова новина"
+        })
+        .set('Authorization', 'Bearer ' + bearerToken)
+        .expect(201)
+        .end(function(err, res) {          
+          if (err) {
+            throw err;
+          }
+          newsID = res.body._id;
+          done();
+        });
+    });
+
+    it("PATCH /:newsId", function(done) {
+      request(app)
+        .patch('/news/' + newsID)
+        .send({ reaction: '&#x261D;' })
+        .set('Authorization', 'Bearer ' + bearerToken)
+        .expect(200)
+        .end(function(err, res) {          
+          if (err) {
+            throw err;
+          }
+          request(app)
+            .patch('/news/' + newsID)
+            .send({ reaction: '&#x261C;' })
+            .set('Authorization', 'Bearer ' + bearerToken)
+            .expect(200)
+            .end(function(err, res) {          
+              if (err) {
+                throw err;
+              }
+              done();
+            });
+        });
+    });
+
+    it("DELETE /:newsId", function(done) {
+      request(app)
+        .delete('/news/' + newsID)
+        .set('Authorization', 'Bearer ' + bearerToken)
+        .expect(200)
+        .end(function(err, res) {          
+          if (err) {
+            throw err;
+          }
+          done();
         });
     });
   })
