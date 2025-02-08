@@ -1,3 +1,5 @@
+import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import HttpError from "../helpers/HttpError.js";
 import { findComplex } from "../services/complexServices.js";
 import {
   findContactInfo,
@@ -35,9 +37,10 @@ const createContactInfo = async (req, res) => {
   if (contactInfo) {
     throw HttpError(
       409,
-      `This news contact information already exists, so you can't write down this contact information once more`
+      `This contact information already exists, so you can't write down this contact information once more`
     );
   }
+
   const complex = await findComplex({
     _id: residential_complex_id,
     buildings: {
@@ -55,4 +58,4 @@ const createContactInfo = async (req, res) => {
   res.status(201).json(result);
 };
 
-export default { createContactInfo };
+export default { createContactInfo: ctrlWrapper(createContactInfo) };
