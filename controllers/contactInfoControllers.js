@@ -53,3 +53,5 @@ const createContactInfo = async (req, res) => {
   const result = await makeContactInfo(data);
   res.status(201).json(result);
 };
+
+export default { createContactInfo };
