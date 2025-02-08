@@ -17,6 +17,7 @@ import notificationsRouter from "./routes/notificationsRouter.js";
 import votingsRouter from "./routes/votingsRouter.js";
 import newsChannelRouter from "./routes/newsChannelRouter.js";
 import newsRouter from "./routes/NewsRouter.js";
+import contactInfoRouter from "./routes/contactInfoRouter.js";
 
 // import googleAuthRouter from "./routes/googleAuthRouter.js";
 
@@ -44,6 +45,7 @@ app.use("/notifications", notificationsRouter);
 app.use("/votings", votingsRouter);
 app.use("/news_channels", newsChannelRouter);
 app.use("/news", newsRouter);
+app.use("/contactInfo", contactInfoRouter);
 // app.use("/", googleAuthRouter);
 
 app.use((_, res) => {
