@@ -9,6 +9,12 @@ servers:
 tags:
   - name: Auth
     description: registration, login, get current user etc
+  - name: Users
+    description: register that a user is living at an address
+  - name: Complexes
+    description: CRUD for residential complexes
+
+
 paths:
   /auth/login:
     post:
@@ -122,7 +128,187 @@ paths:
             schema:
               $ref: '#/components/schemas/update-user'
       responses:
-
+  
+  /users/addresses:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      summary: apply user for registering at an address. Sends out an email to admin for approval
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/address'
+      responses:
+        '200': 
+          description: Success
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userObject'
+        '400':
+          description: Address does not exist
+        '401':
+          description: Not authorized
+        '409':
+          description: Already registered for that address
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      summary: delete registration of a user for an address, approved or not
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/address'
+      responses:
+        '200': 
+          description: Success
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userObject'
+        '400':
+          description: Address did not exist
+        '401':
+          description: Not authorized
+  /users/addresses/{userID}:
+    patch:
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      summary: approve user address. Requires admin access
+      parameters:
+        - in: path
+          required: true
+          name: userID
+          schema: 
+            type: string
+            example: 6770447a0a0bcb8470d928ee
+        - in: query
+          name: residential_complex
+          required: true
+          schema:
+            type: string
+            example: Cool complex 666
+        - in: query
+          name: building
+          required: true
+          schema:
+            type: string
+            example: 7a
+        - in: query
+          name: entrance
+          required: true
+          schema:
+            type: number
+            example: 1
+        - in: query
+          name: apartment
+          required: true
+          schema:
+            type: number
+            example: 1
+      responses:
+        '201': 
+          description: Success
+          content: 
+            application/json:
+              schema:
+                example: |-
+                  {
+                    "message": "User address data was approved",
+                    "result": {
+                      "name": "Cool complex 666 7a",
+                      "picture": "",
+                      "building_id": "67a3ae0a3b07cac29676896b",
+                      "users": [
+                        "6770447a0a0bcb8470d928ee"
+                      ],
+                      "_id": "67a8c5f1f333ff1cc8b58c65"
+                    }
+                  }
+        '400':
+          description: Bad request (no such apartment, no changes made)
+        '401':
+          description: Not authorized
+        '403':
+          description: You are not an admin
+  /users/addresses/{userID}/{complexID}:
+    patch:
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      summary: give user moderator status in a complex. Requires admin access. Empty query to set to "false".
+      parameters:
+        - in: path
+          required: true
+          name: userID
+          schema: 
+            type: string
+            example: 6770447a0a0bcb8470d928ee
+        - in: path
+          required: true
+          name: complexID
+          schema: 
+            type: string
+            example: 6760675f58e4cf9dc2be0bdb
+        - in: query
+          name: moderator_status
+          schema: 
+            type: string
+            example: true
+      responses:
+        '200': 
+          description: Success
+          content: 
+            application/json:
+              schema:
+        '400':
+          description: Bad request
+        '401':
+          description: Not authorized
+        '403':
+          description: You are not an admin
+  /complexes:
+    get:
+      tags:
+        - Complexes
+      summary: get info about all complexes
+      responses:
+        '200': 
+          description: Success
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/complexes'
+  /complexes/{complexID}:
+    get:
+      tags:
+        - Complexes
+      summary: get info about all complexes
+      parameters:
+        - in: path
+          required: true
+          name: complexID
+          schema: 
+            type: string
+            example: 6760675f58e4cf9dc2be0bdb
+      responses:
+        '200': 
+          description: Success
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/complex'
 components:
   securitySchemes:
     bearerAuth:
@@ -194,3 +380,174 @@ components:
         name: Password1@email.com
         password: Password1
         phone: "+111222333444"
+    address:
+      type: object
+      properties:
+        residential_complex:
+          type: string
+        building:
+          type: string
+        entrance:
+          type: number
+        apartment: 
+          type: number
+      example:
+        residential_complex: Cool complex 666
+        building: 7a
+        entrance: 1
+        apartment: 1
+    complexes:
+      type: object
+      example: |-
+        [
+          {
+            "properties": {
+              "parking": false,
+              "security": false,
+              "access_control": false,
+              "concierge": false,
+              "playground": false,
+              "closed_area": false,
+              "video_surveillance": false,
+              "floors": 1,
+              "entrances": 1
+            },
+            "_id": "67a3a0c37ca64083c1ff9799",
+            "name": "Test Complex",
+            "images": [
+              "http://res.cloudinary.com/dgcka24lm/image/upload/v1738776771/teamchallenge/nnfjk1lx7jqpyzsflygr.jpg"
+            ],
+            "buildings": [
+              {
+                "address": "1",
+                "apartments": [
+                  {
+                    "number": 1,
+                    "entrance": 1,
+                    "services_debt": 0,
+                    "_id": "67a89fd9bc86a6c85807a67f"
+                  },
+                  {
+                    "number": 2,
+                    "entrance": 1,
+                    "services_debt": 0,
+                    "_id": "67a89fd9bc86a6c85807a680"
+                  }
+                ],
+                "_id": "67a89fd9bc86a6c85807a67e"
+              },
+              {
+                "address": "2",
+                "apartments": [
+                  {
+                    "number": 1,
+                    "entrance": 1,
+                    "services_debt": 0,
+                    "_id": "67a89fd9bc86a6c85807a682"
+                  },
+                  {
+                    "number": 2,
+                    "entrance": 1,
+                    "services_debt": 0,
+                    "_id": "67a89fd9bc86a6c85807a683"
+                  }
+                ],
+                "_id": "67a89fd9bc86a6c85807a681"
+              }
+            ]
+          },
+          {
+            "properties": {
+              "parking": false,
+              "security": false,
+              "access_control": false,
+              "concierge": false,
+              "playground": false,
+              "closed_area": false,
+              "video_surveillance": false,
+              "floors": 1,
+              "entrances": 1
+            },
+            "_id": "67a3b22c57531ded6f3b23c0",
+            "name": "Test Complex",
+            "images": [
+              "http://res.cloudinary.com/dgcka24lm/image/upload/v1738781227/teamchallenge/hoa8lrcu2f7ojr4kdxds.jpg"
+            ],
+            "buildings": [
+              {
+                "address": "1",
+                "_id": "67a3b22c57531ded6f3b23c1",
+                "apartments": []
+              },
+              {
+                "address": "2",
+                "_id": "67a3b22c57531ded6f3b23c2",
+                "apartments": []
+              },
+              {
+                "address": "3a",
+                "_id": "67a3b22c57531ded6f3b23c3",
+                "apartments": []
+              }
+            ]
+          }
+        ]
+    complex:
+      type: object
+      example: |-
+        {
+          "properties": {
+            "parking": false,
+            "security": false,
+            "access_control": false,
+            "concierge": false,
+            "playground": false,
+            "closed_area": false,
+            "video_surveillance": false,
+            "floors": 1,
+            "entrances": 1
+          },
+          "_id": "67a3a0c37ca64083c1ff9799",
+          "name": "Test Complex",
+          "images": [
+            "http://res.cloudinary.com/dgcka24lm/image/upload/v1738776771/teamchallenge/nnfjk1lx7jqpyzsflygr.jpg"
+          ],
+          "buildings": [
+            {
+              "address": "1",
+              "apartments": [
+                {
+                  "number": 1,
+                  "entrance": 1,
+                  "services_debt": 0,
+                  "_id": "67a89fd9bc86a6c85807a67f"
+                },
+                {
+                  "number": 2,
+                  "entrance": 1,
+                  "services_debt": 0,
+                  "_id": "67a89fd9bc86a6c85807a680"
+                }
+              ],
+              "_id": "67a89fd9bc86a6c85807a67e"
+            },
+            {
+              "address": "2",
+              "apartments": [
+                {
+                  "number": 1,
+                  "entrance": 1,
+                  "services_debt": 0,
+                  "_id": "67a89fd9bc86a6c85807a682"
+                },
+                {
+                  "number": 2,
+                  "entrance": 1,
+                  "services_debt": 0,
+                  "_id": "67a89fd9bc86a6c85807a683"
+                }
+              ],
+              "_id": "67a89fd9bc86a6c85807a681"
+            }
+          ]
+        }
