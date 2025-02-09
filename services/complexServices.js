@@ -19,3 +19,7 @@ export function getListOfComplexes() {
 export function findComplexById(id) {
   return Complex.findById(id);
 }
+
+export function removeComplex(id) {
+  return Complex.findByIdAndDelete(id);
+}

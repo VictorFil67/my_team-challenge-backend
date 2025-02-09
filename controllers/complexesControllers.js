@@ -7,6 +7,7 @@ import {
   findComplex,
   findComplexById,
   getListOfComplexes,
+  removeComplex,
   updateComplexById,
 } from "../services/complexServices.js";
 
@@ -17,8 +18,6 @@ const createComplex = async (req, res) => {
   }
   const {
     name,
-    // images,
-
     parking,
     addresses,
     entrances,
@@ -52,7 +51,7 @@ const createComplex = async (req, res) => {
 
   console.log("images: ", images);
   console.log("paths: ", paths);
-  // await Promise.all(paths.forEach((elem) => fs.rm(elem)));
+
   await paths.forEach((elem) => fs.rm(elem));
 
   const complex = await findComplex({ name });
@@ -118,11 +117,23 @@ const getComplex = async (req, res) => {
   res.json(result);
 };
 
+const deleteComplex = async (req, res) => {
+  const { is_admin } = req.user;
+  if (!is_admin) {
+    throw HttpError(403, `You must be an administrator to commit this action`);
+  }
+  const { complexId: _id } = req.params;
+  const result = await removeComplex(_id);
+
+  res.json(result);
+};
+
 export default {
   createComplex: ctrlWrapper(createComplex),
   updateComplex: ctrlWrapper(updateComplex),
   getComplexes: ctrlWrapper(getComplexes),
   getComplex: ctrlWrapper(getComplex),
+  deleteComplex: ctrlWrapper(deleteComplex),
 };
 
 // const createComplex = async (req, res) => {
