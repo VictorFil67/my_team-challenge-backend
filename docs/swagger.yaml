@@ -11,6 +11,8 @@ tags:
     description: registration, login, get current user etc
   - name: Users
     description: register that a user is living at an address
+  - name: Complexes
+    description: CRUD for residential complexes
 
 
 paths:
@@ -276,7 +278,37 @@ paths:
           description: Not authorized
         '403':
           description: You are not an admin
-
+  /complexes:
+    get:
+      tags:
+        - Complexes
+      summary: get info about all complexes
+      responses:
+        '200': 
+          description: Success
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/complexes'
+  /complexes/{complexID}:
+    get:
+      tags:
+        - Complexes
+      summary: get info about all complexes
+      parameters:
+        - in: path
+          required: true
+          name: complexID
+          schema: 
+            type: string
+            example: 6760675f58e4cf9dc2be0bdb
+      responses:
+        '200': 
+          description: Success
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/complex'
 components:
   securitySchemes:
     bearerAuth:
@@ -364,3 +396,158 @@ components:
         building: 7a
         entrance: 1
         apartment: 1
+    complexes:
+      type: object
+      example: |-
+        [
+          {
+            "properties": {
+              "parking": false,
+              "security": false,
+              "access_control": false,
+              "concierge": false,
+              "playground": false,
+              "closed_area": false,
+              "video_surveillance": false,
+              "floors": 1,
+              "entrances": 1
+            },
+            "_id": "67a3a0c37ca64083c1ff9799",
+            "name": "Test Complex",
+            "images": [
+              "http://res.cloudinary.com/dgcka24lm/image/upload/v1738776771/teamchallenge/nnfjk1lx7jqpyzsflygr.jpg"
+            ],
+            "buildings": [
+              {
+                "address": "1",
+                "apartments": [
+                  {
+                    "number": 1,
+                    "entrance": 1,
+                    "services_debt": 0,
+                    "_id": "67a89fd9bc86a6c85807a67f"
+                  },
+                  {
+                    "number": 2,
+                    "entrance": 1,
+                    "services_debt": 0,
+                    "_id": "67a89fd9bc86a6c85807a680"
+                  }
+                ],
+                "_id": "67a89fd9bc86a6c85807a67e"
+              },
+              {
+                "address": "2",
+                "apartments": [
+                  {
+                    "number": 1,
+                    "entrance": 1,
+                    "services_debt": 0,
+                    "_id": "67a89fd9bc86a6c85807a682"
+                  },
+                  {
+                    "number": 2,
+                    "entrance": 1,
+                    "services_debt": 0,
+                    "_id": "67a89fd9bc86a6c85807a683"
+                  }
+                ],
+                "_id": "67a89fd9bc86a6c85807a681"
+              }
+            ]
+          },
+          {
+            "properties": {
+              "parking": false,
+              "security": false,
+              "access_control": false,
+              "concierge": false,
+              "playground": false,
+              "closed_area": false,
+              "video_surveillance": false,
+              "floors": 1,
+              "entrances": 1
+            },
+            "_id": "67a3b22c57531ded6f3b23c0",
+            "name": "Test Complex",
+            "images": [
+              "http://res.cloudinary.com/dgcka24lm/image/upload/v1738781227/teamchallenge/hoa8lrcu2f7ojr4kdxds.jpg"
+            ],
+            "buildings": [
+              {
+                "address": "1",
+                "_id": "67a3b22c57531ded6f3b23c1",
+                "apartments": []
+              },
+              {
+                "address": "2",
+                "_id": "67a3b22c57531ded6f3b23c2",
+                "apartments": []
+              },
+              {
+                "address": "3a",
+                "_id": "67a3b22c57531ded6f3b23c3",
+                "apartments": []
+              }
+            ]
+          }
+        ]
+    complex:
+      type: object
+      example: |-
+        {
+          "properties": {
+            "parking": false,
+            "security": false,
+            "access_control": false,
+            "concierge": false,
+            "playground": false,
+            "closed_area": false,
+            "video_surveillance": false,
+            "floors": 1,
+            "entrances": 1
+          },
+          "_id": "67a3a0c37ca64083c1ff9799",
+          "name": "Test Complex",
+          "images": [
+            "http://res.cloudinary.com/dgcka24lm/image/upload/v1738776771/teamchallenge/nnfjk1lx7jqpyzsflygr.jpg"
+          ],
+          "buildings": [
+            {
+              "address": "1",
+              "apartments": [
+                {
+                  "number": 1,
+                  "entrance": 1,
+                  "services_debt": 0,
+                  "_id": "67a89fd9bc86a6c85807a67f"
+                },
+                {
+                  "number": 2,
+                  "entrance": 1,
+                  "services_debt": 0,
+                  "_id": "67a89fd9bc86a6c85807a680"
+                }
+              ],
+              "_id": "67a89fd9bc86a6c85807a67e"
+            },
+            {
+              "address": "2",
+              "apartments": [
+                {
+                  "number": 1,
+                  "entrance": 1,
+                  "services_debt": 0,
+                  "_id": "67a89fd9bc86a6c85807a682"
+                },
+                {
+                  "number": 2,
+                  "entrance": 1,
+                  "services_debt": 0,
+                  "_id": "67a89fd9bc86a6c85807a683"
+                }
+              ],
+              "_id": "67a89fd9bc86a6c85807a681"
+            }
+          ]
+        }
