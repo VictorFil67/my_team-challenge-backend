@@ -27,7 +27,8 @@
     "nodemailer": "^6.9.15",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "yaml": "^2.7.0"
   },
   "devDependencies": {
     "chai": "^5.1.2",
