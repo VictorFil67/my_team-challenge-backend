@@ -1,0 +1,196 @@
+openapi: 3.0.1
+info:
+  title: Chat
+  description: API for the Team Challenge Chat project, main backend microservice
+  version: '1.0'
+servers:
+  - url: 'https://team-challenge-backend-c55i.onrender.com/'
+  - url: http://localhost:4000
+tags:
+  - name: Auth
+    description: registration, login, get current user etc
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: log into your account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/login"
+      responses:
+        '200':
+          description: Success
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userObject"
+        '400':
+          description: Incorrect format of email or password
+        '401':
+          description: Incorrect email or password
+  /auth/logout:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      summary: log into your account
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              example: {}
+      responses:
+        '204': 
+          description: Success
+        '401':
+          description: Not authorized
+  /auth/current:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      summary: get information about the user
+      responses:
+        '200': 
+          description: Success
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userObject"
+        '401':
+          description: Not authorized
+  /auth/refresh:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      summary: use refresh (or access) token to get a new token pair
+      responses:
+        '200': 
+          description: Success
+          content: 
+            application/json:
+              schema:
+                example: |-
+                  {
+                    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NzA0NDdhMGEwYmNiODQ3MGQ5MjhlZSIsImlhdCI6MTczOTEwODY5MywiZXhwIjoxNzM5MTEyMjkzfQ._Kb8KYZkLmGAAQcpwzcR_NCmnOLFhsBKEVw2Y0CxvCc",
+                    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NzA0NDdhMGEwYmNiODQ3MGQ5MjhlZSIsImlhdCI6MTczOTEwODY5MywiZXhwIjoxNzM5NzEzNDkzfQ.AxQT_dRuG3zUx5EetLAHdKRrsRzoAWHy0n0P6iOWQ1k"
+                  }
+        '401':
+          description: Not authorized
+  /auth/forgot-password:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      summary: email a message with a secret link to the user
+      responses:
+  /auth/update-password/{secret-code}:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      summary: update password using a secret link
+      parameters:
+        - in: path
+          required: true
+          name: secret-code
+          schema: 
+            type: string
+      responses:
+  /auth/update:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      summary: update user data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/update-user'
+      responses:
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    login:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: Password1@email.com
+        password: Password1
+    userObject: 
+      type: object
+      example: |-
+        {
+          "tokens": {
+            "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NzA0NDdhMGEwYmNiODQ3MGQ5MjhlZSIsImlhdCI6MTczOTEwNzQ0MywiZXhwIjoxNzM5MTExMDQzfQ.bR55VPwuJyiGNchsbypb4luGRzxbcK73FoU-4jXIxjc",
+            "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NzA0NDdhMGEwYmNiODQ3MGQ5MjhlZSIsImlhdCI6MTczOTEwNzQ0MywiZXhwIjoxNzM5NzEyMjQzfQ.vdCj3X64mNl6H0GPYcB5XsyS8eVfTOUNqdoQcMV-99c"
+          },
+          "_id": "6770447a0a0bcb8470d928ee",
+          "name": "password1@email.com",
+          "email": "Password1@email.com",
+          "phone": "+1234567890",
+          "avatar": "https://avatar.iran.liara.run/username?username=Password1@email.com",
+          "is_admin": true,
+          "buildings": [
+            {
+              "residential_complex_id": "6760675f58e4cf9dc2be0bdb",
+              "moderator": true,
+              "addresses": [
+                {
+                  "building": "5a",
+                  "apartments": [
+                    {
+                      "apartment": 5,
+                      "entrance": 3,
+                      "approved": true,
+                      "_id": "676efb11d3c3f7fa3ca3471c"
+                    }
+                  ],
+                  "_id": "676efb11d3c3f7fa3ca3471b"
+                }
+              ],
+              "_id": "676efb11d3c3f7fa3ca3471a"
+            }
+          ],
+          "tempCode": "b4bl7m3xz0ym65f",
+          "tempCodeTime": "1739106011499"
+        }
+    update-user:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        phone: 
+          type: string
+      example:
+        email: Password1@email.com
+        name: Password1@email.com
+        password: Password1
+        phone: "+111222333444"
