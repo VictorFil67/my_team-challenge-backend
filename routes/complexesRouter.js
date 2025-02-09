@@ -10,7 +10,7 @@ import upload from "../middlewares/upload.js";
 
 const complexesRouter = express.Router();
 
-complexesRouter.use(authenticate);
+// complexesRouter.use(authenticate);
 
 const {
   createComplex,
@@ -22,17 +22,19 @@ const {
 
 complexesRouter.post(
   "/",
+  authenticate,
   upload.array("image", 10),
   validateBody(createComplexSchema),
   createComplex
 );
 complexesRouter.put(
   "/:complexId",
+  authenticate,
   validateBody(updateComplexSchema),
   updateComplex
 );
 complexesRouter.get("/", getComplexes);
 complexesRouter.get("/:complexId", getComplex);
-complexesRouter.delete("/:complexId", deleteComplex);
+complexesRouter.delete("/:complexId", authenticate, deleteComplex);
 
 export default complexesRouter;
