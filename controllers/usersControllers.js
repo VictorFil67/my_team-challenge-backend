@@ -307,7 +307,7 @@ const setModeratorStatus = async (req, res) => {
 
 const getUser = async (req, res) => {
   const { userId: _id } = req.params;
-  const result = await findUserById(id, "-password");
+  const result = await findUserById(_id, "-password");
   res.json(result);
 };
 
