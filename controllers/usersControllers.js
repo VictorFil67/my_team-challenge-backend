@@ -305,6 +305,12 @@ const setModeratorStatus = async (req, res) => {
   res.status(200).json(result);
 };
 
+const getUser = async (req, res) => {
+  const { userId: _id } = req.params;
+  const result = await findUserById(id, "-password");
+  res.json(result);
+};
+
 export default {
   addUserAddresses: ctrlWrapper(addUserAddresses),
   deleteUserAddress: ctrlWrapper(deleteUserAddress),
