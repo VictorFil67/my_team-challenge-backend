@@ -316,4 +316,5 @@ export default {
   deleteUserAddress: ctrlWrapper(deleteUserAddress),
   approveUserAddress: ctrlWrapper(approveUserAddress),
   setModeratorStatus: ctrlWrapper(setModeratorStatus),
+  getUser: ctrlWrapper(getUser),
 };
