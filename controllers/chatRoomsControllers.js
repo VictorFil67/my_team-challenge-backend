@@ -137,6 +137,23 @@ const getIsUserChatModerator = async (req, res) => {
   res.json(user);
 };
 
+const getChatMembers = async (req, res) => {
+  const { chatId: _id } = req.params;
+  const { _id: userId } = req.user;
+
+  const chatRoom = await getChatRoom({ _id });
+  if (!chatRoom) {
+    throw HttpError(404, "Chat room not found");
+  }
+
+  const userInChat = chatRoom.users.includes(userId);
+  if (!userInChat) {
+    throw HttpError(403, "You're not from this chat");
+  }
+
+  res.json(chatRoom.users);
+};
+
 export default {
   getUserChatRooms: ctrlWrapper(getUserChatRooms),
   getActiveChat: ctrlWrapper(getActiveChat),
