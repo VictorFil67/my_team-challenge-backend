@@ -3,6 +3,7 @@ import HttpError from "../helpers/HttpError.js";
 import {
   createRoom,
   getChatRoom,
+  getChatRoomById,
   getChatRooms,
   updateRoom,
 } from "../services/chatRoomservices.js";
@@ -141,12 +142,16 @@ const getChatMembers = async (req, res) => {
   const { chatId: _id } = req.params;
   const { _id: userId } = req.user;
 
-  const chatRoom = await getChatRoom({ _id });
+  const chatRoom = await getChatRoomById({ _id });
   if (!chatRoom) {
     throw HttpError(404, "Chat room not found");
   }
+  console.log("chatRoom: ", chatRoom);
 
-  const userInChat = chatRoom.users.includes(userId);
+  const userInChat = chatRoom.users.find(
+    (elem) => elem._id.toString() === userId.toString()
+  );
+  console.log("userInChat: ", userInChat);
   if (!userInChat) {
     throw HttpError(403, "You're not from this chat");
   }
@@ -160,4 +165,5 @@ export default {
   createChatRooom: ctrlWrapper(createChatRooom),
   createChatForTwo: ctrlWrapper(createChatForTwo),
   getIsUserChatModerator: ctrlWrapper(getIsUserChatModerator),
+  getChatMembers: ctrlWrapper(getChatMembers),
 };
