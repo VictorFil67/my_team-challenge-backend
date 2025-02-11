@@ -142,7 +142,10 @@ const getChatMembers = async (req, res) => {
   const { chatId: _id } = req.params;
   const { _id: userId } = req.user;
 
-  const chatRoom = await getChatRoomById({ _id });
+  // const expendFild = "users";
+  // const getFilds = "-password";
+
+  const chatRoom = await getChatRoomById(_id, "users", "-password"); // Указываем поля (минус перед _id — убрать его)
   if (!chatRoom) {
     throw HttpError(404, "Chat room not found");
   }
