@@ -7,3 +7,7 @@ export async function makeContactInfo(data) {
 export async function findContactInfo(params) {
   return await ContactInfo.findOne(params);
 }
+
+export function removeContactInfo(id) {
+  return ContactInfo.findByIdAndDelete(id);
+}
