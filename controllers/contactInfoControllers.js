@@ -4,6 +4,7 @@ import { findComplex } from "../services/complexServices.js";
 import {
   findContactInfo,
   makeContactInfo,
+  removeContactInfo,
 } from "../services/contactInfoservices.js";
 
 const createContactInfo = async (req, res) => {
@@ -59,7 +60,7 @@ const createContactInfo = async (req, res) => {
 };
 
 const deleteContactInfo = async (req, res) => {
-  const { contactInfoId } = req.params;
+  const { contactInfoId: _id } = req.params;
   const { is_admin, buildings } = req.user;
   const { residential_complex_id, building_id } = req.params;
 
@@ -79,6 +80,9 @@ const deleteContactInfo = async (req, res) => {
   if (!is_admin && !moderator) {
     throw HttpError(403, "You don't have access to this action!");
   }
+
+  const result = await removeContactInfo(_id);
+  res.json(result);
 };
 
 export default { createContactInfo: ctrlWrapper(createContactInfo) };
