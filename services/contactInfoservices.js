@@ -11,3 +11,7 @@ export async function findContactInfo(params) {
 export function removeContactInfo(id) {
   return ContactInfo.findByIdAndDelete(id);
 }
+
+export function findContactInfoById(id) {
+  return ContactInfo.findById(id);
+}
