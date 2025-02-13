@@ -3,6 +3,7 @@ import HttpError from "../helpers/HttpError.js";
 import { findComplex } from "../services/complexServices.js";
 import {
   findContactInfo,
+  findContactInfoById,
   makeContactInfo,
   removeContactInfo,
 } from "../services/contactInfoservices.js";
@@ -63,7 +64,9 @@ const deleteContactInfo = async (req, res) => {
   const { contactInfoId: _id } = req.params;
   const { is_admin, buildings } = req.user;
 
-  const { residential_complex_id } = await findContactInfo(_id);
+  const contactInfo = await findContactInfoById(_id);
+
+  const residential_complex_id = contactInfo.residential_complex_id;
 
   const searchComplex = buildings.find((elem) => {
     return (
