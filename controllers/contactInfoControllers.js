@@ -62,7 +62,8 @@ const createContactInfo = async (req, res) => {
 const deleteContactInfo = async (req, res) => {
   const { contactInfoId: _id } = req.params;
   const { is_admin, buildings } = req.user;
-  const { residential_complex_id, building_id } = req.params;
+
+  const { residential_complex_id } = await findContactInfo(_id);
 
   const searchComplex = buildings.find((elem) => {
     return (
@@ -85,4 +86,7 @@ const deleteContactInfo = async (req, res) => {
   res.json(result);
 };
 
-export default { createContactInfo: ctrlWrapper(createContactInfo) };
+export default {
+  createContactInfo: ctrlWrapper(createContactInfo),
+  deleteContactInfo: ctrlWrapper(deleteContactInfo),
+};

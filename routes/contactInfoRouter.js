@@ -13,5 +13,9 @@ contactInfoRouter.post(
   validateBody(createContactInfoSchema),
   contactInfoControllers.createContactInfo
 );
+contactInfoRouter.delete(
+  "/:contactInfoId",
+  contactInfoControllers.deleteContactInfo
+);
 
 export default contactInfoRouter;
