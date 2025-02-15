@@ -20,5 +20,10 @@ contactInfoRouter.delete(
   isValidId,
   contactInfoControllers.deleteContactInfo
 );
+contactInfoRouter.put(
+  "/:contactInfoId",
+  isValidId,
+  contactInfoControllers.updateContactInfo
+);
 
 export default contactInfoRouter;
