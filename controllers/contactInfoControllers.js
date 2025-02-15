@@ -6,6 +6,7 @@ import {
   findContactInfoById,
   makeContactInfo,
   removeContactInfo,
+  updateContactInfoById,
 } from "../services/contactInfoservices.js";
 
 const createContactInfo = async (req, res) => {
@@ -96,6 +97,11 @@ const updateContactInfo = async (req, res) => {
   const { contactInfoId: _id } = req.params;
   const { is_admin, buildings } = req.user;
 
+  const keys = Object.keys(req.body);
+  if (keys.length === 0) {
+    throw HttpError(400, "At least one field must not be empty!");
+  }
+
   const contactInfo = await findContactInfoById(_id);
   if (!contactInfo) {
     throw HttpError(404, "Contact info not found");
@@ -120,7 +126,8 @@ const updateContactInfo = async (req, res) => {
     throw HttpError(403, "You don't have access to this action!");
   }
 
-  res.json("OK!!!!!!!!!!!!!");
+  const result = await updateContactInfoById(_id, req.body);
+  res.json(result);
 };
 
 export default {
