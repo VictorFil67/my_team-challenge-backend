@@ -126,4 +126,5 @@ const updateContactInfo = async (req, res) => {
 export default {
   createContactInfo: ctrlWrapper(createContactInfo),
   deleteContactInfo: ctrlWrapper(deleteContactInfo),
+  updateContactInfo: ctrlWrapper(updateContactInfo),
 };
