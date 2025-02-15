@@ -15,3 +15,7 @@ export function removeContactInfo(id) {
 export function findContactInfoById(id) {
   return ContactInfo.findById(id);
 }
+
+export function updateContactInfoById(id, data) {
+  return ContactInfo.findByIdAndUpdate(id, data);
+}
