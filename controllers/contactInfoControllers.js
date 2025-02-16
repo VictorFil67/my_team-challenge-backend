@@ -1,4 +1,5 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import { CheckAccess } from "../helpers/checkAccess.js";
 import HttpError from "../helpers/HttpError.js";
 import { findComplex } from "../services/complexServices.js";
 import {
@@ -95,36 +96,38 @@ const deleteContactInfo = async (req, res) => {
 
 const updateContactInfo = async (req, res) => {
   const { contactInfoId: _id } = req.params;
-  const { is_admin, buildings } = req.user;
+  // const { is_admin, buildings } = req.user;
 
   const keys = Object.keys(req.body);
   if (keys.length === 0) {
     throw HttpError(400, "At least one field must not be empty!");
   }
 
-  const contactInfo = await findContactInfoById(_id);
-  if (!contactInfo) {
-    throw HttpError(404, "Contact info not found");
-  }
+  await CheckAccess(_id, req.user);
 
-  const residential_complex_id = contactInfo.residential_complex_id;
+  // const contactInfo = await findContactInfoById(_id);
+  // if (!contactInfo) {
+  //   throw HttpError(404, "Contact info not found");
+  // }
 
-  const searchComplex = buildings.find((elem) => {
-    return (
-      elem.residential_complex_id.toString() ===
-      residential_complex_id.toString()
-    );
-  });
+  // const residential_complex_id = contactInfo.residential_complex_id;
 
-  if (!is_admin && !searchComplex) {
-    throw HttpError(403, `The user is not related to the specified complex.`);
-  }
+  // const searchComplex = buildings.find((elem) => {
+  //   return (
+  //     elem.residential_complex_id.toString() ===
+  //     residential_complex_id.toString()
+  //   );
+  // });
 
-  const moderator = is_admin ? false : searchComplex.moderator;
-  console.log(moderator);
-  if (!is_admin && !moderator) {
-    throw HttpError(403, "You don't have access to this action!");
-  }
+  // if (!is_admin && !searchComplex) {
+  //   throw HttpError(403, `The user is not related to the specified complex.`);
+  // }
+
+  // const moderator = is_admin ? false : searchComplex.moderator;
+  // console.log(moderator);
+  // if (!is_admin && !moderator) {
+  //   throw HttpError(403, "You don't have access to this action!");
+  // }
 
   const result = await updateContactInfoById(_id, req.body);
   res.json(result);
