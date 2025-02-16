@@ -97,14 +97,15 @@ const deleteContactInfo = async (req, res) => {
 };
 
 const updateContactInfo = async (req, res) => {
-  const { contactInfoId: _id } = req.params;
-
+  // const { contactInfoId: _id } = req.params;
+  const params = req.params;
+  const { contactInfoId: _id } = params;
   const keys = Object.keys(req.body);
   if (keys.length === 0) {
     throw HttpError(400, "At least one field must not be empty!");
   }
 
-  await CheckAccess(_id, req.user);
+  await CheckAccess(params, req.user);
 
   const result = await updateContactInfoById(_id, req.body);
   res.json(result);
