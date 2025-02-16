@@ -1,15 +1,21 @@
 import { findContactInfoById } from "../services/contactInfoservices.js";
 import HttpError from "./HttpError.js";
 
-export const CheckAccess = async (id, user) => {
+export const CheckAccess = async (params, user) => {
   const { is_admin, buildings } = user;
 
-  const contactInfo = await findContactInfoById(id);
-  if (!contactInfo) {
-    throw HttpError(404, "Contact info not found");
+  let contactInfo;
+  if (params.contactInfoId) {
+    contactInfo = await findContactInfoById(params.contactInfoId);
+    console.log(contactInfo);
+    if (!contactInfo) {
+      throw HttpError(404, "Contact info not found");
+    }
   }
 
-  const residential_complex_id = contactInfo.residential_complex_id;
+  const residential_complex_id = params.contactInfoId
+    ? contactInfo.residential_complex_id
+    : params.residential_complex_id;
 
   const searchComplex = buildings.find((elem) => {
     return (
