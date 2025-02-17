@@ -7,3 +7,5 @@ export const createContactInfoSchema = Joi.object({
   descriptionUA: Joi.string().required(),
   location: Joi.string(),
 });
+
+export const updateContactInfoSchema = Joi.object({});
