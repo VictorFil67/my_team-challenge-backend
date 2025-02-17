@@ -2,7 +2,10 @@ import { Router } from "express";
 import authenticate from "../middlewares/authenticate.js";
 import contactInfoControllers from "../controllers/contactInfoControllers.js";
 import validateBody from "../decorators/validateBody.js";
-import { createContactInfoSchema } from "../schemas/contactInfoSchemas.js";
+import {
+  createContactInfoSchema,
+  updateContactInfoSchema,
+} from "../schemas/contactInfoSchemas.js";
 import isValidId from "../middlewares/isValidId.js";
 
 const contactInfoRouter = Router();
@@ -23,6 +26,7 @@ contactInfoRouter.delete(
 contactInfoRouter.put(
   "/:contactInfoId",
   isValidId,
+  validateBody(updateContactInfoSchema),
   contactInfoControllers.updateContactInfo
 );
 
