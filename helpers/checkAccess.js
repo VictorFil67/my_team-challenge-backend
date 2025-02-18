@@ -35,5 +35,7 @@ export const CheckAccess = async (params, user) => {
     //     throw HttpError(403, "You don't have access to this action!");
     access = false;
   }
-  return access;
+  const checkAccessRequest = { access, contactInfo, searchComplex };
+  console.log("checkAccessRequest: ", checkAccessRequest);
+  return checkAccessRequest;
 };

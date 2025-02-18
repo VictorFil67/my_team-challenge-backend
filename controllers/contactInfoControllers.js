@@ -15,7 +15,7 @@ const createContactInfo = async (req, res) => {
   const params = req.params;
   const { residential_complex_id, building_id } = params;
 
-  const access = await CheckAccess(params, user);
+  const { access } = await CheckAccess(params, user);
   if (!access) {
     throw HttpError(403, "You don't have access to this action!");
   }
@@ -53,7 +53,7 @@ const createContactInfo = async (req, res) => {
 const deleteContactInfo = async (req, res) => {
   const { contactInfoId: _id } = req.params;
 
-  const access = await CheckAccess(_id, req.user);
+  const { access } = await CheckAccess(_id, req.user);
   if (!access) {
     throw HttpError(403, "You don't have access to this action!");
   }
@@ -72,8 +72,8 @@ const updateContactInfo = async (req, res) => {
     throw HttpError(400, "At least one field must not be empty!");
   }
 
-  const access = await CheckAccess(params, req.user);
-  console.log(access);
+  const { access } = await CheckAccess(params, req.user);
+
   if (!access) {
     throw HttpError(403, "You don't have access to this action!");
   }
@@ -83,6 +83,10 @@ const updateContactInfo = async (req, res) => {
 
 const getContactInfo = async (req, res) => {
   const { contactInfoId } = req.params;
+
+  const access = await CheckAccess(params, req.user);
+  if (!access) {
+  }
   const result = await findContactInfoById(contactInfoId);
   res.json(result);
 };
