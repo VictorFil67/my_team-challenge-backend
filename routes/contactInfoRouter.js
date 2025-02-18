@@ -29,5 +29,10 @@ contactInfoRouter.put(
   validateBody(updateContactInfoSchema),
   contactInfoControllers.updateContactInfo
 );
+contactInfoRouter.get(
+  "/:contactInfoId",
+  isValidId,
+  contactInfoControllers.getContactInfo
+);
 
 export default contactInfoRouter;

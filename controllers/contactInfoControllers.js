@@ -84,4 +84,5 @@ export default {
   createContactInfo: ctrlWrapper(createContactInfo),
   deleteContactInfo: ctrlWrapper(deleteContactInfo),
   updateContactInfo: ctrlWrapper(updateContactInfo),
+  getContactInfo: ctrlWrapper(getContactInfo),
 };
