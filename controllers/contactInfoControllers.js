@@ -82,10 +82,25 @@ const updateContactInfo = async (req, res) => {
 };
 
 const getContactInfo = async (req, res) => {
+  const params = req.params;
   const { contactInfoId } = req.params;
 
-  const access = await CheckAccess(params, req.user);
+  const { access, contactInfo, searchComplex } = await CheckAccess(
+    params,
+    req.user
+  );
+  // console.log("checkAccessRequest: ", access, contactInfo, searchComplex);
   if (!access) {
+    if (contactInfo.building_id) {
+      const userBuilding = searchComplex.addresses.find(
+        (elem) =>
+          elem.building_id?.toString() === contactInfo.building_id.toString()
+      );
+      // console.log("userBuilding: ", userBuilding);
+      if (!userBuilding) {
+        throw HttpError(403, "You don't have access to this action!");
+      }
+    }
   }
   const result = await findContactInfoById(contactInfoId);
   res.json(result);
