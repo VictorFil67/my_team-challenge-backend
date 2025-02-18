@@ -60,7 +60,7 @@ const deleteContactInfo = async (req, res) => {
 const updateContactInfo = async (req, res) => {
   // console.log("Date: ", new Date(1739739139508));
   // console.log("Date now: ", new Date());
-  // const { contactInfoId: _id } = req.params;
+
   const params = req.params;
   const { contactInfoId: _id } = params;
   const keys = Object.keys(req.body);
