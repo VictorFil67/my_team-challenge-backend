@@ -74,6 +74,12 @@ const updateContactInfo = async (req, res) => {
   res.json(result);
 };
 
+const getContactInfo = async (req, res) => {
+  const { contactInfoId } = req.params;
+  const result = await findContactInfoById(contactInfoId);
+  res.json(result);
+};
+
 export default {
   createContactInfo: ctrlWrapper(createContactInfo),
   deleteContactInfo: ctrlWrapper(deleteContactInfo),
