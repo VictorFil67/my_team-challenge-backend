@@ -30,7 +30,10 @@ export const CheckAccess = async (params, user) => {
 
   const moderator = is_admin ? false : searchComplex.moderator;
   console.log(moderator);
+  let access = true;
   if (!is_admin && !moderator) {
-    throw HttpError(403, "You don't have access to this action!");
+    //     throw HttpError(403, "You don't have access to this action!");
+    access = false;
   }
+  return access;
 };
