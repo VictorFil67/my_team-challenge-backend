@@ -8,7 +8,7 @@ const isValidId = (req, res, next) => {
     if (!isValidObjectId(req.params[key]) && req.params[key] !== undefined) {
       throw HttpError(404, `${req.params[key]} is not valid id`);
     }
-    console.log(req.params[key]);
+    // console.log(req.params[key]);
   });
 
   next();

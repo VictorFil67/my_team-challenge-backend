@@ -7,7 +7,7 @@ export const CheckAccess = async (params, user) => {
   let contactInfo;
   if (params.contactInfoId) {
     contactInfo = await findContactInfoById(params.contactInfoId);
-    console.log(contactInfo);
+    // console.log(contactInfo);
     if (!contactInfo) {
       throw HttpError(404, "Contact info not found");
     }
@@ -30,7 +30,12 @@ export const CheckAccess = async (params, user) => {
 
   const moderator = is_admin ? false : searchComplex.moderator;
   console.log(moderator);
+  let access = true;
   if (!is_admin && !moderator) {
-    throw HttpError(403, "You don't have access to this action!");
+    //     throw HttpError(403, "You don't have access to this action!");
+    access = false;
   }
+  const checkAccessRequest = { access, contactInfo, searchComplex };
+  //   console.log("checkAccessRequest: ", checkAccessRequest);
+  return checkAccessRequest;
 };
