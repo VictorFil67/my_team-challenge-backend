@@ -89,14 +89,13 @@ const getContactInfo = async (req, res) => {
     params,
     req.user
   );
-  // console.log("checkAccessRequest: ", access, contactInfo, searchComplex);
   if (!access) {
     if (contactInfo.building_id) {
       const userBuilding = searchComplex.addresses.find(
         (elem) =>
           elem.building_id?.toString() === contactInfo.building_id.toString()
       );
-      // console.log("userBuilding: ", userBuilding);
+
       if (!userBuilding) {
         throw HttpError(403, "You don't have access to this action!");
       }
