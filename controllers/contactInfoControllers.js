@@ -62,7 +62,7 @@ const deleteContactInfo = async (req, res) => {
 };
 
 const updateContactInfo = async (req, res) => {
-  // console.log("Date: ", new Date(1739739139508));
+  console.log("Date: ", new Date(1727616328141));
   // console.log("Date now: ", new Date());
 
   const params = req.params;

@@ -7,7 +7,7 @@ export const CheckAccess = async (params, user) => {
   let contactInfo;
   if (params.contactInfoId) {
     contactInfo = await findContactInfoById(params.contactInfoId);
-    // console.log(contactInfo);
+
     if (!contactInfo) {
       throw HttpError(404, "Contact info not found");
     }
