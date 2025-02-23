@@ -60,10 +60,6 @@ export const startBot = () => {
               console.log("data: ", data);
               bot.sendMessage(chatId, "✅ Successful authorization!");
             } else {
-              //   bot.sendMessage(
-              //     chatId,
-              //     `❌ Ошибка: ${data.message || "Не удалось войти"}`
-              //   );
               sendErrorMessage(
                 chatId,
                 `❌ Error: ${data.message || "Unknown error"}`
@@ -76,7 +72,6 @@ export const startBot = () => {
                 chatId,
                 `❌ Error: ${code}, ${data.message || "Something went wrong"}`
               ),
-            //   bot.sendMessage(chatId, `❌ Ошибка ${code}: ${data.message}`),
           }),
         };
         try {
