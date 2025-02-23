@@ -214,6 +214,14 @@ const updateUserdata = async (req, res) => {
   res.status(200).json(result);
 };
 
+const handleResponse = (res, status, data) => {
+  if (res) {
+    return res.status(status).json(data);
+  } else {
+    return data;
+  }
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),

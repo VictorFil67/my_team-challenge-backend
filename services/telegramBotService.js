@@ -1,8 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
 import "dotenv/config";
 import authControllers from "../controllers/authControllers.js";
-// import { Promise } from "mongoose";
-// import { sendErrorMessage } from "../helpers/botErrorHandler.js";
+import { signinHelper } from "./authServices.js";
 
 const { BOT_TOKEN } = process.env;
 const { signin } = authControllers;
@@ -48,41 +47,46 @@ export const startBot = () => {
           },
         };
         // Create a response object that returns a JWT
-        const res = {
-          json: async (data) => {
-            if (data) {
-              // Сохраняем chatId менеджера или клиента
-              // await User.findOneAndUpdate(
-              //   { email: users[chatId].email },
-              //   { chatId },
-              //   { new: true }
-              // );
-              console.log("data: ", data);
-              bot.sendMessage(chatId, "✅ Successful authorization!");
-            } else {
-              sendErrorMessage(
-                chatId,
-                `❌ Error: ${data.message || "Unknown error"}`
-              );
-            }
-          },
-          status: (code) => ({
-            json: (data) =>
-              sendErrorMessage(
-                chatId,
-                `❌ Error: ${code}, ${data.message || "Something went wrong"}`
-              ),
-          }),
-        };
+        // const res = {
+        //   json: async (data) => {
+        //     if (data) {
+        //       // Сохраняем chatId менеджера или клиента
+        //       // await User.findOneAndUpdate(
+        //       //   { email: users[chatId].email },
+        //       //   { chatId },
+        //       //   { new: true }
+        //       // );
+        //       console.log("data: ", data);
+        //       bot.sendMessage(chatId, "✅ Successful authorization!");
+        //     } else {
+        //       sendErrorMessage(
+        //         chatId,
+        //         `❌ Error: ${data.message || "Unknown error"}`
+        //       );
+        //     }
+        //   },
+        //   status: (code) => ({
+        //     json: (data) =>
+        //       sendErrorMessage(
+        //         chatId,
+        //         `❌ Error: ${code}, ${data.message || "Something went wrong"}`
+        //       ),
+        //   }),
+        // };
         try {
-          const result = await new Promise((resolve, reject) => {
-            signin(req, res);
-          });
+          //   const result = await new Promise((resolve, reject) => {
+          //     signin(req, res);
+          //   });
+          console.log("Calling signin from bot...");
+          const result = await signinHelper(
+            users[chatId].email,
+            users[chatId].password
+          );
           if (result) {
             // Processing result, if it exists
             console.log("User logged in successfully:", result);
           } else {
-            sendErrorMessage(chatId, "Unknown error");
+            sendErrorMessage(chatId, "Unknown error in result");
           }
           console.log("result: ", result);
         } catch (error) {
