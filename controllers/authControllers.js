@@ -79,6 +79,7 @@ const signup = async (req, res) => {
 };
 
 const signin = async (req, res) => {
+  console.log("req.body: ", req.body);
   const { email, password } = req.body;
   const user = await findUser({ email });
   if (!user) {
@@ -98,7 +99,7 @@ const signin = async (req, res) => {
   await setTokens(_id, accessToken, refreshToken);
 
   const loggedInUser = await findUserById(_id, "-password");
-
+  console.log("loggedInUser: ", loggedInUser);
   res.status(200).json(loggedInUser);
 };
 
