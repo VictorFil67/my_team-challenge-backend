@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import { findUser, findUserById } from "./userServices.js";
 import "dotenv/config";
+import HttpError from "../helpers/HttpError.js";
 
 const { JWT_SECRET } = process.env;
 
@@ -53,34 +54,16 @@ export const signinHelper = async (email, password) => {
   try {
     console.log("📩 SigninHelper request received:", { email });
 
-    // const user = await User.findOne({ email });
-    // if (!user) {
-    //   console.log("❌ SigninHelper response: User not found");
-    //   return { error: "User not found" };
-    // }
-
-    // const isMatch = bcrypt.compare(password, user.password);
-    // if (!isMatch) {
-    //   console.log("❌ SigninHelper response: Invalid password");
-    //   return { error: "Invalid password" };
-    // }
-
-    // const token = jwt.sign(
-    //   { userId: user._id, email: user.email },
-    //   process.env.JWT_SECRET,
-    //   {
-    //     expiresIn: "7d",
-    //   }
-    // );
-
     const user = await findUser({ email });
     if (!user) {
-      throw HttpError(401, "Email is wrong");
+      return { error: "Email is wrong" };
     }
     const { password: hashPassword, _id } = user;
-    const compare = bcrypt.compare(password, hashPassword);
+    const compare = await bcrypt.compare(password, hashPassword);
+    console.log("compare: ", compare);
     if (!compare) {
-      throw HttpError(401, "Password is wrong");
+      // throw HttpError(401, "Password is wrong");
+      return { error: "Invalid password" };
     }
 
     const payload = { id: _id };
