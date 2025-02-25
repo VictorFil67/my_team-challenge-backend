@@ -39,6 +39,8 @@ const complexID = '67a3a0c37ca64083c1ff9799';
 let newsID = null;
 const newsChannelID = '6795115a5824a1b87515b14d';
 let contactInfoID = null;
+let pollID = null;
+let optionsIds = null;
 
 function getToken(done) {
   request(app)
@@ -418,6 +420,62 @@ describe('Testing routes', () => {
       
       request(app)
         .delete('/contactInfo/' + contactInfoID)
+        .set('Authorization', 'Bearer ' + bearerToken)
+        .expect(200)
+        .end(function(err, res) {          
+          if (err) {
+            throw err;
+          }
+          done();
+        });
+    });
+  })
+
+  describe('Test /votings', function() {
+    before(getToken);
+
+    it("POST /:complexID", function(done) {
+      request(app)
+        .post('/votings/' + complexID)
+        .send({
+          headline: "TEST VOTING",
+          votingType: "Multiple",
+          options: [{ name: "1" }, { name: "2" }, { name: "3" }],
+          startDate: new Date(Date.now()),
+          displayType: "Number"
+        })
+        .set('Authorization', 'Bearer ' + bearerToken)
+        .expect(201)
+        .end(function(err, res) {          
+          if (err) {
+            throw err;
+          }
+          pollID = res.body._id;
+          optionsIds = res.body.options.map((item) => item._id);
+          done();
+        });
+    });
+
+    it("PATCH /:votingID", function(done) {
+      request(app)
+        .patch('/votings/' + pollID)
+        .send({
+          optionsIds
+        })
+        .set('Authorization', 'Bearer ' + bearerToken)
+        .expect(200)
+        .end(function(err, res) {          
+          if (err) {
+            throw err;
+          }
+          console.log(res);
+          done();
+        });
+    });
+
+    it("DELETE /:votingID", function(done) {      
+      request(app)
+        .delete('/votings/' + pollID)
         .set('Authorization', 'Bearer ' + bearerToken)
         .expect(200)
         .end(function(err, res) {          
