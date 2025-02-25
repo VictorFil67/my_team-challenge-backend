@@ -174,19 +174,19 @@ const vote = async (req, res) => {
     }
   );
 
-  // if (result.displayType === "Percentages") {
-  //   const total = result.options.reduce(
-  //     (akk, option) => akk + option.quantity,
-  //     0
-  //   );
-  //   console.log(total);
-  //   const optionsInPercents = result.options.map((option) => {
-  //     const percentQuantity = Math.round((option.quantity / total) * 100);
-  //     option.quantity = percentQuantity;
-  //     return option;
-  //   });
-  //   result.options = optionsInPercents;
-  // }
+  if (result.displayType === "Percentages") {
+    const total = result.options.reduce(
+      (akk, option) => akk + option.quantity,
+      0
+    );
+    console.log(total);
+    const optionsInPercents = result.options.map((option) => {
+      const percentQuantity = Math.round((option.quantity / total) * 100);
+      option.quantity = percentQuantity;
+      return option;
+    });
+    result.options = optionsInPercents;
+  }
 
   res.json(result);
   // res.json("OK!!!!!!!!!");
