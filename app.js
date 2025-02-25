@@ -20,7 +20,7 @@ import votingsRouter from "./routes/votingsRouter.js";
 import newsChannelRouter from "./routes/newsChannelRouter.js";
 import newsRouter from "./routes/NewsRouter.js";
 import contactInfoRouter from "./routes/contactInfoRouter.js";
-import { startBot } from "./services/telegramBotService.js";
+// import { startBot } from "./services/telegramBotService.js";
 
 // import googleAuthRouter from "./routes/googleAuthRouter.js";
 
@@ -48,7 +48,7 @@ app.use("/notifications", notificationsRouter);
 app.use("/votings", votingsRouter);
 app.use("/news_channels", newsChannelRouter);
 app.use("/news", newsRouter);
-app.use("/contactInfo", contactInfoRouter);
+app.use("/contact_info", contactInfoRouter);
 // app.use("/", googleAuthRouter);
 
 const file = fs.readFileSync("./docs/swagger.yaml", "utf8");
@@ -95,7 +95,7 @@ mongoose
   .then(() => {
     console.log("Database connection successful");
 
-    startBot();
+    // startBot();
 
     app.listen(PORT, () => {
       console.log(`Server is running. Use our API on port: ${PORT}`);
