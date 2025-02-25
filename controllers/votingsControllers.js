@@ -75,7 +75,7 @@ const getVotings = async (req, res) => {
 
   res.json(finalResult);
 };
-
+// ***************************************************************************
 const vote = async (req, res) => {
   const { _id } = req.user;
   const { votingId } = req.params;
@@ -128,16 +128,16 @@ const vote = async (req, res) => {
     );
   }
   // //the second variant
-  // const isVotedUser = votedUsers.findIndex(
-  //   (user) => user._id.toString() === _id.toString()
-  // );
-  // console.log(isVotedUser);
-  // if (isVotedUser > -1) {
-  //   throw HttpError(
-  //     403,
-  //     "You don't have access to this action, because you have already voted!"
-  //   );
-  // }
+  const isVotedUser = votedUsers.findIndex(
+    (user) => user._id.toString() === _id.toString()
+  );
+  console.log(isVotedUser);
+  if (isVotedUser > -1) {
+    throw HttpError(
+      403,
+      "You don't have access to this action, because you have already voted!"
+    );
+  }
   // // ----------------------
   votedUsers.push(userVote);
   console.log("votedUsers: ", votedUsers);
@@ -149,6 +149,14 @@ const vote = async (req, res) => {
   // const optionsAfterVoting = oldOptions.map((oldOption, idx) => {
   //   const newQuantity = oldOption.quantity + voteQuantities[idx];
 
+  const optionsAfterVoting = options.map((elem) => {
+    optionsIds.map((item) => {
+      elem.quantity =
+        elem._id.toString() === item ? elem.quantity + 1 : elem.quantity;
+    });
+    return elem;
+  });
+  console.log("optionsAfterVoting: ", optionsAfterVoting);
   //   //the first variant
   //   oldOption.quantity = newQuantity;
   //   return oldOption;
@@ -161,7 +169,7 @@ const vote = async (req, res) => {
   const result = await addVote(
     { _id: votingId },
     {
-      // options: optionsAfterVoting,
+      options: optionsAfterVoting,
       votedUsers,
     }
   );
