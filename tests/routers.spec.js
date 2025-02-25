@@ -460,7 +460,7 @@ describe('Testing routes', () => {
       request(app)
         .patch('/votings/' + pollID)
         .send({
-          optionsIds
+          optionsIds: [optionsIds[2]]
         })
         .set('Authorization', 'Bearer ' + bearerToken)
         .expect(200)
