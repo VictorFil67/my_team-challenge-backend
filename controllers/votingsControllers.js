@@ -4,6 +4,7 @@ import {
   addVote,
   addVoting,
   findVotingById,
+  removeVotingById,
   votingsList,
 } from "../services/votingsServices.js";
 
@@ -192,7 +193,7 @@ const vote = async (req, res) => {
 };
 
 const deleteVoting = async (req, res) => {
-  const { is_admin, buildings } = user;
+  const { is_admin, buildings } = req.user;
   const { votingId } = req.params;
 
   const voting = await findVotingById(votingId);
@@ -206,10 +207,14 @@ const deleteVoting = async (req, res) => {
   if (!is_admin && !moderator) {
     throw HttpError(403, "You don't have access to this action!");
   }
+  const result = await removeVotingById(votingId);
+
+  res.json(result);
 };
 
 export default {
   createVoting: ctrlWrapper(createVoting),
   getVotings: ctrlWrapper(getVotings),
   vote: ctrlWrapper(vote),
+  deleteVoting: ctrlWrapper(deleteVoting),
 };
