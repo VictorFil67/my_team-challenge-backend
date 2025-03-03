@@ -11,8 +11,6 @@ import isValidId from "../middlewares/isValidId.js";
 
 const complexesRouter = express.Router();
 
-// complexesRouter.use(authenticate);
-
 const {
   createComplex,
   updateComplex,
@@ -30,6 +28,7 @@ complexesRouter.post(
 );
 complexesRouter.put(
   "/:complexId",
+  isValidId,
   authenticate,
   validateBody(updateComplexSchema),
   updateComplex
