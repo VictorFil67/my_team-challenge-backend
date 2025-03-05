@@ -4,6 +4,7 @@ import {
   addVote,
   addVoting,
   findVotingById,
+  removeVotingById,
   votingsList,
 } from "../services/votingsServices.js";
 
@@ -174,26 +175,46 @@ const vote = async (req, res) => {
     }
   );
 
-  // if (result.displayType === "Percentages") {
-  //   const total = result.options.reduce(
-  //     (akk, option) => akk + option.quantity,
-  //     0
-  //   );
-  //   console.log(total);
-  //   const optionsInPercents = result.options.map((option) => {
-  //     const percentQuantity = Math.round((option.quantity / total) * 100);
-  //     option.quantity = percentQuantity;
-  //     return option;
-  //   });
-  //   result.options = optionsInPercents;
-  // }
+  if (result.displayType === "Percentages") {
+    const total = result.options.reduce(
+      (akk, option) => akk + option.quantity,
+      0
+    );
+    console.log(total);
+    const optionsInPercents = result.options.map((option) => {
+      const percentQuantity = Math.round((option.quantity / total) * 100);
+      option.quantity = percentQuantity;
+      return option;
+    });
+    result.options = optionsInPercents;
+  }
 
   res.json(result);
-  // res.json("OK!!!!!!!!!");
+};
+
+const deleteVoting = async (req, res) => {
+  const { is_admin, buildings } = req.user;
+  const { votingId } = req.params;
+
+  const voting = await findVotingById(votingId);
+  if (!voting) {
+    throw HttpError(404, "Voting not found");
+  }
+
+  const moderator = buildings.find((elem) => elem.moderator === true);
+  console.log("moderator: ", moderator);
+
+  if (!is_admin && !moderator) {
+    throw HttpError(403, "You don't have access to this action!");
+  }
+  const result = await removeVotingById(votingId);
+
+  res.json(result);
 };
 
 export default {
   createVoting: ctrlWrapper(createVoting),
   getVotings: ctrlWrapper(getVotings),
   vote: ctrlWrapper(vote),
+  deleteVoting: ctrlWrapper(deleteVoting),
 };

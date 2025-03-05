@@ -53,7 +53,7 @@ const createContactInfo = async (req, res) => {
 const deleteContactInfo = async (req, res) => {
   const { contactInfoId: _id } = req.params;
 
-  const { access } = await CheckAccess(_id, req.user);
+  const { access } = await CheckAccess(req.params, req.user);
   if (!access) {
     throw HttpError(403, "You don't have access to this action!");
   }
