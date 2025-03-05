@@ -32,7 +32,7 @@ app.use("/notifications", notificationsRouter);
 app.use("/votings", votingsRouter);
 app.use("/news_channels", newsChannelRouter);
 app.use("/news", newsRouter);
-app.use("/contactInfo", contactInfoRouter);
+app.use("/contact_info", contactInfoRouter);
 
 let bearerToken = null;
 const complexID = '67a3a0c37ca64083c1ff9799';
@@ -389,14 +389,14 @@ describe('Testing routes', () => {
     });
   })
 
-  describe('Test /contactInfo', function() {
+  describe('Test /contact_info', function() {
     before(getToken);
 
     it("POST /:residential_complex_id/:building_id?", function(done) {
       console.log(complexID);
       
       request(app)
-        .post('/contactInfo/' + complexID)
+        .post('/contact_info/' + complexID)
         .send({
           title: "TEST CONTACT",
           titleUA: "ТЕСТОВА КОНТАКТНА ІНФО",
@@ -419,7 +419,7 @@ describe('Testing routes', () => {
       console.log(complexID);
       
       request(app)
-        .delete('/contactInfo/' + contactInfoID)
+        .delete('/contact_info/' + contactInfoID)
         .set('Authorization', 'Bearer ' + bearerToken)
         .expect(200)
         .end(function(err, res) {          
