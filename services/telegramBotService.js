@@ -10,6 +10,18 @@ const users = {};
 console.log("🤖 Telegram Bot launched!");
 
 export const startBot = () => {
+  bot.onText(/\/start/, (msg) => {
+    const chatId = msg.chat.id;
+    const startKeyboard = {
+      reply_markup: {
+        keyboard: [["Start"]],
+        resize_keyboard: true,
+        one_time_keyboard: true,
+      },
+    };
+    bot.sendMessage(chatId, "Нажмите 'Start', чтобы продолжить", startKeyboard);
+  });
+
   //User's email request
   bot.onText(/\/login/, (msg) => {
     const chatId = msg.chat.id;
