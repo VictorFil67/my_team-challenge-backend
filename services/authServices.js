@@ -71,7 +71,7 @@ export const signinHelper = async (email, password) => {
     await setTokens(_id, accessToken, refreshToken);
 
     const loggedInUser = await findUserById(_id, "-password");
-    console.log("loggedInUser: ", loggedInUser);
+    // console.log("loggedInUser: ", loggedInUser);
 
     return loggedInUser;
   } catch (error) {
