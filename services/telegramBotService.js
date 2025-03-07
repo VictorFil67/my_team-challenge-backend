@@ -15,16 +15,16 @@ async function updateUserCommands(chatId, command = "start") {
 
   switch (command) {
     case "start":
-      commands = [{ command: "/start", description: "Запуск бота" }];
+      commands = [{ command: "/start", description: "Launching the bot" }];
       break;
     case "login":
-      commands = [{ command: "/login", description: "Авторизация" }];
+      commands = [{ command: "/login", description: "Authorization" }];
       break;
     case "logout":
-      commands = [{ command: "/logout", description: "Выход" }];
+      commands = [{ command: "/logout", description: "Exit" }];
       break;
     default:
-      commands = [{ command: "/start", description: "Запуск бота" }];
+      commands = [{ command: "/start", description: "Launching the bot" }];
   }
 
   await bot.setMyCommands(commands, {
