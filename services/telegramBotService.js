@@ -2,6 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import "dotenv/config";
 import { signinHelper } from "./authServices.js";
 import { commands } from "./commands.js";
+import { updateUser } from "./userServices.js";
 
 const { BOT_TOKEN } = process.env;
 
@@ -9,7 +10,7 @@ const bot = new TelegramBot(BOT_TOKEN, { polling: true });
 const users = {};
 const userStates = {};
 
-async function updateUserCommands(chatId, command) {
+async function updateUserCommands(chatId, command = "start") {
   let commands = [];
 
   switch (command) {
@@ -34,13 +35,13 @@ async function updateUserCommands(chatId, command) {
 console.log("🤖 Telegram Bot launched!");
 
 export const startBot = () => {
+  let userId = "";
   bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
     if (userStates[chatId] !== "start") return;
-    // console.log("userStates[chatId]: ", userStates[chatId]);
     userStates[chatId] = "login";
     await updateUserCommands(chatId, userStates[chatId]);
-    bot.sendMessage(chatId, "Добро пожаловать! Теперь введите /login");
+    bot.sendMessage(chatId, "Welcome! Now enter /login");
     return;
   });
 
@@ -48,22 +49,24 @@ export const startBot = () => {
     const chatId = msg.chat.id;
     if (userStates[chatId] !== "login") return;
     userStates[chatId] = "logout";
-    // console.log("userStates[chatId]: ", userStates[chatId]);
     await updateUserCommands(chatId, userStates[chatId]);
     bot.sendMessage(chatId, "Enter your email:");
     users[chatId] = { step: "email" };
-    // console.log("users: ", users);
-    // console.log("users[chatId]: ", users[chatId]);
   });
 
   bot.onText(/\/logout/, async (msg) => {
     const chatId = msg.chat.id;
     if (userStates[chatId] !== "logout") return;
     userStates[chatId] = "start";
-    // console.log("userStates[chatId]: ", userStates[chatId]);
     await updateUserCommands(chatId, userStates[chatId]);
-    bot.sendMessage(chatId, "Вы вышли. Теперь можете только начать заново.");
-    return;
+    bot.sendMessage(chatId, "Confirm log out, please", {
+      reply_markup: {
+        keyboard: [[{ text: "✅ Confirm" }, { text: "❌ Cancel" }]],
+        resize_keyboard: true,
+      },
+    });
+    users[chatId].step = "logout";
+    console.log("users[chatId].step: ", users[chatId].step);
   });
 
   bot.on("polling_error", console.log);
@@ -74,42 +77,74 @@ export const startBot = () => {
     if (!userStates[chatId]) {
       userStates[chatId] = "start";
     }
-    // console.log("userStates[chatId]: ", userStates[chatId]);
-    // console.log("chatId: ", chatId);
-    // console.log("userStates[chatId]: ", userStates[chatId]);
+
     if (users[chatId]) {
       if (users[chatId].step === "email") {
         users[chatId].email = text;
         users[chatId].step = "password";
         bot.sendMessage(chatId, "Now Enter your password:");
-        // console.log("users[chatId]: ", users[chatId]);
       } else if (users[chatId].step === "password") {
         users[chatId].password = text;
         users[chatId].step = null;
-        // console.log("users[chatId]: ", users[chatId]);
 
         try {
-          // console.log("Calling signinHelper from bot...");
           const result = await signinHelper(
             users[chatId].email,
             users[chatId].password
           );
-          // console.log("📨 Result from signinHelper:", result);
           if (result?.tokens) {
-            bot.sendMessage(chatId, "✅ User logged in successfully!");
+            userId = result._id;
+            console.log("result.tokens: ", result.tokens);
+            const user = await updateUser(
+              userId,
+              { botChatId: chatId },
+              { projection: { password: 0 } }
+            );
+            console.log("user: ", user);
+            await bot.sendMessage(chatId, "✅ User logged in successfully!");
             // console.log("You logged in successfully:", result);
-            return;
+            // return;
           } else {
             bot.sendMessage(
               chatId,
               `❌ Error: ${result?.error || "Unknown error"}`
             );
+            // userStates[chatId] = "start";
           }
         } catch (error) {
           console.error("🔥 Authorization error:", error);
           bot.sendMessage(chatId, "❌ Server error. Try later.");
+          // userStates[chatId] = "start";
         }
-        delete users[chatId];
+        delete users[chatId].step;
+      } else if (users[chatId].step === "logout") {
+        if (text == "❌ Cancel") {
+          bot.sendMessage(chatId, "You canceled log out", {
+            reply_markup: {
+              remove_keyboard: true,
+            },
+          });
+
+          delete users[chatId].step;
+        } else if (text == "✅ Confirm") {
+          try {
+            const user = await updateUser(
+              userId,
+              { $unset: { botChatId: "" } },
+              { projection: { password: 0 } }
+            );
+            console.log("user: ", user);
+            bot.sendMessage(chatId, "You confirmed log out", {
+              reply_markup: {
+                remove_keyboard: true,
+              },
+            });
+            delete users[chatId];
+          } catch (error) {
+            console.log(error);
+            bot.sendMessage(chatId, "❌ Log out error.");
+          }
+        }
       }
     }
   });
