@@ -117,7 +117,7 @@ const updateComplex = async (req, res) => {
 
 const getComplexes = async (req, res) => {
   const result = await getListOfComplexes();
-  console.log("result: ", result);
+  // console.log("result: ", result);
   await sendComplexes(result);
   res.json(result);
 };
