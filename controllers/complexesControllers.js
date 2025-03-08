@@ -10,6 +10,7 @@ import {
   removeComplex,
   updateComplexById,
 } from "../services/complexServices.js";
+import { sendComplexes } from "../services/telegramBotService.js";
 
 const createComplex = async (req, res) => {
   const { is_admin } = req.user;
@@ -116,6 +117,8 @@ const updateComplex = async (req, res) => {
 
 const getComplexes = async (req, res) => {
   const result = await getListOfComplexes();
+  console.log("result: ", result);
+  await sendComplexes(result);
   res.json(result);
 };
 
