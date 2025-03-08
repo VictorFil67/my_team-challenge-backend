@@ -152,8 +152,15 @@ export const startBot = () => {
 
 export async function sendComplexes(data) {
   const user = await findUser({ botChatId: { $exists: true } });
-  console.log("user: ", user);
+  console.log("user.botChatId: ", user.botChatId);
+  // const sentChatIds = new Set();
+  const botData = data.map((elem) => elem.name).join("\n");
+  console.log("botData: ", botData);
+  const message = `🏢 List of complexes:\n${botData}`;
+  // console.log(data);
+  // const dataStr = JSON.stringify(data, null, 2);
   if (user) {
-    bot.sendMessage(user.botChatId, data);
+    bot.sendMessage(user.botChatId, message);
+    // sentChatIds.add(user.botChatId);
   }
 }
