@@ -2,7 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import "dotenv/config";
 import { signinHelper } from "./authServices.js";
 import { commands } from "./commands.js";
-import { updateUser } from "./userServices.js";
+import { findUser, updateUser } from "./userServices.js";
 
 const { BOT_TOKEN } = process.env;
 
@@ -149,3 +149,11 @@ export const startBot = () => {
     }
   });
 };
+
+export async function sendComplexes(data) {
+  const user = await findUser({ botChatId: { $exists: true } });
+  console.log("user: ", user);
+  if (user) {
+    bot.sendMessage(user.botChatId, data);
+  }
+}
