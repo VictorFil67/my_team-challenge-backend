@@ -2,7 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import "dotenv/config";
 import { signinHelper } from "./authServices.js";
 import { commands } from "./commands.js";
-import { findUser, updateUser } from "./userServices.js";
+import { findUser, findUsers, updateUser } from "./userServices.js";
 
 const { BOT_TOKEN } = process.env;
 
@@ -151,16 +151,14 @@ export const startBot = () => {
 };
 
 export async function sendComplexes(data) {
+  console.log("Object.keys(userStates): ", Object.keys(userStates));
   const user = await findUser({ botChatId: { $exists: true } });
-  console.log("user.botChatId: ", user.botChatId);
-  // const sentChatIds = new Set();
+
   const botData = data.map((elem) => elem.name).join("\n");
   console.log("botData: ", botData);
   const message = `🏢 List of complexes:\n${botData}`;
-  // console.log(data);
-  // const dataStr = JSON.stringify(data, null, 2);
-  if (user) {
+
+  if (user.botChatId) {
     bot.sendMessage(user.botChatId, message);
-    // sentChatIds.add(user.botChatId);
   }
 }
