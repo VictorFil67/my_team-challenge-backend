@@ -23,3 +23,7 @@ export function updateUserByFilter(filter, data) {
 export function createUser(data) {
   return User.create(data);
 }
+
+export function findUsers(filter) {
+  return User.find(filter);
+}
