@@ -169,18 +169,9 @@ export async function sendComplexes(data) {
 
 bot.onText(/\/getprofile/, async (msg) => {
   const chatId = msg.chat.id;
-  const user = await findUser({ botChatId: chatId });
-  const userStr = JSON.stringify(user);
-  console.log("userStr: ", userStr);
-  if (user) {
-    bot.sendMessage(chatId, `😟 User:\n${userStr}`);
-  }
+  const { name, email, phone } = await findUser({ botChatId: chatId });
+  // const userStr = JSON.stringify(user);
+  console.log("name,email,phone,avatar: ", name, email, phone);
+
+  bot.sendMessage(chatId, `😟 User:\n${name}\n${email}\n${phone}`);
 });
-// export async function getProfile() {
-//   const user = await findUser({ botChatId: { $exists: true } });
-//   const botData = data.name;
-//   const message = `🏢 Complex:\n${botData}`;
-//   if (user) {
-//     bot.sendMessage(user.botChatId, message);
-//   }
-// }
