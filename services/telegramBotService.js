@@ -166,3 +166,21 @@ export async function sendComplexes(data) {
     }
   }
 }
+
+bot.onText(/\/getprofile/, async (msg) => {
+  const chatId = msg.chat.id;
+  const user = await findUser({ botChatId: chatId });
+  const userStr = JSON.stringify(user);
+  console.log("userStr: ", userStr);
+  if (user) {
+    bot.sendMessage(chatId, `😟 User:\n${userStr}`);
+  }
+});
+// export async function getProfile() {
+//   const user = await findUser({ botChatId: { $exists: true } });
+//   const botData = data.name;
+//   const message = `🏢 Complex:\n${botData}`;
+//   if (user) {
+//     bot.sendMessage(user.botChatId, message);
+//   }
+// }
