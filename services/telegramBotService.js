@@ -1,8 +1,10 @@
 import TelegramBot from "node-telegram-bot-api";
 import "dotenv/config";
 import { signinHelper } from "./authServices.js";
-import { commands } from "./commands.js";
+// import { commands } from "./commands.js";
 import { findUser, findUsers, updateUser } from "./userServices.js";
+// import e from "express";
+import { addUserAddresByBot } from "../botrequests/userRequests.js";
 
 const { BOT_TOKEN } = process.env;
 
@@ -145,6 +147,18 @@ export const startBot = () => {
             bot.sendMessage(chatId, "❌ Log out error.");
           }
         }
+      } else if (users[chatId].step === "residential_complex") {
+        users[chatId].residential_complex = text;
+        users[chatId].step = "building";
+        bot.sendMessage(chatId, "Enter your building:");
+      } else if (users[chatId].step === "building") {
+        users[chatId].building = text;
+        users[chatId].step = "entrance";
+        bot.sendMessage(chatId, "Enter your entrance:");
+      } else if (users[chatId].step === "entrance") {
+        users[chatId].entrance = text;
+        users[chatId].step = "apartment";
+        bot.sendMessage(chatId, "Enter your apartment:");
       }
     }
   });
