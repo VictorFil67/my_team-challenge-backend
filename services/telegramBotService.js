@@ -189,3 +189,9 @@ bot.onText(/\/getprofile/, async (msg) => {
 
   bot.sendMessage(chatId, `😟 User:\n${name}\n${email}\n${phone}`);
 });
+
+bot.onText(/\/addAddress/, async (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, "Enter your residential complex:");
+  users[chatId] = { step: "residential_complex" };
+});
