@@ -159,6 +159,59 @@ export const startBot = () => {
         users[chatId].entrance = text;
         users[chatId].step = "apartment";
         bot.sendMessage(chatId, "Enter your apartment:");
+      } else if (users[chatId].step === "apartment") {
+        users[chatId].apartment = text;
+        users[chatId].step = null;
+        try {
+          console.log("chatId: ", chatId);
+          const result = await addUserAddresByBot({
+            chatId,
+            residential_complex: users[chatId].residential_complex,
+            building: users[chatId].building,
+            entrance: users[chatId].entrance,
+            apartment: users[chatId].apartment,
+          });
+          if (typeof result === "string") {
+            bot.sendMessage(chatId, result);
+          } else if (typeof result !== "string") {
+            console.log("result: ", result);
+            console.log("result.buildings: ", result.buildings);
+
+            const userProperties = result.buildings.map((elem) => {
+              elem.residential_complex_id;
+              const addresses = elem.addresses.map((elem) => {
+                elem.building;
+                const apartments = elem.apartments.map((elem) => {
+                  const apartment = `\n entrance: ${elem.entrance} apartment: ${elem.apartment}`;
+                  // return { entrance: elem.entrance, apartment: elem.apartment };
+                  return apartment;
+                });
+                const address = `\n building: ${
+                  elem.building
+                }\n apartments:${apartments.join()} `;
+                // return { building: elem.building, apartments };
+                return address;
+              });
+              const complex = `\n Residential complex: ${
+                elem.residential_complex_id
+              }\n  addresses: ${addresses.join()} `;
+              // return {
+              //   residential_complex_id: elem.residential_complex_id,
+              //   addresses,
+              // };
+              return complex;
+            });
+            bot.sendMessage(
+              chatId,
+              ` ✅ Your address has been added successfully! \n${userProperties.join()}`
+            );
+          } else {
+            bot.sendMessage(chatId, "❌ Error: Unknown error");
+          }
+        } catch (error) {
+          console.error("🔥 Error in addUserAddresByBot: ", error);
+          bot.sendMessage(chatId, "❌ Error: Server error");
+        }
       }
     }
   });
