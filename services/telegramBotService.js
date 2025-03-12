@@ -107,19 +107,15 @@ export const startBot = () => {
             );
             console.log("user: ", user);
             await bot.sendMessage(chatId, "✅ User logged in successfully!");
-            // console.log("You logged in successfully:", result);
-            // return;
           } else {
             bot.sendMessage(
               chatId,
               `❌ Error: ${result?.error || "Unknown error"}`
             );
-            // userStates[chatId] = "start";
           }
         } catch (error) {
           console.error("🔥 Authorization error:", error);
           bot.sendMessage(chatId, "❌ Server error. Try later.");
-          // userStates[chatId] = "start";
         }
         delete users[chatId].step;
       } else if (users[chatId].step === "logout") {
@@ -186,22 +182,18 @@ export const startBot = () => {
                 elem.building;
                 const apartments = elem.apartments.map((elem) => {
                   const apartment = `\n entrance: ${elem.entrance} apartment: ${elem.apartment}`;
-                  // return { entrance: elem.entrance, apartment: elem.apartment };
                   return apartment;
                 });
                 const address = `\n building: ${
                   elem.building
                 }\n apartments:${apartments.join()} `;
-                // return { building: elem.building, apartments };
+
                 return address;
               });
               const complex = `\n Residential complex: ${
                 elem.residential_complex_id
               }\n  addresses: ${addresses.join()} `;
-              // return {
-              //   residential_complex_id: elem.residential_complex_id,
-              //   addresses,
-              // };
+
               return complex;
             });
             bot.sendMessage(
@@ -221,7 +213,6 @@ export const startBot = () => {
 };
 
 export async function sendComplexes(data) {
-  // const user = await findUser({ botChatId: { $exists: true } });
   const users = await findUsers({ botChatId: { $exists: true } });
   const userBotChatIds = users.map((user) => user.botChatId);
   console.log("userBotChatIds: ", userBotChatIds);
@@ -240,7 +231,7 @@ export async function sendComplexes(data) {
 bot.onText(/\/getprofile/, async (msg) => {
   const chatId = msg.chat.id;
   const { name, email, phone } = await findUser({ botChatId: chatId });
-  // const userStr = JSON.stringify(user);
+
   console.log("name,email,phone,avatar: ", name, email, phone);
 
   bot.sendMessage(chatId, `😟 User:\n${name}\n${email}\n${phone}`);
