@@ -323,4 +323,5 @@ export default {
   approveUserAddress: ctrlWrapper(approveUserAddress),
   setModeratorStatus: ctrlWrapper(setModeratorStatus),
   getUser: ctrlWrapper(getUser),
+  getContactInfoForUser: ctrlWrapper(getContactInfoForUser),
 };
