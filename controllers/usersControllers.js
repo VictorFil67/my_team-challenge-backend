@@ -322,10 +322,7 @@ const getContactInfoForUser = async (req, res) => {
     });
     return { residential_complex_id, addresses };
   });
-  console.log(
-    "userAddresses[0].residential_complex_id: ",
-    userAddresses[0].residential_complex_id
-  );
+
   const result = await Promise.all(
     userAddresses.map(async (elem) => {
       const complex = await Promise.all(
@@ -343,10 +340,10 @@ const getContactInfoForUser = async (req, res) => {
   );
 
   console.log("result: ", result);
-  const contactInfo = await findContactInfo({
-    residential_complex_id: userAddresses[0].residential_complex_id,
-    building_id: { $exists: false },
-  });
+  // const contactInfo = await findContactInfo({
+  //   residential_complex_id: userAddresses[0].residential_complex_id,
+  //   building_id: { $exists: false },
+  // });
   res.json(result);
 };
 
