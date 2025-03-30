@@ -178,6 +178,7 @@ export default {
   getComplexes: ctrlWrapper(getComplexes),
   getComplex: ctrlWrapper(getComplex),
   deleteComplex: ctrlWrapper(deleteComplex),
+  updateComplexImages: ctrlWrapper(updateComplexImages),
 };
 
 // const createComplex = async (req, res) => {

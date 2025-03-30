@@ -33,6 +33,14 @@ complexesRouter.put(
   validateBody(updateComplexSchema),
   updateComplex
 );
+complexesRouter.patch(
+  "/:complexId",
+  isValidId,
+  authenticate,
+  upload.array("image", 10),
+  validateBody(updateComplexImagesSchema),
+  updateComplexImages
+);
 complexesRouter.get("/", getComplexes);
 complexesRouter.get("/:complexId", isValidId, getComplex);
 complexesRouter.delete("/:complexId", isValidId, authenticate, deleteComplex);
