@@ -4,6 +4,7 @@ import complexesControllers from "../controllers/complexesControllers.js";
 import {
   createComplexSchema,
   updateComplexSchema,
+  updateComplexImagesSchema,
 } from "../schemas/complexSchema.js";
 import validateBody from "../decorators/validateBody.js";
 import upload from "../middlewares/upload.js";
@@ -14,6 +15,7 @@ const complexesRouter = express.Router();
 const {
   createComplex,
   updateComplex,
+  updateComplexImages,
   getComplexes,
   getComplex,
   deleteComplex,
